@@ -1,23 +1,56 @@
-# single-dorm · 单人宿舍 3D 场景
+# 弹丸论破同人 · 3D 场景集
 
-弹丸论破风格的同人 3D 场景：一间温暖明亮的单人宿舍 —— 黄色花纹墙纸、白色床品、红色门厅地毯，以及一扇被六块旧木板和铁钉彻底封死的窗。全部几何与程序化贴图在浏览器内实时生成，**无 CDN、无网络请求**，仅两张参考画使用本地 WebP。
+两个纯静态、可离线运行的 Three.js 场景，共用同一套预览 UI，可在页面右上角互相切换：
 
-基于 Three.js 的纯静态实现，开箱即用。
+| 场景 | 预览地址 | 内容 |
+| --- | --- | --- |
+| **学生餐厅** | **https://guanying37.github.io/single-dorm/dining/** | 36 × 22 m 大厅，10 张餐桌 / 60 座，8 幅美食画、两座挂钟、可交互餐具柜 |
+| **单人宿舍** | **https://guanying37.github.io/single-dorm/** | 黄色墙纸、封死的窗、可开启的衣橱与抽屉 |
 
-## 在线预览
+> 页面使用 ES Modules，必须通过 HTTP(S) 访问；直接双击 `index.html`（`file://`）不会加载 Three.js 模块。
 
-**https://guanying37.github.io/single-dorm/**
+![学生餐厅](single-dorm/dining/preview/hero.jpg)
 
-> 页面使用 ES Modules，必须通过 HTTP(S) 访问；直接双击 `index.html`（`file://`）无法加载模块。
+## 学生餐厅
+
+供重要学生使用、装修良好但不奢华的餐厅。**无人物、无文字、无音频、无 CDN、无网络请求**；几何、程序化贴图与全部灯光在浏览器内生成。
+
+- **场地**：36.0 × 22.0 m，净高 4.2 m，约 792 ㎡；暖白灰泥墙、900 mm 石材地砖与深色收边、浅跌级天花与横向梁。
+- **家具**：10 张 1.8 × 1.0 m 橡木餐桌、60 把曲木椅、60 套五件餐具（盘、碗、筷、勺、叉）；奶油/鼠尾草方格桌布；每桌白瓷花瓶插 3~5 枝花（花瓣周向不重叠、花蕊可见、茎入瓶）。
+- **陈设**：8 幅美食主题画像（立体浅浮雕，非位图绘制）；北墙复古挂钟（木框、白盘、罗马数字、钟摆、时间可调）；东墙大天鹅时钟。
+- **门与预留空间**：正门双开，通向 2.7 m 走廊预留段（带地毯与端门）；后厨门、卫生间门锁定，保留 `sceneId` 切换钩子。
+- **交互**：正门开关、餐具柜左右门与三层抽屉；全部带动态碰撞体，不穿模。
+- **设备**：10 组 4000K 线性 LED、3 台嵌入式空调、6 台半球监控。
+- **性能**：约 53–57 draw calls、25.6 万三角面、13 张程序化贴图；单张静态烘焙阴影；无后处理；自适应分辨率；**测试机 1920×1080 硬件渲染实测约 59 FPS**。
+
+### 操作
+
+| 输入 | 行为 |
+| --- | --- |
+| `W A S D` | 平移（眼高固定 1.80 m） |
+| `Shift` | 加速 |
+| 鼠标拖动 / 全屏鼠标 | 环顾；全屏进入指针锁定并隐藏光标 |
+| 右键 | 固定 / 解锁视线 |
+| 中键 | 平滑回正 |
+| `E` | 与门、柜门、抽屉互动 |
+| `F11` / 右上按钮 | 全屏 |
+
+非全屏时左上角实时显示 FPS；全屏时隐藏装饰性 HUD，只保留准星、交互提示与 Toast。
+
+### 预览
+
+| | |
+|---|---|
+| ![餐厅全景](single-dorm/dining/preview/hero.jpg) | ![餐桌与餐具](single-dorm/dining/preview/tables.jpg) |
+| ![打开的餐具柜](single-dorm/dining/preview/sideboard.jpg) | ![打开的正门与走廊](single-dorm/dining/preview/doors.jpg) |
+
+更多：[学生餐厅说明](single-dorm/dining/README.md) · [建模任务书](single-dorm/dining/BRIEF.md)
+
+## 单人宿舍
+
+温暖明亮的单人宿舍：黄色花纹墙纸、白色床品、红色门厅地毯，以及一扇被六块旧木板和铁钉彻底封死的窗。全部几何与程序化贴图在浏览器内实时生成，仅两张参考画使用本地 WebP。
 
 ![单人宿舍](single-dorm/preview/hero.jpg)
-
-## 场景内容
-
-- 程序化墙纸、木地板、地毯与床品材质，全部在 `src/textures.js` 内用 Canvas 生成
-- 封死的窗（六块旧木板 + 铁钉）、吊灯、投影、四壁监控、可开启的衣橱与抽屉
-- 两张用户提供的画作作为参考图（`assets/art/*.webp`）
-- 固定站位的自由环顾 + 预设机位切换
 
 <table>
   <tr>
@@ -30,46 +63,61 @@
   </tr>
 </table>
 
+详细说明见 [单人宿舍 README](single-dorm/README.md)。
+
 ## 目录结构
 
 ```
 single-dorm/
-├─ index.html            # 入口
-├─ styles.css            # 页面与 HUD 样式
-├─ src/
-│  ├─ main.js            # 引导、交互、机位
-│  ├─ scene.js           # 渲染器、灯光、后期
-│  ├─ room.js            # 房间结构：墙、地板、天花板、封窗
-│  ├─ furniture.js       # 家具：床、书桌、衣橱、抽屉
-│  ├─ materials.js       # 材质定义
-│  ├─ textures.js        # 程序化贴图（Canvas）
-│  ├─ optimize.js        # 合并/裁剪等渲染优化
-│  └─ utils.js
-├─ vendor/               # Three.js（本地副本，MIT）
-├─ assets/art/           # 参考画 WebP
-└─ preview/              # 预览截图
+├─ index.html                # 单人宿舍入口
+├─ styles.css                # 两个场景共用的预览 UI
+├─ src/                      # 单人宿舍模块
+├─ dining/                   # 学生餐厅
+│  ├─ index.html
+│  ├─ dining.css
+│  ├─ README.md
+│  ├─ BRIEF.md               # 已确认的建模任务书
+│  ├─ src/
+│  │  ├─ main.js             # 页面、输入、全屏、交互、FPS
+│  │  ├─ scene.js            # 场景装配、灯光、碰撞、交互调度
+│  │  ├─ room.js             # 外壳、三扇门、走廊预留段、墙面线条
+│  │  ├─ furniture.js        # 餐桌、椅、桌布、餐具、花、餐具柜
+│  │  ├─ decor.js            # 天花设备、画像、两座钟、绿植
+│  │  ├─ textures.js         # 程序化材质贴图
+│  │  ├─ materials.js        # 自然色 PBR 材质
+│  │  ├─ player.js           # 第一人称移动、走路晃动
+│  │  ├─ collision.js        # 圆形玩家 vs AABB / OBB
+│  │  ├─ config.js           # 尺寸、桌位、时钟、初始机位
+│  │  └─ utils.js            # 几何合并、静态批处理
+│  └─ preview/               # 预览截图
+├─ assets/art/               # 宿舍参考画
+├─ preview/                  # 宿舍预览截图
+└─ vendor/                   # Three.js（本地副本，MIT）
 ```
 
 ## 本地运行
 
+在 `single-dorm/` 目录启动任意静态服务器：
+
 ```powershell
 cd single-dorm
 python -m http.server 8123 --bind 127.0.0.1
-# 打开 http://127.0.0.1:8123/
+# 宿舍: http://127.0.0.1:8123/
+# 餐厅: http://127.0.0.1:8123/dining/
 ```
 
-或使用任意静态服务器：
-
-```powershell
-npx serve single-dorm -l 8123
-```
+或 `npx serve . -l 8123`。
 
 ## 发布
 
-- `main` 分支保存工程源码；`gh-pages` 分支保存站点根目录（内容即 `single-dorm/`），由 GitHub Pages 直接托管
-- 站点更新方式：把 `single-dorm/` 的内容同步到 `gh-pages` 分支根目录后推送
-- 版本以 Release 形式提供，附带可直接下载的源码压缩包
+`main` 分支保存工程源码；`gh-pages` 分支保存站点根目录（内容即 `single-dorm/`），由 GitHub Pages 托管。两个场景同源部署：
+
+- `/` → 单人宿舍
+- `/dining/` → 学生餐厅
+- `/vendor/` → 本地 Three.js
+
+更新站点：把 `single-dorm/` 的内容同步到 `gh-pages` 分支根目录后推送。
 
 ## 许可
 
-场景代码本源代码可自由用于学习与非商业同人创作。`vendor/` 下的 Three.js 遵循 MIT 协议（见 `single-dorm/vendor/THREE-LICENSE.txt`）。《弹丸论破》相关角色与设定版权归 Spike Chunsoft 所有。
+场景代码可自由用于学习与非商业同人创作。`vendor/` 下的 Three.js 遵循 MIT 协议（见 `single-dorm/vendor/THREE-LICENSE.txt`）。《弹丸论破》相关角色与设定版权归 Spike Chunsoft 所有。

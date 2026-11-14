@@ -1,0 +1,10 @@
+/* Dining-hall specific additions on top of the shared preview chrome. */
+
+body.hud-hidden .ui-layer,
+body.hud-hidden #loader {
+  display: none !important;
+}
+
+body.hud-hidden #app::after {
+  display: none;
+}

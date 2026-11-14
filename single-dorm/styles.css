@@ -235,6 +235,38 @@ body.is-fullscreen .chrome {
   box-shadow: 0 0 0 3px rgba(169, 77, 66, 0.12);
 }
 
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.scene-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 13px;
+  border: 1px solid rgba(247, 231, 203, 0.18);
+  border-radius: 10px;
+  background: rgba(22, 16, 12, 0.38);
+  color: rgba(250, 241, 222, 0.78);
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  backdrop-filter: blur(15px) saturate(1.1);
+  -webkit-backdrop-filter: blur(15px) saturate(1.1);
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.scene-link:hover {
+  background: rgba(42, 30, 21, 0.58);
+  border-color: rgba(244, 220, 176, 0.42);
+  color: rgba(255, 247, 230, 0.95);
+}
+
 .fullscreen-button {
   pointer-events: auto;
   display: inline-flex;
@@ -656,6 +688,14 @@ body:not(.is-fullscreen) .pointer-hint {
   }
   .fullscreen-button .key {
     display: none;
+  }
+  .scene-link {
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 9px;
+  }
+  .top-actions {
+    gap: 6px;
   }
   .control-strip {
     max-width: 92vw;
