@@ -9,6 +9,8 @@
 
 > `/dining/` 会自动跳转到 `/#dining`。页面使用 ES Modules，必须通过 HTTP(S) 访问；直接双击 `index.html`（`file://`）不会加载 Three.js 模块。
 
+![同一页面顶部切换单人宿舍与学生餐厅](single-dorm/preview/combined.jpg)
+
 ![学生餐厅](single-dorm/dining/preview/hero.jpg)
 
 ## 学生餐厅
