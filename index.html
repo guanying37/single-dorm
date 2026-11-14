@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#17120f" />
+  <meta name="description" content="一间被木板封住窗户的温暖单人宿舍。基于 Three.js 的程序化实时 3D 场景预览。" />
+  <title>单人宿舍 · 3D 场景预览</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23721f26'/%3E%3Cpath d='M16 6l8 10-8 10-8-10z' fill='none' stroke='%23f2ddb4' stroke-width='1.4'/%3E%3Cpath d='M16 10v12M10 16h12' stroke='%23f2ddb4' stroke-opacity='.45' stroke-width='1'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main id="app">
+    <canvas id="stage" tabindex="0" aria-label="可自由环顾的单人宿舍三维场景"></canvas>
+
+    <div class="ui-layer">
+      <div class="top-bar chrome">
+        <div class="identity">
+          <div class="crest-mark" aria-hidden="true"></div>
+          <div class="identity-body">
+            <span class="eyebrow">Hope's Peak · Dormitory</span>
+            <h1>单人宿舍</h1>
+            <div class="status-row">
+              <span class="fps-dot" id="fpsDot" aria-hidden="true"></span>
+              <span class="fps-readout"><span>FPS</span><strong id="fpsValue">--</strong></span>
+              <span class="rule" aria-hidden="true"></span>
+              <span class="fps-readout" id="qualityLabel" style="opacity:.62">实时</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="fullscreen-button" id="fullscreenButton" type="button" title="进入全屏预览（可用 F11）">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M3.5 7V3.5H7M13 3.5h3.5V7M16.5 13v3.5H13M7 16.5H3.5V13" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>全屏预览</span>
+          <span class="key">F11</span>
+        </button>
+      </div>
+
+      <div id="crosshair" aria-hidden="true"></div>
+
+      <div class="interaction-badge" id="interactionBadge" role="status">
+        <kbd>E</kbd>
+        <span id="interactionText">互动</span>
+        <span class="hint-mouse" id="interactionMouseHint">单击</span>
+      </div>
+
+      <div class="toast" id="toast" role="status"></div>
+      <div class="pointer-hint" id="lockHint" aria-hidden="true">
+        <span class="pointer-hint-dot" aria-hidden="true"></span>
+        <span id="lockHintText">点击画面捕获鼠标 · 360° 环顾 · 右键固定视野</span>
+      </div>
+
+
+      <div class="bottom-bar chrome">
+        <div class="control-strip" aria-label="操作说明">
+          <div class="control-item">
+            <span class="keycap">LMB</span><span>拖拽环顾</span>
+          </div>
+          <div class="control-item">
+            <span class="keycap">E</span><span>互动</span>
+          </div>
+          <div class="control-item">
+            <span class="keycap">MMB</span><span>视野回正</span>
+          </div>
+          <div class="control-item">
+            <span class="keycap">F11</span><span>全屏</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="loader">
+      <div class="loader-inner">
+        <div class="loader-mark" aria-hidden="true"></div>
+        <p class="loader-title">正在布置房间</p>
+        <p class="loader-subtitle">SINGLE DORM · PROCEDURAL SET</p>
+        <div class="loader-line" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <noscript>
+      <div class="noscript">这个 3D 预览需要启用 JavaScript。<br>请启用后重新载入页面。</div>
+    </noscript>
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three.module.min.js"
+      }
+    }
+  </script>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
