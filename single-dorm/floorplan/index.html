@@ -54,7 +54,7 @@
         <span><i class="swatch corridor"></i>走廊</span>
         <span><i class="swatch hall"></i>3F 礼堂投影</span>
         <span><i class="swatch closed"></i>未开放</span>
-        <span><i class="swatch wc"></i>厕所</span>
+        <span><i class="swatch wc"></i>卫生间核心</span>
         <span><i class="swatch furniture"></i>家具/器材</span>
       </div>
 
@@ -74,7 +74,7 @@
         <p class="kicker">AREA STUDIES · TWO LEVELS EACH</p>
         <h2 id="areasTitle">分区户型</h2>
       </div>
-      <p>除礼堂外，每个区域都画 1F 与 2F 两张；礼堂单独画 3F。</p>
+      <p>除礼堂外，每个区域都画 1F 与 2F 两张；礼堂单独画 3F。点击任意图纸可放大。</p>
     </section>
 
     <section class="area-grid">
@@ -93,10 +93,10 @@
           </div>
           <div class="mini-plan">
             <span class="level-badge">2F</span>
-            <canvas id="life2f" width="380" height="340" aria-label="生活区 2F：寝室、厕所"></canvas>
+            <canvas id="life2f" width="380" height="340" aria-label="生活区 2F：16 间寝室、卫生间核心"></canvas>
           </div>
         </div>
-        <p class="caption">1F：现有厨房/后厨 18×14、传菜口向东接现有餐厅、货梯、冷库、厕所；2F：4 间寝室 + 共享卫浴/洗衣 + 厕所。</p>
+        <p class="caption">1F：现有厨房/后厨 18×14、传菜口向东接现有餐厅、货梯、冷库、卫生间核心；2F：16 间寝室 + 同位置卫浴核心。</p>
       </article>
 
       <article class="panel area-card">
@@ -198,7 +198,8 @@
           <ul>
             <li>现有厨房 18×14 m 放在生活区 1F。</li>
             <li>东侧传菜口接现有餐厅；西侧货梯；北侧冷库；南侧清洗。</li>
-            <li>2F 为寝室；1F/2F 均设厕所。</li>
+            <li>2F 为 16 间寝室；1F/2F 同位置设一个卫生间核心。</li>
+            <li>中央中庭加客梯 1F–3F，与大楼梯并行。</li>
           </ul>
         </div>
         <div>
@@ -212,6 +213,24 @@
       </div>
     </section>
   </main>
+
+  <div class="zoom-hint" id="zoomHint">点击任意图纸放大 · 滚轮/按钮缩放 · 拖拽平移</div>
+
+  <div class="lightbox" id="lightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="图纸放大预览">
+    <div class="lightbox-bar">
+      <span class="lightbox-title" id="lightboxTitle">图纸</span>
+      <div class="lightbox-actions">
+        <button type="button" id="zoomOut" aria-label="缩小">−</button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+        <button type="button" id="zoomIn" aria-label="放大">+</button>
+        <button type="button" id="zoomReset">1:1</button>
+        <button type="button" id="lightboxClose" class="lightbox-close" aria-label="关闭">×</button>
+      </div>
+    </div>
+    <div class="lightbox-stage" id="lightboxStage">
+      <img id="lightboxImage" alt="" draggable="false" />
+    </div>
+  </div>
 
   <script defer src="./src/floorplan.js"></script>
 </body>

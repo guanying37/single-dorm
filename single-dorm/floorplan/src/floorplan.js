@@ -321,7 +321,6 @@ function pingPong(ctx, t, x, z, rotate = false) {
 function wc(ctx, t, x, z, w = 3, d = 3, color = WC) {
   fillRect(ctx, t, x, z, w, d, color);
   strokeRect(ctx, t, x, z, w, d, '#6f8983', 1.1);
-  label(ctx, t.X(x + 0.2), t.Y(z + 0.35), 'WC', { size: 7, weight: 700, color: '#4f6f69' });
   fillRect(ctx, t, x + 0.25, z + 0.8, 0.5, 0.55, '#c7d9d3');
   fillRect(ctx, t, x + 0.95, z + 0.8, 0.5, 0.55, '#c7d9d3');
   fillRect(ctx, t, x + 0.25, z + 1.75, 0.9, 0.45, '#c7d9d3');
@@ -418,48 +417,56 @@ function drawLife2F() {
   const { ctx, width, height } = initCanvas(canvas);
   const t = miniShell(ctx, width, height, '生活区', '2F');
 
-  fillRect(ctx, t, 1.0, 7.0, 20.0, 2.0, CORRIDOR);
-  line(ctx, t, 1.0, 7.0, 21.0, 7.0, WALL, 1.8);
-  line(ctx, t, 1.0, 9.0, 21.0, 9.0, WALL, 1.8);
+  // Cross corridor serving 16 compact rooms.
+  fillRect(ctx, t, 0.8, 6.8, 20.2, 1.4, CORRIDOR);
+  fillRect(ctx, t, 9.4, 0.8, 1.4, 14.4, CORRIDOR);
 
-  const rooms = [
-    { x: 1, z: 1, w: 9, d: 5.6, id: '01' },
-    { x: 12, z: 1, w: 9, d: 5.6, id: '02' },
-    { x: 1, z: 9.4, w: 9, d: 5.6, id: '03' },
-    { x: 12, z: 9.4, w: 5, d: 5.6, id: '04' },
+  const columns = [
+    { x: 1.0, w: 4.0 },
+    { x: 5.3, w: 3.7 },
+    { x: 11.1, w: 3.7 },
+    { x: 15.0, w: 3.7 },
   ];
-  for (const room of rooms) {
-    fillRect(ctx, t, room.x, room.z, room.w, room.d, '#fdf7ec');
-    strokeRect(ctx, t, room.x, room.z, room.w, room.d, WALL, 1.8);
-    label(ctx, t.X(room.x + 0.2), t.Y(room.z + 0.3), `寝室 ${room.id}`, { size: 7, weight: 700, color: DORM, bg: 'rgba(253,247,236,0.9)' });
+  const rows = [
+    { z: 1.0, d: 2.5 },
+    { z: 3.8, d: 2.5 },
+    { z: 8.6, d: 2.5 },
+    { z: 11.5, d: 2.5 },
+  ];
+
+  let index = 1;
+  for (const row of rows) {
+    for (const col of columns) {
+      fillRect(ctx, t, col.x, row.z, col.w, row.d, '#fdf7ec');
+      strokeRect(ctx, t, col.x, row.z, col.w, row.d, WALL, 1.2);
+      label(ctx, t.X(col.x + 0.15), t.Y(row.z + 0.22), String(index).padStart(2, '0'), {
+        size: 5.8,
+        weight: 700,
+        color: DORM,
+        bg: 'rgba(253,247,236,0.9)',
+      });
+      bed(ctx, t, col.x + 0.2, row.z + 0.65, 0.85, 1.55);
+      desk(ctx, t, col.x + col.w - 0.72, row.z + 0.55, 0.55, 0.34);
+      fillRect(ctx, t, col.x + col.w - 0.55, row.z + 1.72, 0.38, 0.32, '#9b7a50');
+      index += 1;
+    }
   }
 
-  for (const room of rooms) {
-    bed(ctx, t, room.x + 0.3, room.z + 0.8, 1.05, 1.9);
-    desk(ctx, t, room.x + room.w - 1.0, room.z + 0.8, 0.7, 0.4);
-    fillRect(ctx, t, room.x + room.w - 0.7, room.z + 2.6, 0.5, 0.4, '#9b7a50');
-    strokeRect(ctx, t, room.x + room.w - 0.7, room.z + 2.6, 0.5, 0.4, '#725738', 0.8);
+  // One consolidated restroom / shower core, stacked with 1F.
+  wc(ctx, t, 19.0, 9.4, 2.6, 5.2);
+  label(ctx, t.X(20.3), t.Y(9.8), 'WC / 淋浴核心', { size: 5.4, weight: 700, color: '#4f6f69', align: 'center', bg: 'rgba(220,233,230,0.88)' });
+  label(ctx, t.X(20.3), t.Y(14.7), '服务 1F/2F', { size: 5, weight: 600, color: MUTED, align: 'center' });
+
+  // Minimal door marks where rooms meet the cross corridor.
+  for (const col of columns) {
+    door(ctx, t, col.x + col.w / 2, 6.8, 0.55, 'h', 1);
+    door(ctx, t, col.x + col.w / 2, 8.2, 0.55, 'h', -1);
   }
 
-  fillRect(ctx, t, 12, 9.4, 9, 5.6, '#eef2ef');
-  strokeRect(ctx, t, 12, 9.4, 9, 5.6, WALL, 1.8);
-  label(ctx, t.X(12.25), t.Y(9.8), '共享卫浴 / 洗衣', { size: 6.5, weight: 700, color: '#5d7a73' });
-  wc(ctx, t, 17.8, 9.4, 3.2, 5.6);
-  label(ctx, t.X(19.4), t.Y(14.7), '厕所', { size: 6, weight: 700, color: '#4f6f69', align: 'center' });
-  fillRect(ctx, t, 12.3, 10.0, 2.0, 1.0, '#c7d9d3');
-  fillRect(ctx, t, 14.5, 10.0, 2.0, 1.0, '#c7d9d3');
-  label(ctx, t.X(13.3), t.Y(11.5), '洗衣', { size: 6, weight: 600, color: MUTED });
-  label(ctx, t.X(15.5), t.Y(11.5), '盥洗', { size: 6, weight: 600, color: MUTED });
-
-  door(ctx, t, 2.8, 7.0, 0.8, 'h', 1);
-  door(ctx, t, 8.5, 7.0, 0.8, 'h', -1);
-  door(ctx, t, 2.8, 9.0, 0.8, 'h', -1);
-  door(ctx, t, 13.8, 9.0, 0.8, 'h', 1);
-  door(ctx, t, 14.2, 9.4, 0.8, 'v', -1);
-
-  windowMark(ctx, t, 1.5, 0, 6.0, true);
-  windowMark(ctx, t, 12.5, 0, 6.0, true);
-  label(ctx, t.X(1.3), t.Y(8.0), '2F 走廊', { size: 6.5, weight: 600, color: MUTED, bg: 'rgba(233,222,203,0.9)' });
+  windowMark(ctx, t, 1.4, 0, 6.0, true);
+  windowMark(ctx, t, 11.5, 0, 6.0, true);
+  label(ctx, t.X(1.2), t.Y(7.5), '2F 内走廊 · 16 间寝室', { size: 5.8, weight: 600, color: MUTED, bg: 'rgba(233,222,203,0.9)' });
+  label(ctx, t.X(1.2), t.Y(6.3), '楼梯 / 客梯至 1F、3F 礼堂', { size: 5.2, weight: 500, color: MUTED, bg: 'rgba(233,222,203,0.8)' });
   miniFooter(ctx, t, width, height);
 }
 
@@ -697,10 +704,14 @@ function drawHall3F() {
   strokeRect(ctx, t, 4.0, 19.0, 4.2, 1.8, WALL, 1.2);
   label(ctx, t.X(6.1), t.Y(19.9), '控制室', { size: 6.2, weight: 600, color: MUTED, align: 'center' });
 
-  wc(ctx, t, 26.3, 17.2, 2.2, 3.8);
-  label(ctx, t.X(27.4), t.Y(21.5), '厕所', { size: 5.8, weight: 700, color: '#4f6f69', align: 'center' });
-  wc(ctx, t, 9.0, 17.2, 2.2, 3.8);
-  label(ctx, t.X(10.1), t.Y(21.5), '厕所', { size: 5.8, weight: 700, color: '#4f6f69', align: 'center' });
+  wc(ctx, t, 25.2, 17.2, 4.2, 3.8);
+  label(ctx, t.X(27.3), t.Y(21.5), '卫生间核心', { size: 5.8, weight: 700, color: '#4f6f69', align: 'center' });
+
+  // Elevator arrival beside the stair.
+  fillRect(ctx, t, 9.2, 17.4, 2.6, 3.4, '#e2d3bc');
+  strokeRect(ctx, t, 9.2, 17.4, 2.6, 3.4, WALL, 1.3);
+  label(ctx, t.X(10.5), t.Y(18.3), 'EL', { size: 6.5, weight: 700, color: ACCENT, align: 'center' });
+  label(ctx, t.X(10.5), t.Y(19.0), '客梯', { size: 5.4, weight: 600, color: MUTED, align: 'center' });
 
   // Grand stair arrival at south center.
   fillRect(ctx, t, 13.4, 17.2, 5.2, 4.0, '#e5d6bf');
@@ -763,17 +774,17 @@ function drawOverall() {
   strokeRect(ctx, t, 48, 38, 22, 16, WALL, 3);
   strokeRect(ctx, t, 0, 0, 72, 56, WALL, 4.5);
 
-  // Grand stair in atrium.
+  // Grand stair + passenger elevator in the atrium.
   stairs(ctx, t, 30, 23, 5.0, 10.0, 'up');
   stairs(ctx, t, 37, 23, 5.0, 10.0, 'up');
   label(ctx, t.X(36), t.Y(34.2), '大楼梯：1F → 2F → 3F 礼堂', { size: 7, weight: 700, color: ACCENT, align: 'center', bg: 'rgba(239,229,212,0.9)' });
 
-  // Small WC markers in wings.
-  for (const [x, z] of [[2.8, 14.6], [48.8, 14.6], [2.8, 50.6], [48.8, 50.6]]) {
-    fillRect(ctx, t, x, z, 2.2, 2.0, '#dce9e6');
-    strokeRect(ctx, t, x, z, 2.2, 2.0, '#7c9893', 0.8);
-    label(ctx, t.X(x + 1.1), t.Y(z + 1.0), 'WC', { size: 5, weight: 700, color: '#4f6f69', align: 'center' });
-  }
+  fillRect(ctx, t, 26.8, 23, 2.4, 4.6, '#e2d3bc');
+  strokeRect(ctx, t, 26.8, 23, 2.4, 4.6, WALL, 1.4);
+  line(ctx, t, 27.0, 23.4, 29.0, 23.4, '#8f7e66', 0.8);
+  line(ctx, t, 28.0, 23, 28.0, 27.6, '#8f7e66', 0.8);
+  label(ctx, t.X(28.0), t.Y(28.0), 'EL', { size: 6.5, weight: 700, color: ACCENT, align: 'center', bg: 'rgba(239,229,212,0.9)' });
+  label(ctx, t.X(28.0), t.Y(28.5), '客梯 1F–3F', { size: 5.6, weight: 600, color: MUTED, align: 'center', bg: 'rgba(239,229,212,0.85)' });
 
   // Doors to corridors.
   door(ctx, t, 24, 8, 1.2, 'v', -1);
@@ -783,11 +794,11 @@ function drawOverall() {
   door(ctx, t, 36, 20, 1.5, 'h', 1);
   door(ctx, t, 36, 36, 1.5, 'h', -1);
 
-  roomLabel(ctx, t.X(3.0), t.Y(4.0), '生活区', '1F 厨房/后厨 · 2F 寝室 · WC', DORM);
+  roomLabel(ctx, t.X(3.0), t.Y(4.0), '生活区', '1F 厨房/后厨 · 2F 16 间寝室', DORM);
   roomLabel(ctx, t.X(49.0), t.Y(4.0), '未开放区', '1F/2F · 不制作', CLOSED);
-  roomLabel(ctx, t.X(3.0), t.Y(40.0), '休憩区', '锻炼 · 乒乓球 · 杂物 · WC', REST);
-  roomLabel(ctx, t.X(49.0), t.Y(40.0), '研究教室区', '10 间教室 · WC', RESEARCH);
-  label(ctx, t.X(36), t.Y(21.0), '中庭 / 大楼梯', { size: 9, weight: 700, color: MUTED, align: 'center', bg: 'rgba(239,229,212,0.9)' });
+  roomLabel(ctx, t.X(3.0), t.Y(40.0), '休憩区', '锻炼 · 乒乓球 · 杂物', REST);
+  roomLabel(ctx, t.X(49.0), t.Y(40.0), '研究教室区', '10 间教室 · 准备/储藏', RESEARCH);
+  label(ctx, t.X(36), t.Y(21.0), '中庭 / 大楼梯 / 客梯', { size: 9, weight: 700, color: MUTED, align: 'center', bg: 'rgba(239,229,212,0.9)' });
 
   // Dimensions.
   ctx.save();
@@ -886,6 +897,22 @@ function drawSection() {
   ctx.restore();
   label(ctx, 510, sy - 32, '通往 3F 礼堂的大楼梯', { size: 7, weight: 700, color: ACCENT, bg: PAPER });
 
+  // Passenger elevator shaft, 1F–3F.
+  const ex1 = 640;
+  const ex2 = 680;
+  ctx.save();
+  ctx.strokeStyle = WALL;
+  ctx.lineWidth = 1.4;
+  ctx.strokeRect(ex1, level3 + 52, ex2 - ex1, ground - (level3 + 52));
+  ctx.fillStyle = 'rgba(226,211,188,0.75)';
+  ctx.fillRect(ex1 + 6, level2 + 10, ex2 - ex1 - 12, 26);
+  ctx.fillStyle = ACCENT;
+  ctx.font = `700 7px ${FONT}`;
+  ctx.textAlign = 'center';
+  ctx.fillText('EL', (ex1 + ex2) / 2, level2 + 27);
+  ctx.restore();
+  label(ctx, (ex1 + ex2) / 2, level3 + 44, '客梯 1F–3F', { size: 6.5, weight: 700, color: ACCENT, align: 'center', bg: PAPER });
+
   // Ground label.
   label(ctx, 40, ground + 18, '±0.000 · 1F', { size: 8, weight: 500, color: MUTED });
   label(ctx, 40, level2 + 24, '2F', { size: 9, weight: 700, color: MUTED });
@@ -917,5 +944,114 @@ function downloadOverview() {
 
 document.getElementById('downloadOverview')?.addEventListener('click', downloadOverview);
 document.getElementById('printPage')?.addEventListener('click', () => window.print());
+
+/* ------------------------------------------------------------------ *
+ * Canvas lightbox: click any plan to enlarge, wheel/buttons zoom, drag pan.
+ * ------------------------------------------------------------------ */
+
+const lightbox = document.getElementById('lightbox');
+const lightboxStage = document.getElementById('lightboxStage');
+const lightboxImage = document.getElementById('lightboxImage');
+const lightboxTitle = document.getElementById('lightboxTitle');
+const zoomLevel = document.getElementById('zoomLevel');
+let zoom = 1;
+let panX = 0;
+let panY = 0;
+let dragging = false;
+let dragStart = null;
+
+function applyLightboxTransform() {
+  if (!lightboxImage) return;
+  lightboxImage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+  if (zoomLevel) zoomLevel.textContent = `${Math.round(zoom * 100)}%`;
+}
+
+function setZoom(next) {
+  zoom = Math.max(0.5, Math.min(5, next));
+  applyLightboxTransform();
+}
+
+function resetLightbox() {
+  zoom = 1;
+  panX = 0;
+  panY = 0;
+  applyLightboxTransform();
+}
+
+function openLightbox(canvas) {
+  if (!lightbox || !lightboxImage || !canvas) return;
+  lightboxImage.src = canvas.toDataURL('image/png');
+  lightboxImage.alt = canvas.getAttribute('aria-label') || '图纸';
+  if (lightboxTitle) lightboxTitle.textContent = canvas.getAttribute('aria-label') || '图纸';
+  resetLightbox();
+  lightbox.hidden = false;
+  lightbox.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('lightbox-open');
+  document.getElementById('lightboxClose')?.focus();
+}
+
+function closeLightbox() {
+  if (!lightbox) return;
+  lightbox.hidden = true;
+  lightbox.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('lightbox-open');
+  dragging = false;
+  if (lightboxStage) lightboxStage.classList.remove('is-dragging');
+}
+
+document.querySelectorAll('canvas').forEach((canvas) => {
+  canvas.title = '点击放大';
+  canvas.addEventListener('click', () => openLightbox(canvas));
+});
+
+document.getElementById('lightboxClose')?.addEventListener('click', closeLightbox);
+document.getElementById('zoomIn')?.addEventListener('click', () => setZoom(zoom * 1.2));
+document.getElementById('zoomOut')?.addEventListener('click', () => setZoom(zoom / 1.2));
+document.getElementById('zoomReset')?.addEventListener('click', resetLightbox);
+
+lightboxStage?.addEventListener('wheel', (event) => {
+  event.preventDefault();
+  setZoom(zoom * (event.deltaY < 0 ? 1.12 : 0.9));
+}, { passive: false });
+
+lightboxStage?.addEventListener('pointerdown', (event) => {
+  if (event.target !== lightboxImage) return;
+  dragging = true;
+  dragStart = { x: event.clientX - panX, y: event.clientY - panY };
+  lightboxStage.classList.add('is-dragging');
+  lightboxStage.setPointerCapture?.(event.pointerId);
+});
+
+lightboxStage?.addEventListener('pointermove', (event) => {
+  if (!dragging || !dragStart) return;
+  panX = event.clientX - dragStart.x;
+  panY = event.clientY - dragStart.y;
+  applyLightboxTransform();
+});
+
+function endLightboxDrag() {
+  dragging = false;
+  dragStart = null;
+  lightboxStage?.classList.remove('is-dragging');
+}
+
+lightboxStage?.addEventListener('pointerup', endLightboxDrag);
+lightboxStage?.addEventListener('pointercancel', endLightboxDrag);
+
+lightboxImage?.addEventListener('dblclick', () => {
+  setZoom(zoom > 1.4 ? 1 : 2);
+});
+
+lightbox?.addEventListener('click', (event) => {
+  if (event.target === lightboxStage) closeLightbox();
+});
+
+window.addEventListener('keydown', (event) => {
+  if (!lightbox || lightbox.hidden) return;
+  if (event.key === 'Escape') closeLightbox();
+  if (event.key === '+' || event.key === '=') setZoom(zoom * 1.2);
+  if (event.key === '-') setZoom(zoom / 1.2);
+  if (event.key === '0') resetLightbox();
+});
 
 drawAll();
