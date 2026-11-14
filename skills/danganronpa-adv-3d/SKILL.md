@@ -158,7 +158,7 @@ description: Use when designing, building, reviewing, or repairing a Danganronpa
 |---|---|
 | `templates/scaffold/index.html` | 画布、HUD、import map、双场景挂载点 |
 | `templates/scaffold/styles.css` | 共享预览 UI、全屏/准星/Toast |
-| `templates/scaffold/hub.js` | 双场景切换、路由、输入分发、FPS |
+| `templates/scaffold/src/hub.js` | 双场景切换、路由、输入分发、FPS |
 | `templates/runtime/first-person.js` | 第一人称移动、跑步晃动、回正 |
 | `templates/runtime/collision.js` | 圆 vs AABB/OBB、滑动、防卡角 |
 | `templates/runtime/static-builder.js` | 按材质合并、静态批处理 |
