@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>1F + 2F 概念平面 · 校区户型</title>
+  <title>特殊学园 · 1F/2F 生活与教学 · 3F 礼堂</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <header class="page-head">
     <div>
-      <p class="eyebrow">HOPE'S PEAK · CONCEPT FLOOR PLAN</p>
-      <h1>1F + 2F 概念平面</h1>
+      <p class="eyebrow">HOPE'S PEAK · SPECIAL SCHOOL · CONCEPT PLAN</p>
+      <h1>特殊学园概念平面</h1>
       <p class="lede">
-        根据手绘草图整理：中央虚线框为<strong>礼堂</strong>；四角为<strong>宿舍区 / 未开放区 / 休憩区 / 研究教室区</strong>；
-        下方箭头为通往 <strong>3F</strong> 的竖向交通核。尺寸、门位与家具为概念布置，不是施工图。
+        四个翼楼都是 <strong>1F / 2F 两层</strong>；<strong>礼堂位于 3F 最上层</strong>。
+        生活区包含现有厨房/后厨（18 × 14 m）与厕所，传菜口向东接现有餐厅；
+        休憩区加入锻炼、乒乓球与运动杂物间；研究教室区共 10 间；每区都设厕所。
       </p>
+      <div class="chips">
+        <span>1F / 2F 翼楼</span>
+        <span>3F 礼堂</span>
+        <span>每区厕所</span>
+        <span>厨房 18 × 14</span>
+        <span>10 间研究教室</span>
+      </div>
     </div>
     <div class="head-actions">
       <a class="back-link" href="../">← 场景预览</a>
@@ -30,11 +38,11 @@
           <p class="kicker">OVERALL BLOCK PLAN</p>
           <h2 id="overviewTitle">整体骨架</h2>
         </div>
-        <div class="scale-note">概念尺度 <strong>44 × 30 m</strong> · 可调</div>
+        <div class="scale-note">概念尺度 <strong>72 × 56 m</strong> · 可调</div>
       </div>
 
       <div class="canvas-wrap overview-wrap">
-        <canvas id="overviewCanvas" width="1100" height="760" aria-label="校区整体概念平面图">
+        <canvas id="overviewCanvas" width="1200" height="860" aria-label="特殊学园整体概念平面图">
           你的浏览器需要支持 Canvas 才能显示户型图。
         </canvas>
       </div>
@@ -44,123 +52,161 @@
         <span><i class="swatch door"></i>门</span>
         <span><i class="swatch window"></i>窗</span>
         <span><i class="swatch corridor"></i>走廊</span>
-        <span><i class="swatch hall"></i>礼堂</span>
+        <span><i class="swatch hall"></i>3F 礼堂投影</span>
         <span><i class="swatch closed"></i>未开放</span>
-        <span><i class="swatch furniture"></i>家具</span>
+        <span><i class="swatch wc"></i>厕所</span>
+        <span><i class="swatch furniture"></i>家具/器材</span>
+      </div>
+
+      <div class="section-block">
+        <div class="section-head">
+          <p class="kicker">VERTICAL SECTION</p>
+          <h3>竖向关系：1F / 2F 翼楼 + 3F 礼堂</h3>
+        </div>
+        <div class="canvas-wrap section-wrap">
+          <canvas id="sectionCanvas" width="1200" height="250" aria-label="1F/2F/3F 竖向关系与通往礼堂的楼梯示意图"></canvas>
+        </div>
       </div>
     </section>
 
     <section class="areas-head" aria-labelledby="areasTitle">
       <div>
-        <p class="kicker">AREA STUDIES</p>
+        <p class="kicker">AREA STUDIES · TWO LEVELS EACH</p>
         <h2 id="areasTitle">分区户型</h2>
       </div>
-      <p>每个区域单独一张 Canvas；先定骨架，再进 3D 建模。</p>
+      <p>除礼堂外，每个区域都画 1F 与 2F 两张；礼堂单独画 3F。</p>
     </section>
 
     <section class="area-grid">
       <article class="panel area-card">
         <div class="area-head">
           <div>
-            <p class="kicker">NW · 12 × 10 m</p>
-            <h3>宿舍区</h3>
+            <p class="kicker">NW · 22 × 16 m / 层</p>
+            <h3>生活区</h3>
           </div>
-          <span class="tag dorm">DORM</span>
+          <span class="tag dorm">LIVING</span>
         </div>
-        <div class="canvas-wrap">
-          <canvas id="dormCanvas" width="640" height="520" aria-label="宿舍区概念户型图"></canvas>
+        <div class="level-pair">
+          <div class="mini-plan">
+            <span class="level-badge">1F</span>
+            <canvas id="life1f" width="380" height="340" aria-label="生活区 1F：厨房、后厨、厕所"></canvas>
+          </div>
+          <div class="mini-plan">
+            <span class="level-badge">2F</span>
+            <canvas id="life2f" width="380" height="340" aria-label="生活区 2F：寝室、厕所"></canvas>
+          </div>
         </div>
-        <p class="caption">4 间寝室 + 共享卫浴 / 洗衣；内走廊连接礼堂侧廊。</p>
+        <p class="caption">1F：现有厨房/后厨 18×14、传菜口向东接现有餐厅、货梯、冷库、厕所；2F：4 间寝室 + 共享卫浴/洗衣 + 厕所。</p>
       </article>
 
       <article class="panel area-card">
         <div class="area-head">
           <div>
-            <p class="kicker">NE · 12 × 10 m</p>
-            <h3>未开放区</h3>
-          </div>
-          <span class="tag closed">LOCKED</span>
-        </div>
-        <div class="canvas-wrap">
-          <canvas id="closedCanvas" width="640" height="520" aria-label="未开放区概念户型图"></canvas>
-        </div>
-        <p class="caption">按草图标记“未开放（不制作）”；只保留结构轮廓与封堵门洞。</p>
-      </article>
-
-      <article class="panel area-card">
-        <div class="area-head">
-          <div>
-            <p class="kicker">SW · 12 × 10 m</p>
+            <p class="kicker">SW · 22 × 16 m / 层</p>
             <h3>休憩区</h3>
           </div>
-          <span class="tag rest">LOUNGE</span>
+          <span class="tag rest">RECREATION</span>
         </div>
-        <div class="canvas-wrap">
-          <canvas id="restCanvas" width="640" height="520" aria-label="休憩区概念户型图"></canvas>
+        <div class="level-pair">
+          <div class="mini-plan">
+            <span class="level-badge">1F</span>
+            <canvas id="rec1f" width="380" height="340" aria-label="休憩区 1F：锻炼、乒乓球、运动杂物间、厕所"></canvas>
+          </div>
+          <div class="mini-plan">
+            <span class="level-badge">2F</span>
+            <canvas id="rec2f" width="380" height="340" aria-label="休憩区 2F：健身房、乒乓球、储物、厕所"></canvas>
+          </div>
         </div>
-        <p class="caption">沙发/茶几/自动贩卖/简易娱乐；开放布置，不设内隔墙。</p>
+        <p class="caption">1F：综合锻炼区、乒乓球（2 台）、运动杂物间、更衣/厕所；2F：健身房、乒乓球（2 台）、器材储藏、休息/厕所。</p>
       </article>
 
       <article class="panel area-card">
         <div class="area-head">
           <div>
-            <p class="kicker">SE · 12 × 10 m</p>
+            <p class="kicker">SE · 22 × 16 m / 层</p>
             <h3>研究教室区</h3>
           </div>
           <span class="tag research">RESEARCH</span>
         </div>
-        <div class="canvas-wrap">
-          <canvas id="researchCanvas" width="640" height="520" aria-label="研究教室区概念户型图"></canvas>
+        <div class="level-pair">
+          <div class="mini-plan">
+            <span class="level-badge">1F</span>
+            <canvas id="research1f" width="380" height="340" aria-label="研究教室区 1F：01-05 教室、准备室、厕所"></canvas>
+          </div>
+          <div class="mini-plan">
+            <span class="level-badge">2F</span>
+            <canvas id="research2f" width="380" height="340" aria-label="研究教室区 2F：06-10 教室、储藏、厕所"></canvas>
+          </div>
         </div>
-        <p class="caption">2 间研究教室 + 准备/储藏；可改为一间大教室或实验室。</p>
+        <p class="caption">1F：研究教室 01–05 + 准备室/厕所；2F：研究教室 06–10 + 器材储藏/厕所；共 10 间。</p>
+      </article>
+
+      <article class="panel area-card">
+        <div class="area-head">
+          <div>
+            <p class="kicker">NE · 22 × 16 m / 层</p>
+            <h3>未开放区</h3>
+          </div>
+          <span class="tag closed">LOCKED</span>
+        </div>
+        <div class="level-pair">
+          <div class="mini-plan">
+            <span class="level-badge">1F</span>
+            <canvas id="closed1f" width="380" height="340" aria-label="未开放区 1F 概念图"></canvas>
+          </div>
+          <div class="mini-plan">
+            <span class="level-badge">2F</span>
+            <canvas id="closed2f" width="380" height="340" aria-label="未开放区 2F 概念图"></canvas>
+          </div>
+        </div>
+        <p class="caption">按草图“未开放（不制作）”：两层均只留结构轮廓、封堵门洞与封堵厕所核心，不布置家具。</p>
       </article>
 
       <article class="panel area-card wide-card">
         <div class="area-head">
           <div>
-            <p class="kicker">CENTER · 10 × 14 m</p>
+            <p class="kicker">3F ONLY · 32 × 22 m</p>
             <h3>中央礼堂</h3>
           </div>
-          <span class="tag hall">AUDITORIUM</span>
+          <span class="tag hall">AUDITORIUM · 3F</span>
         </div>
         <div class="canvas-wrap">
-          <canvas id="hallCanvas" width="720" height="620" aria-label="中央礼堂概念户型图"></canvas>
+          <canvas id="hall3f" width="900" height="620" aria-label="3F 中央礼堂：舞台、座席、门厅、厕所、大楼梯"></canvas>
         </div>
-        <p class="caption">北侧舞台、中央座席、两侧通道、南侧控制/入口；虚线为礼堂边界。</p>
+        <p class="caption">位于 3F 最上层；北侧舞台、中央座席、南侧门厅/控制/厕所；2F 大楼梯到达。其余翼楼在 3F 为屋面/挑空。</p>
       </article>
     </section>
 
     <section class="panel notes" aria-labelledby="notesTitle">
       <div class="panel-head">
         <div>
-          <p class="kicker">ASSUMPTIONS</p>
-          <h2 id="notesTitle">概念假设</h2>
+          <p class="kicker">DESIGN NOTES</p>
+          <h2 id="notesTitle">设计关系</h2>
         </div>
       </div>
       <div class="notes-grid">
         <div>
-          <h4>从草图提取</h4>
+          <h4>竖向</h4>
           <ul>
-            <li>1F + 2F 共用同一骨架；四角功能可上下互换。</li>
-            <li>中央虚线框 = 礼堂；四周留 3 m 走廊。</li>
-            <li>下方箭头 = 通往 3F 的竖向交通核。</li>
-            <li>右上角 = 未开放（不制作），只做轮廓。</li>
+            <li>四个翼楼均为 1F + 2F；礼堂独占 3F。</li>
+            <li>中央中庭设大楼梯：1F→2F，2F→3F 礼堂。</li>
+            <li>3F 礼堂下方为 1F/2F 中庭与楼梯厅。</li>
           </ul>
         </div>
         <div>
-          <h4>暂定尺寸</h4>
+          <h4>生活区 / 厨房</h4>
           <ul>
-            <li>总平面 44 × 30 m；四角区域 12 × 10 m。</li>
-            <li>礼堂 10 × 14 m；走廊 3 m。</li>
-            <li>层高、柱网、楼梯宽度待结构阶段确定。</li>
+            <li>现有厨房 18×14 m 放在生活区 1F。</li>
+            <li>东侧传菜口接现有餐厅；西侧货梯；北侧冷库；南侧清洗。</li>
+            <li>2F 为寝室；1F/2F 均设厕所。</li>
           </ul>
         </div>
         <div>
-          <h4>下一步</h4>
+          <h4>休憩 / 研究</h4>
           <ul>
-            <li>确认房间功能与门位；再拆 fixed / moving 两套机位。</li>
-            <li>确认礼堂是单层还是通高；是否需要二层看台。</li>
-            <li>把确认后的骨架写进 `scene-spec.yaml`。</li>
+            <li>休憩区两层都放乒乓球与运动杂物间，2F 增加健身房。</li>
+            <li>研究教室 1F 01–05，2F 06–10；两层都有厕所。</li>
+            <li>未开放区两层封堵，但保留厕所核心。</li>
           </ul>
         </div>
       </div>

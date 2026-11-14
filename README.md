@@ -141,7 +141,7 @@ python -m http.server 8123 --bind 127.0.0.1
 - 说明：[floorplan/README.md](single-dorm/floorplan/README.md)
 - 本地地址：http://127.0.0.1:8123/floorplan/
 
-内容：整体骨架（四角房间 + 中央礼堂 + 走廊 + 3F 交通核）、宿舍区、未开放区、休憩区、研究教室区、中央礼堂。
+内容：1F/2F 四翼楼（生活区含现有厨房/后厨与厕所、休憩区含乒乓球/运动杂物间、研究教室 10 间、未开放区）、3F 中央礼堂、通往礼堂的大楼梯与竖向剖面。每区均有厕所。
 
 ![校区整体骨架](single-dorm/floorplan/preview/overview.png)
 
