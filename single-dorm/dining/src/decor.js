@@ -10,6 +10,7 @@ import {
   torusGeometry,
   latheGeometry,
   tubeGeometry,
+  rodGeometry,
   mulberry32,
 } from './utils.js';
 
@@ -386,56 +387,160 @@ function buildPlants(builder, materials) {
       receive: true,
     });
 
-    // Trunk and branches: a few tubes are enough at this distance.
+    // Trunk and a real branch hierarchy. Every leaf is attached to a
+    // secondary twig by a short woody stem, so nothing floats.
     builder.add(
-      'walnut',
+      'plantWood',
       tubeGeometry(
         [
           [0, 0.48, 0],
-          [0.04, 1.05, 0.03],
-          [-0.04, 1.55, -0.02],
-          [0.02, 2.0, 0.03],
+          [0.035, 0.9, 0.025],
+          [0.0, 1.28, 0],
         ],
-        0.045,
-        16,
-        6,
+        0.036,
+        14,
+        10,
       ),
       base,
-      { cast: true, receive: true },
+      { cast: false, receive: true },
+    );
+    builder.add(
+      'plantWood',
+      tubeGeometry(
+        [
+          [0.0, 1.24, 0],
+          [-0.035, 1.55, -0.02],
+          [0.02, 2.0, 0.03],
+        ],
+        0.024,
+        14,
+        10,
+      ),
+      base,
+      { cast: false, receive: true },
     );
 
-    const branchTips = [];
-    const branchCount = 4;
-    for (let b = 0; b < branchCount; b += 1) {
-      const angle = (b / branchCount) * Math.PI * 2 + random() * 0.5;
-      const startY = 1.35 + random() * 0.4;
-      const reach = 0.55 + random() * 0.25;
-      const start = [0, startY, 0];
-      const end = [Math.cos(angle) * reach, startY + 0.4 + random() * 0.25, Math.sin(angle) * reach];
-      builder.add('walnut', tubeGeometry([start, [(start[0] + end[0]) / 2, (startY + end[1]) / 2 + 0.06, (start[2] + end[2]) / 2], end], 0.022, 10, 5), base, {
-        cast: true,
-        receive: true,
-      });
-      branchTips.push(end);
-    }
-
     const leafGeometry = sphereGeometry(1, 10, 6);
-    for (let i = 0; i < 46; i += 1) {
-      const tip = branchTips[i % branchTips.length];
-      const spread = 0.62;
-      const lower = i > 30;
-      const x = tip[0] + (random() - 0.5) * spread + (random() - 0.5) * 0.25;
-      const y = tip[1] + (lower ? -0.55 - random() * 0.35 : (random() - 0.15) * 0.6);
-      const z = tip[2] + (random() - 0.5) * spread;
-      const scale = 0.11 + random() * 0.075;
-      const rotation = random() * Math.PI;
+    leafGeometry.scale(0.115, 0.008, 0.06);
+    leafGeometry.translate(0.115, 0, 0);
+
+    const addLeaf = (origin, yaw, pitch, droop, scale, key) => {
       const matrix = base
         .clone()
-        .multiply(trs(x, y, z, rotation))
-        .multiply(new THREE.Matrix4().makeRotationX(-0.5 + random() * 0.6))
-        .multiply(new THREE.Matrix4().makeScale(scale * 1.7, scale * 0.2, scale));
-      const key = i % 3 === 0 ? 'leafLight' : 'leaf';
+        .multiply(trs(origin[0], origin[1], origin[2], yaw))
+        .multiply(new THREE.Matrix4().makeRotationX(pitch))
+        .multiply(new THREE.Matrix4().makeRotationZ(droop))
+        .multiply(new THREE.Matrix4().makeScale(scale, 1, scale));
       builder.add(key, leafGeometry, matrix, { cast: true, receive: true });
+    };
+
+    const primaryCount = 5;
+    const primaryBranches = [];
+    for (let b = 0; b < primaryCount; b += 1) {
+      const angle = (b / primaryCount) * Math.PI * 2 + 0.35 + random() * 0.35;
+      const startY = 1.2 + random() * 0.5;
+      const reach = 0.64 + random() * 0.26;
+      const start = [0, startY, 0];
+      const end = [
+        Math.cos(angle) * reach,
+        2.0 + random() * 0.42,
+        Math.sin(angle) * reach,
+      ];
+      const mid = [
+        (start[0] + end[0]) * 0.5 + Math.cos(angle + 0.9) * 0.05,
+        (start[1] + end[1]) * 0.5 + 0.07,
+        (start[2] + end[2]) * 0.5 + Math.sin(angle + 0.9) * 0.05,
+      ];
+      builder.add('plantWood', tubeGeometry([start, mid, end], 0.019, 12, 5), base, {
+        cast: false,
+        receive: true,
+      });
+      primaryBranches.push({ start, mid, end, angle });
+
+      // Three leaves right at the branch tip.
+      for (let tipLeaf = 0; tipLeaf < 3; tipLeaf += 1) {
+        const origin = [
+          end[0] + (random() - 0.5) * 0.12,
+          end[1] + (random() - 0.2) * 0.1,
+          end[2] + (random() - 0.5) * 0.12,
+        ];
+        const stem = rodGeometry(end, origin, 0.005, 5);
+        builder.add('plantWood', stem, base, { cast: false, receive: true });
+        const yaw = Math.atan2(origin[2], origin[0]) + (random() - 0.5) * 0.7;
+        const pitch = -0.2 + (random() - 0.5) * 1.1;
+        addLeaf(origin, yaw, pitch, -0.12 - random() * 0.3, 0.9 + random() * 0.3, tipLeaf === 0 ? 'leafLight' : 'leaf');
+      }
+    }
+
+    for (const branch of primaryBranches) {
+      // A little foliage lower on the primary branch closes the gap
+      // between the bare trunk and the crown.
+      for (const t of [0.3, 0.52]) {
+        const point = [
+          branch.start[0] + (branch.end[0] - branch.start[0]) * t,
+          branch.start[1] + (branch.end[1] - branch.start[1]) * t,
+          branch.start[2] + (branch.end[2] - branch.start[2]) * t,
+        ];
+        const origin = [
+          point[0] + Math.cos(branch.angle) * (0.1 + random() * 0.1),
+          point[1] - 0.04 + random() * 0.1,
+          point[2] + Math.sin(branch.angle) * (0.1 + random() * 0.1),
+        ];
+        builder.add('plantWood', rodGeometry(point, origin, 0.005, 4), base, { cast: false, receive: true });
+        const pitch = -0.2 + (random() - 0.5) * 1.2;
+        addLeaf(
+          origin,
+          branch.angle + (random() - 0.5) * 0.8,
+          pitch,
+          -0.1 - random() * 0.35,
+          0.9 + random() * 0.3,
+          'leaf',
+        );
+      }
+
+      for (let k = 0; k < 4; k += 1) {
+        const t = 0.44 + k * 0.145;
+        const basePoint = [
+          branch.start[0] + (branch.end[0] - branch.start[0]) * t,
+          branch.start[1] + (branch.end[1] - branch.start[1]) * t,
+          branch.start[2] + (branch.end[2] - branch.start[2]) * t,
+        ];
+        const twigAngle = branch.angle + (k - 1.5) * 0.52 + (random() - 0.5) * 0.3;
+        const length = 0.22 + random() * 0.16;
+        const twigEnd = [
+          basePoint[0] + Math.cos(twigAngle) * length,
+          basePoint[1] + 0.1 + random() * 0.16,
+          basePoint[2] + Math.sin(twigAngle) * length,
+        ];
+        const twigMid = [
+          (basePoint[0] + twigEnd[0]) / 2 + Math.cos(twigAngle + 1.2) * 0.03,
+          (basePoint[1] + twigEnd[1]) / 2 + 0.04,
+          (basePoint[2] + twigEnd[2]) / 2 + Math.sin(twigAngle + 1.2) * 0.03,
+        ];
+        builder.add('plantWood', tubeGeometry([basePoint, twigMid, twigEnd], 0.012, 8, 5), base, {
+          cast: false,
+          receive: true,
+        });
+
+        for (let l = 0; l < 5; l += 1) {
+          const u = 0.46 + l * 0.13;
+          const point = [
+            basePoint[0] + (twigEnd[0] - basePoint[0]) * u,
+            basePoint[1] + (twigEnd[1] - basePoint[1]) * u,
+            basePoint[2] + (twigEnd[2] - basePoint[2]) * u,
+          ];
+          const origin = [
+            point[0] + (random() - 0.5) * 0.11,
+            point[1] + (random() - 0.25) * 0.08,
+            point[2] + (random() - 0.5) * 0.11,
+          ];
+          const stem = rodGeometry(point, origin, 0.005, 4);
+          builder.add('plantWood', stem, base, { cast: false, receive: true });
+          const yaw = Math.atan2(origin[2], origin[0]) + (random() - 0.5) * 0.8;
+          const pitch = -0.2 + (random() - 0.5) * 1.2;
+          addLeaf(origin, yaw, pitch, -0.1 - random() * 0.35, 0.95 + random() * 0.35, l === 1 ? 'leafLight' : 'leaf');
+        }
+      }
     }
   }
 }

@@ -447,7 +447,7 @@ export function createMaterials(textures) {
   });
 
   const leaf = std({
-    color: 0x66744f,
+    color: 0x72805a,
     roughness: 0.82,
     metalness: 0,
     envMapIntensity: 0.14,
@@ -455,11 +455,22 @@ export function createMaterials(textures) {
   });
 
   const leafLight = std({
-    color: 0x7d8a5f,
+    color: 0x8b966c,
     roughness: 0.84,
     metalness: 0,
     envMapIntensity: 0.14,
     name: 'plant-leaf-light',
+  });
+
+  const plantWood = std({
+    map: textures.wood,
+    bumpMap: textures.wood,
+    bumpScale: 0.0028,
+    color: 0xb08f70,
+    roughness: 0.58,
+    metalness: 0.02,
+    envMapIntensity: 0.24,
+    name: 'plant-wood',
   });
 
   return {
@@ -515,5 +526,6 @@ export function createMaterials(textures) {
     soil,
     leaf,
     leafLight,
+    plantWood,
   };
 }

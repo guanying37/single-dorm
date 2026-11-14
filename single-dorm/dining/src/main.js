@@ -557,6 +557,7 @@ function readNumber(name, fallback) {
 }
 
 async function boot() {
+  if (window.location.protocol === 'file:') return;
   await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
   try {

@@ -83,6 +83,15 @@
       </div>
     </div>
 
+    <script>
+      if (window.location.protocol === 'file:') {
+        var fileLoader = document.getElementById('loader');
+        if (fileLoader) {
+          fileLoader.innerHTML = '<div class="loader-inner"><p class="loader-title">需要通过本地服务器打开</p><p class="loader-subtitle">双击 single-dorm / start-preview.cmd</p><p class="loader-subtitle">或在该目录运行 python -m http.server 8123</p></div>';
+        }
+      }
+    </script>
+
     <noscript>
       <div class="noscript">这个 3D 预览需要启用 JavaScript。<br>请启用后重新载入页面。</div>
     </noscript>
