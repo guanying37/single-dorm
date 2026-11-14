@@ -133,6 +133,18 @@ python -m http.server 8123 --bind 127.0.0.1
 
 更新站点：把 `single-dorm/` 的内容同步到 `gh-pages` 分支根目录后推送。
 
+## 校区概念平面
+
+根据手绘草图整理的概念户型图（Canvas，非施工图）：
+
+- 页面：[single-dorm/floorplan/](single-dorm/floorplan/)
+- 说明：[floorplan/README.md](single-dorm/floorplan/README.md)
+- 本地地址：http://127.0.0.1:8123/floorplan/
+
+内容：整体骨架（四角房间 + 中央礼堂 + 走廊 + 3F 交通核）、宿舍区、未开放区、休憩区、研究教室区、中央礼堂。
+
+![校区整体骨架](single-dorm/floorplan/preview/overview.png)
+
 ## 制作 Skill
 
 本仓库还维护一套可复用的「弹丸论破风格 ADV 3D 场景」skill：
