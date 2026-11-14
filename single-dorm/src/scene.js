@@ -97,25 +97,15 @@ export class SingleDormScene {
     const lights = new THREE.Group();
     lights.name = 'room-lighting';
 
-    const hemisphere = new THREE.HemisphereLight(0xfff2d8, 0x594535, 0.56);
+    const hemisphere = new THREE.HemisphereLight(0xfff2d8, 0x594535, 0.6);
     hemisphere.name = 'warm-sky-fill';
     lights.add(hemisphere);
 
-    // The pendant is the room's visible light source, so it must also be
-    // the light that owns the shadows. A gentle side fill adds modelling
-    // without casting a second, contradictory set of shadows.
-    const fill = new THREE.DirectionalLight(0xffe6cf, 0.28);
-    fill.name = 'soft-side-fill';
-    fill.position.set(2.2, 3.6, 1.9);
-    fill.target.position.set(0, 1.0, -0.3);
-    fill.castShadow = false;
-    lights.add(fill);
-    lights.add(fill.target);
-
     // One shadow-casting key, placed just under the pendant shade and
-    // aimed straight down. Every shadow in the room therefore radiates
-    // from the same lamp the player sees. The wide, soft cone still
-    // reaches the walls and the room corners.
+    // aimed straight down. The pendant is the room's only visible lamp,
+    // so no side directional fill is allowed to light surfaces from a
+    // direction no lamp occupies. The wide, soft cone still reaches the
+    // walls and the room corners.
     const key = new THREE.SpotLight(0xffd2a0, 34, 9.2, 1.07, 0.62, 1.8);
     key.name = 'pendant-shadow-light';
     key.position.set(0, 2.275, 0);
@@ -147,7 +137,6 @@ export class SingleDormScene {
     lights.add(windowSpill);
     this.lights = {
       hemisphere,
-      fill,
       key,
       pendant,
       windowSpill,

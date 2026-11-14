@@ -560,7 +560,18 @@ export function buildFurniture(builder, materials, root) {
 
     addBouquet(builder, tableMatrix, table.variant);
 
-    colliders.push({ x: table.x, z: table.z, hx: 1.55, hz: 1.45 });
+    // Table + individual chairs. The four diagonal corners of a table
+    // setting have no chairs, so they stay walkable instead of being
+    // swallowed by one oversized cluster box.
+    colliders.push({ x: table.x, z: table.z, hx: 0.95, hz: 0.55 });
+    for (const chair of chairs) {
+      colliders.push({
+        x: table.x + chair.x,
+        z: table.z + chair.z,
+        hx: 0.29,
+        hz: 0.29,
+      });
+    }
   }
 
   const sideboard = buildSideboard(builder, materials, root);

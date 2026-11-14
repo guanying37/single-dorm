@@ -545,6 +545,45 @@ function buildPlants(builder, materials) {
   }
 }
 
+/* --- Wall speakers -------------------------------------------------- */
+
+const SPEAKER_POSITIONS = Object.freeze([
+  { x: 17.7, z: 0, ry: -Math.PI / 2 },
+  { x: -17.7, z: 0, ry: Math.PI / 2 },
+]);
+
+function buildSpeakers(builder) {
+  for (const speaker of SPEAKER_POSITIONS) {
+    const matrix = trs(speaker.x, 2.62, speaker.z, speaker.ry).multiply(
+      new THREE.Matrix4().makeRotationX(0.16),
+    );
+    const part = (key, geometry, local, options = {}) =>
+      builder.add(key, geometry, matrix.clone().multiply(local), options);
+
+    // Wall plate, bracket and cabinet (local +Z is the front).
+    part('iron', boxGeometry(0.13, 0.26, 0.03), trs(0, 0, -0.16), { cast: false });
+    part('iron', boxGeometry(0.055, 0.07, 0.15), trs(0, 0.02, -0.09), { cast: false });
+    part('speakerShell', boxGeometry(0.34, 0.5, 0.26), trs(0, 0, 0.02), { cast: true });
+    part('speakerGrille', boxGeometry(0.3, 0.46, 0.02), trs(0, 0, 0.155), { cast: false });
+
+    // Woofer and tweeter, slightly proud of the baffle.
+    part('speakerCone', cylinderGeometry(0.082, 0.082, 0.022, 24), trs(0, -0.08, 0.17, 0, 1, 1, 1, Math.PI / 2), {
+      cast: false,
+    });
+    part('steel', torusGeometry(0.095, 0.009, 5, 24), trs(0, -0.08, 0.168), { cast: false });
+    part('steel', cylinderGeometry(0.022, 0.022, 0.008, 16), trs(0, -0.08, 0.184, 0, 1, 1, 1, Math.PI / 2), {
+      cast: false,
+    });
+    part('speakerCone', cylinderGeometry(0.036, 0.036, 0.016, 18), trs(0, 0.15, 0.17, 0, 1, 1, 1, Math.PI / 2), {
+      cast: false,
+    });
+    part('steel', torusGeometry(0.045, 0.006, 4, 20), trs(0, 0.15, 0.168), { cast: false });
+    part('steel', sphereGeometry(0.012, 10, 8), trs(0, 0.15, 0.18), { cast: false });
+    // Small recessed badge, no text.
+    part('steel', boxGeometry(0.07, 0.012, 0.004), trs(0, 0.02, 0.167), { cast: false });
+  }
+}
+
 /* --- Clocks -------------------------------------------------------- */
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
@@ -765,6 +804,7 @@ export function buildDecor(builder, materials, root) {
   buildCeiling(builder);
   buildPaintings(builder);
   buildPlants(builder, materials);
+  buildSpeakers(builder);
 
   const pendulum = buildPendulumClock(materials);
   const swan = buildSwanClock(materials);

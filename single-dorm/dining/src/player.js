@@ -16,7 +16,7 @@ export class FirstPersonControls {
     this.camera = camera;
     this.collision = collision;
 
-    this.position = new THREE.Vector2(START.x, START.z);
+    this.position = new THREE.Vector3(START.x, 0, START.z);
     this.velocity = new THREE.Vector3();
     this.yaw = START.yaw;
     this.pitch = START.pitch;
@@ -31,6 +31,7 @@ export class FirstPersonControls {
     this.bobPhase = 0;
     this.bobAmount = 0;
     this.bobOffset = 0;
+    this.lateral = 0;
     this.roll = 0;
     this.recenterState = null;
     this.lastSpeed = 0;
@@ -176,13 +177,15 @@ export class FirstPersonControls {
     }
 
     const moving = speed > 0.15;
-    const normalized = Math.min(1, speed / MOVE.walkSpeed);
+    const normalized = Math.min(2.0, speed / MOVE.walkSpeed);
     const targetAmount = moving ? MOVE.bobHeight * normalized : 0;
     this.bobAmount = damp(this.bobAmount, targetAmount, 10, dt);
-    if (moving) this.bobPhase += dt * (MOVE.bobFrequency + speed * 0.75);
+    if (moving) this.bobPhase += dt * (MOVE.bobFrequency + speed * 1.15);
     this.bobOffset = Math.sin(this.bobPhase * 2) * this.bobAmount;
     const rollTarget = moving ? Math.sin(this.bobPhase) * MOVE.bobRoll * normalized : 0;
     this.roll = damp(this.roll, rollTarget, 8, dt);
+    const lateralTarget = moving ? Math.cos(this.bobPhase) * this.bobAmount * 0.5 : 0;
+    this.lateral = damp(this.lateral, lateralTarget, 12, dt);
 
     this.applyCamera(dt);
   }
@@ -204,7 +207,13 @@ export class FirstPersonControls {
 
   applyCamera() {
     const eye = this.eyeHeight + this.bobOffset;
-    this.camera.position.set(this.position.x, eye, this.position.z);
+    const rightX = Math.cos(this.yaw);
+    const rightZ = -Math.sin(this.yaw);
+    this.camera.position.set(
+      this.position.x + rightX * this.lateral,
+      eye,
+      this.position.z + rightZ * this.lateral,
+    );
     this.camera.rotation.set(this.pitch, this.yaw, this.roll, 'YXZ');
   }
 }

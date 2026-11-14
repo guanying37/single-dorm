@@ -365,6 +365,14 @@ export function createMaterials(textures) {
     name: 'matte-black',
   });
 
+  const iron = std({
+    color: 0x4a4844,
+    roughness: 0.5,
+    metalness: 0.72,
+    envMapIntensity: 0.7,
+    name: 'iron',
+  });
+
   const cameraBody = std({
     color: 0xe7e3d8,
     roughness: 0.45,
@@ -473,6 +481,30 @@ export function createMaterials(textures) {
     name: 'plant-wood',
   });
 
+  const speakerShell = std({
+    color: 0x3d3c37,
+    roughness: 0.58,
+    metalness: 0.12,
+    envMapIntensity: 0.3,
+    name: 'speaker-shell',
+  });
+
+  const speakerGrille = std({
+    color: 0x262621,
+    roughness: 0.8,
+    metalness: 0.08,
+    envMapIntensity: 0.18,
+    name: 'speaker-grille',
+  });
+
+  const speakerCone = std({
+    color: 0x77766c,
+    roughness: 0.46,
+    metalness: 0.05,
+    envMapIntensity: 0.3,
+    name: 'speaker-cone',
+  });
+
   return {
     wall,
     ceiling,
@@ -514,6 +546,7 @@ export function createMaterials(textures) {
     clockInk,
     whitePaint,
     black,
+    iron,
     cameraBody,
     dome,
     ledRed,
@@ -527,5 +560,9 @@ export function createMaterials(textures) {
     leaf,
     leafLight,
     plantWood,
+    speakerShell,
+    speakerGrille,
+    speakerCone,
   };
 }
+

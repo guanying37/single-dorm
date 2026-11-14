@@ -9,6 +9,7 @@ import {
   uvScaledPlane,
   sphereGeometry,
   torusGeometry,
+  tubeGeometry,
 } from './utils.js';
 
 /* ------------------------------------------------------------------ *
@@ -390,8 +391,10 @@ export function buildRoom(builder, materials) {
   builder.add('ledWhite', cylinderGeometry(0.14, 0.14, 0.012, 20), trs(0, 2.785, HALF_D + 1.15), { cast: false, receive: false });
   builder.add('fixtureMetal', torusGeometry(0.15, 0.012, 6, 24), trs(0, 2.78, HALF_D + 1.15, 0, 1, 1, 1, Math.PI / 2), { cast: false });
 
-  // Runner and a closed door at the end of the stub so the opening reads
-  // as the beginning of a corridor rather than a white box.
+  // Runner and a console at the end of the stub. There is deliberately
+  // no second door here: a door directly behind the entrance reads as a
+  // pointless door-in-a-door, so the corridor ends in a small console
+  // and wall light instead.
   const stubEnd = HALF_D + stubDepth;
   builder.add('matBoard', planeGeometry(1.72, 2.42), trs(0, 0.005, HALF_D + 1.3, 0, 1, 1, 1, -Math.PI / 2), {
     cast: false,
@@ -401,18 +404,45 @@ export function buildRoom(builder, materials) {
     cast: false,
     receive: true,
   });
-  addBox(builder, 'oak', 0.98, 2.1, 0.05, 0, 1.05, stubEnd - 0.035, 0);
-  for (const face of [-1, 1]) {
-    const z = stubEnd - 0.035 + face * 0.032;
-    addBox(builder, 'oakDark', 0.78, 0.012, 0.012, 0, 0.2, z, 0, { cast: false });
-    addBox(builder, 'oakDark', 0.78, 0.012, 0.012, 0, 1.9, z, 0, { cast: false });
-    addBox(builder, 'oakDark', 0.012, 1.7, 0.012, -0.39, 1.05, z, 0, { cast: false });
-    addBox(builder, 'oakDark', 0.012, 1.7, 0.012, 0.39, 1.05, z, 0, { cast: false });
-    builder.add('brass', sphereGeometry(0.03, 12, 8), trs(0.36, 1.02, z + face * 0.025), { cast: false });
+
+  const consoleZ = stubEnd - 0.2;
+  addBox(builder, 'oak', 1.46, 0.05, 0.34, 0, 0.86, consoleZ, 0);
+  addBox(builder, 'oakDark', 1.36, 0.03, 0.26, 0, 0.79, consoleZ, 0, { cast: false });
+  for (const side of [-1, 1]) {
+    addBox(builder, 'oak', 0.055, 0.84, 0.055, side * 0.65, 0.42, consoleZ - 0.12, 0);
+    addBox(builder, 'oak', 0.055, 0.84, 0.055, side * 0.65, 0.42, consoleZ + 0.12, 0);
   }
-  addBox(builder, 'oak', 1.14, 0.09, 0.05, 0, 2.16, stubEnd - 0.04, 0);
-  addBox(builder, 'oak', 0.09, 2.2, 0.05, -0.535, 1.1, stubEnd - 0.04, 0);
-  addBox(builder, 'oak', 0.09, 2.2, 0.05, 0.535, 1.1, stubEnd - 0.04, 0);
+  addBox(builder, 'oakDark', 1.3, 0.05, 0.03, 0, 0.18, consoleZ, 0, { cast: false });
+  builder.add('ceramic', cylinderGeometry(0.055, 0.085, 0.24, 20), trs(0.38, 0.995, consoleZ), { cast: true, receive: true });
+  builder.add('ceramic', cylinderGeometry(0.075, 0.07, 0.02, 20), trs(0.38, 1.125, consoleZ), { cast: true, receive: true });
+  for (let i = 0; i < 3; i += 1) {
+    builder.add(
+      'greenery',
+      tubeGeometry(
+        [
+          [0.38, 1.13, consoleZ],
+          [0.36 + i * 0.02, 1.28 + i * 0.03, consoleZ + (i - 1) * 0.02],
+          [0.34 + i * 0.03, 1.4 + i * 0.04, consoleZ + (i - 1) * 0.03],
+        ],
+        0.004,
+        8,
+        4,
+      ),
+      trs(0, 0, 0),
+      { cast: false, receive: true },
+    );
+  }
+
+  // Wall light above the console.
+  addBox(builder, 'brass', 0.06, 0.16, 0.025, 0, 2.12, stubEnd - 0.015, 0, { cast: false });
+  builder.add('brass', cylinderGeometry(0.012, 0.012, 0.18, 8), trs(0, 2.18, stubEnd - 0.1, 0, 1, 1, 1, Math.PI / 2), {
+    cast: false,
+  });
+  builder.add('frosted', cylinderGeometry(0.1, 0.075, 0.17, 16), trs(0, 2.18, stubEnd - 0.2), { cast: false, receive: true });
+  builder.add('ledWhite', cylinderGeometry(0.055, 0.055, 0.01, 16), trs(0, 2.09, stubEnd - 0.2), {
+    cast: false,
+    receive: false,
+  });
 
   colliders.push(
     { x: 0, z: -HALF_D - 0.13, hx: HALF_W + 0.2, hz: 0.14 },
@@ -425,6 +455,7 @@ export function buildRoom(builder, materials) {
     { x: -stubHalfWidth - 0.06, z: HALF_D + stubDepth / 2, hx: 0.06, hz: stubDepth / 2 },
     { x: stubHalfWidth + 0.06, z: HALF_D + stubDepth / 2, hx: 0.06, hz: stubDepth / 2 },
     { x: 0, z: HALF_D + stubDepth + 0.06, hx: stubHalfWidth + 0.1, hz: 0.06 },
+    { x: 0, z: stubEnd - 0.2, hx: 0.76, hz: 0.2 },
   );
 
   // Wall segments around the service openings (thin door blocks live

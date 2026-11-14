@@ -22,7 +22,7 @@ class Server(socketserver.ThreadingTCPServer):
 
 
 def open_preview():
-    webbrowser.open(f"http://127.0.0.1:{PORT}/dining/")
+    webbrowser.open(f"http://127.0.0.1:{PORT}/#dining")
 
 
 if __name__ == "__main__":
@@ -36,8 +36,8 @@ if __name__ == "__main__":
 
     threading.Timer(1.2, open_preview).start()
     with httpd:
-        print(f"Dining hall : http://127.0.0.1:{PORT}/dining/")
-        print(f"Single dorm : http://127.0.0.1:{PORT}/")
+        print(f"Combined preview : http://127.0.0.1:{PORT}/#dining")
+        print(f"Single dorm home : http://127.0.0.1:{PORT}/")
         print("Press Ctrl+C to stop.")
         try:
             httpd.serve_forever()

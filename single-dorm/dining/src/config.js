@@ -25,11 +25,11 @@ export const START = Object.freeze({
 
 export const MOVE = Object.freeze({
   walkSpeed: 2.6,
-  runSpeed: 4.6,
-  acceleration: 12.5,
+  runSpeed: 6.2,
+  acceleration: 14.0,
   lookSensitivity: 0.0022,
   pitchLimit: Math.PI / 2 - 0.12,
-  bobHeight: 0.012,
+  bobHeight: 0.014,
   bobRoll: 0.0025,
   bobFrequency: 6.4,
 });

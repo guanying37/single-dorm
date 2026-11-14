@@ -100,15 +100,15 @@ export class DiningHallScene {
     const lights = new THREE.Group();
     lights.name = 'hall-lights';
 
-    const hemisphere = new THREE.HemisphereLight(0xfff6e8, 0x8a7861, 0.35);
-    const ambient = new THREE.AmbientLight(0xfff2e1, 0.13);
+    const hemisphere = new THREE.HemisphereLight(0xfff6e8, 0x8a7861, 0.4);
+    const ambient = new THREE.AmbientLight(0xfff2e1, 0.16);
     lights.add(hemisphere, ambient);
 
-    // One soft directional key carries the room's shadow language and
-    // gives walls and furniture a consistent direction of light. It is
-    // baked once with the spot maps.
+    // One soft directional key carries the room's shadow language. It
+    // points straight down from the ceiling plane so every shadow falls
+    // under the object that casts it, matching the visible fixtures.
     const key = new THREE.DirectionalLight(0xfff6ea, 0.72);
-    key.position.set(10, 14, 9);
+    key.position.set(0, 22, 0);
     key.target.position.set(0, 0, 0);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
@@ -118,6 +118,7 @@ export class DiningHallScene {
     key.shadow.camera.bottom = -16;
     key.shadow.camera.near = 1;
     key.shadow.camera.far = 48;
+    key.shadow.camera.up.set(0, 0, 1);
     key.shadow.bias = -0.00035;
     key.shadow.normalBias = 0.03;
     lights.add(key, key.target);
@@ -135,14 +136,6 @@ export class DiningHallScene {
       spots.push(spot);
     }
 
-    // A soft directional fill gives the walls normal-based modelling
-    // without a second set of visible shadows.
-    const fill = new THREE.DirectionalLight(0xfff8ef, 0.34);
-    fill.position.set(6, 9, 8);
-    fill.target.position.set(0, 0, 0);
-    fill.castShadow = false;
-    lights.add(fill, fill.target);
-
     // Wall washers on the long walls: no shadow maps, just soft scallops
     // that make the white plaster read as a surface rather than a fill.
     const washers = [];
@@ -159,14 +152,14 @@ export class DiningHallScene {
 
     const corridor = new THREE.PointLight(
       this.room.corridorLight.color,
-      4.2,
+      this.room.corridorLight.intensity,
       this.room.corridorLight.distance,
       2,
     );
     corridor.position.copy(this.room.corridorLight.position);
     lights.add(corridor);
 
-    this.lights = { hemisphere, ambient, spots, washers, corridor, fill, key };
+    this.lights = { hemisphere, ambient, spots, washers, corridor, key };
     this.scene.add(lights);
   }
 
