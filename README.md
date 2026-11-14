@@ -133,6 +133,16 @@ python -m http.server 8123 --bind 127.0.0.1
 
 更新站点：把 `single-dorm/` 的内容同步到 `gh-pages` 分支根目录后推送。
 
+## 制作 Skill
+
+本仓库还维护一套可复用的「弹丸论破风格 ADV 3D 场景」skill：
+
+- 源文件：[skills/danganronpa-adv-3d/README.md](skills/danganronpa-adv-3d/README.md)
+- 主入口：[skills/danganronpa-adv-3d/SKILL.md](skills/danganronpa-adv-3d/SKILL.md)
+- 内容：需求契约、餐厅实现细则、第一人称/碰撞、光影、同页集成、本地预览、验收清单，以及可复制的 Three.js 脚手架/控制器/碰撞模板。
+
+已安装到本机用户级 skill 目录：`~/.dsh/skills/danganronpa-adv-3d`，下次会话可直接加载。
+
 ## 许可
 
 场景代码可自由用于学习与非商业同人创作。`vendor/` 下的 Three.js 遵循 MIT 协议（见 `single-dorm/vendor/THREE-LICENSE.txt`）。《弹丸论破》相关角色与设定版权归 Spike Chunsoft 所有。
