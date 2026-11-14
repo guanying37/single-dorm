@@ -139,7 +139,7 @@ python -m http.server 8123 --bind 127.0.0.1
 
 - 源文件：[skills/danganronpa-adv-3d/README.md](skills/danganronpa-adv-3d/README.md)
 - 主入口：[skills/danganronpa-adv-3d/SKILL.md](skills/danganronpa-adv-3d/SKILL.md)
-- 内容：需求契约、餐厅实现细则、第一人称/碰撞、光影、同页集成、本地预览、验收清单，以及可复制的 Three.js 脚手架/控制器/碰撞模板。
+- 内容：场景/资产生产线计划、美术方向、场景简报、模块化 kit、家具/道具族、灯光配方、运行时接入、性能预算、验收清单，以及简报/规格/资产清单/交接模板。当前餐厅与宿舍只作为 examples。
 
 已安装到本机用户级 skill 目录：`~/.dsh/skills/danganronpa-adv-3d`，下次会话可直接加载。
 

@@ -1,0 +1,63 @@
+# 场景规格模板
+# 复制为 scenes/<id>/scene-spec.yaml，填完再进入建模提示词阶段。
+
+sceneId: scene.example
+name: 示例场景
+mode: hybrid            # walk | fixed | hybrid
+chapter: ""
+function: ""
+mood: ""
+
+dimensions:
+  width: 0
+  depth: 0
+  height: 0
+  wallThickness: 0.22
+
+connections:
+  - id: ""
+    wall: south         # north | south | east | west
+    type: single        # single | double | opening
+    width: 0.9
+    height: 2.2
+
+playerStart:
+  x: 0
+  z: 0
+  yaw: 0
+  eyeHeight: 1.8
+  radius: 0.30
+
+cameraAnchors:
+  - id: anchor.1
+    position: [0, 1.65, 0]
+    yaw: 0
+    pitch: 0
+    fov: 60
+    use: ""
+
+interactables: []
+
+assets:
+  reuse: []
+  new: []
+  oneoff: []
+
+lighting:
+  recipe: ""
+  keyShadow: vertical-down
+  windowFill: non-shadow
+  fixtures: []
+
+budget:
+  triangles: 450000
+  drawCalls: 90
+  texturesMB: 16
+  shadowMap: 2048
+
+validation:
+  walkable: true
+  hasAdvAnchors: true
+  collision: true
+  interactions: true
+  offline: true
