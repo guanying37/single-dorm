@@ -358,6 +358,66 @@ function miniFooter(ctx, t, width, height) {
   scaleBar(ctx, t, 28, height - 20, 2, 2);
 }
 
+function drawDiningEat() {
+  const canvas = document.getElementById('diningEat');
+  if (!canvas) return;
+  const { ctx, width, height } = initCanvas(canvas);
+  paper(ctx, width, height);
+  grid(ctx, width, height, 24);
+  label(ctx, 40, 25, '生活区 · 餐厅进食区', { size: 12, weight: 700, color: DORM });
+  label(ctx, width - 40, 25, '现有餐厅 36 × 22 m · 6 人桌', { size: 8, weight: 500, color: MUTED, align: 'right' });
+  const t = makeTransform(width, height, 36, 22, 48, 10);
+
+  fillRect(ctx, t, 0, 0, 36, 22, '#fbf4e7');
+  strokeRect(ctx, t, 0, 0, 36, 22, WALL, 4.5);
+
+  // 8 six-seat tables.
+  const tableW = 2.2;
+  const tableD = 1.15;
+  const xs = [7.5, 14.0, 24.0, 30.0];
+  const zs = [5.5, 11.0, 16.5];
+  let count = 0;
+  for (const z of zs) {
+    for (const x of xs) {
+      if (count >= 8) break;
+      fillRect(ctx, t, x, z, tableW, tableD, '#c9b18a');
+      strokeRect(ctx, t, x, z, tableW, tableD, '#8a704b', 1.1);
+      const seats = [
+        [x + 0.45, z - 0.35],
+        [x + 1.1, z - 0.35],
+        [x + 1.75, z - 0.35],
+        [x + 0.45, z + tableD + 0.35],
+        [x + 1.1, z + tableD + 0.35],
+        [x + 1.75, z + tableD + 0.35],
+      ];
+      for (const [sx, sz] of seats) chair(ctx, t, sx, sz, 0.17);
+      count += 1;
+    }
+  }
+
+  // Kitchen pass west.
+  fillRect(ctx, t, 0.2, 9.5, 0.8, 3.0, '#e5d6bf');
+  strokeRect(ctx, t, 0.2, 9.5, 0.8, 3.0, WALL, 1);
+  arrow(ctx, t.X(1.2), t.Y(11.0), t.X(4.0), t.Y(11.0), ACCENT, 1.4);
+  label(ctx, t.X(1.0), t.Y(9.0), '传菜口 ← 厨房', { size: 7, weight: 700, color: ACCENT, bg: PAPER });
+
+  // Entry east / foyer.
+  door(ctx, t, 36, 11, 1.5, 'v', -1);
+  label(ctx, t.X(34.2), t.Y(9.9), '入口', { size: 7, weight: 600, color: MUTED, align: 'right', bg: PAPER });
+
+  windowMark(ctx, t, 4, 0, 7.0, true);
+  windowMark(ctx, t, 19, 0, 6.0, true);
+  windowMark(ctx, t, 5, 22, 6.0, true);
+  windowMark(ctx, t, 22, 22, 6.0, true);
+
+  label(ctx, t.X(18), t.Y(2.4), '进食区 / 公共餐桌', { size: 13, weight: 700, color: DORM, align: 'center', bg: 'rgba(251,244,231,0.86)' });
+  label(ctx, t.X(18), t.Y(2.9), 'DINING · EXISTING HALL', { size: 7, weight: 500, color: MUTED, align: 'center', bg: 'rgba(251,244,231,0.8)' });
+  label(ctx, t.X(18), t.Y(20.2), '西接厨房 · 东侧入口 · 作为生活区 1F 进食区', { size: 7, weight: 500, color: MUTED, align: 'center' });
+
+  north(ctx, width - 42, 62, 0.65);
+  scaleBar(ctx, t, 48, height - 22, 3, 5);
+}
+
 function drawLife1F() {
   const canvas = document.getElementById('life1f');
   const { ctx, width, height } = initCanvas(canvas);
@@ -393,7 +453,7 @@ function drawLife1F() {
   fillRect(ctx, t, 18.95, 3.1, 0.2, 2.0, PAPER);
   arrow(ctx, t.X(19.1), t.Y(4.1), t.X(20.7), t.Y(4.1), ACCENT, 1.2);
   label(ctx, t.X(19.35), t.Y(3.4), '传菜口', { size: 6, weight: 700, color: ACCENT, bg: PAPER });
-  label(ctx, t.X(20.6), t.Y(4.7), '→ 现有餐厅', { size: 6, weight: 600, color: ACCENT, align: 'right' });
+  label(ctx, t.X(20.6), t.Y(4.7), '→ 餐厅进食区', { size: 6, weight: 600, color: ACCENT, align: 'right' });
 
   // Toilets in the remaining east strip.
   wc(ctx, t, 19.4, 9.4, 2.3, 5.2);
@@ -452,10 +512,10 @@ function drawLife2F() {
     }
   }
 
-  // One consolidated restroom / shower core, stacked with 1F.
-  wc(ctx, t, 19.0, 9.4, 2.6, 5.2);
-  label(ctx, t.X(20.3), t.Y(9.8), 'WC / 淋浴核心', { size: 5.4, weight: 700, color: '#4f6f69', align: 'center', bg: 'rgba(220,233,230,0.88)' });
-  label(ctx, t.X(20.3), t.Y(14.7), '服务 1F/2F', { size: 5, weight: 600, color: MUTED, align: 'center' });
+  // Only vertical access here; the area's single WC core is on 1F.
+  stairs(ctx, t, 19.4, 9.6, 2.0, 4.8, 'down');
+  label(ctx, t.X(20.4), t.Y(9.9), '下 1F / WC', { size: 5.2, weight: 700, color: MUTED, align: 'center', bg: 'rgba(233,222,203,0.9)' });
+  label(ctx, t.X(20.4), t.Y(14.7), '卫生间核心在 1F', { size: 5, weight: 600, color: MUTED, align: 'center' });
 
   // Minimal door marks where rooms meet the cross corridor.
   for (const col of columns) {
@@ -547,8 +607,10 @@ function drawRec2F() {
 
   fillRect(ctx, t, 8.5, 10, 5.0, 5, '#eef2ef');
   strokeRect(ctx, t, 8.5, 10, 5.0, 5, '#7c9893', 1.3);
-  label(ctx, t.X(8.8), t.Y(10.5), '更衣 / 厕所', { size: 6.3, weight: 700, color: '#4f6f69' });
-  wc(ctx, t, 11.2, 10, 2.3, 5);
+  label(ctx, t.X(8.8), t.Y(10.5), '更衣 / 淋浴', { size: 6.3, weight: 700, color: '#4f6f69' });
+  fillRect(ctx, t, 11.2, 10.4, 1.8, 0.8, '#c7d9d3');
+  fillRect(ctx, t, 11.2, 12.1, 1.8, 0.8, '#c7d9d3');
+  label(ctx, t.X(10.8), t.Y(14.3), 'WC 在 1F', { size: 5.2, weight: 600, color: MUTED, align: 'center' });
 
   fillRect(ctx, t, 14, 10, 7, 5, '#f4ebde');
   strokeRect(ctx, t, 14, 10, 7, 5, WALL, 1.3);
@@ -609,8 +671,15 @@ function drawResearch(level) {
   fillRect(ctx, t, 15, 9.4, 3.0, 5.6, '#eef2ef');
   strokeRect(ctx, t, 15, 9.4, 3.0, 5.6, '#7c9893', 1.2);
   label(ctx, t.X(15.25), t.Y(9.75), level === 1 ? '准备室' : '储藏', { size: 6, weight: 700, color: '#4f6f69' });
-  wc(ctx, t, 18.2, 9.4, 2.8, 5.6);
-  label(ctx, t.X(19.6), t.Y(14.7), '厕所', { size: 6, weight: 700, color: '#4f6f69', align: 'center' });
+  if (level === 1) {
+    wc(ctx, t, 18.2, 9.4, 2.8, 5.6);
+    label(ctx, t.X(19.6), t.Y(14.7), '卫生间核心', { size: 5.4, weight: 700, color: '#4f6f69', align: 'center' });
+  } else {
+    fillRect(ctx, t, 18.2, 9.4, 2.8, 5.6, '#eee5d6');
+    strokeRect(ctx, t, 18.2, 9.4, 2.8, 5.6, WALL, 1.1);
+    for (let i = 0; i < 3; i += 1) fillRect(ctx, t, 18.4, 10.0 + i * 1.2, 2.1, 0.32, '#b9a688');
+    label(ctx, t.X(19.6), t.Y(14.7), 'WC 在 1F', { size: 5.2, weight: 600, color: MUTED, align: 'center' });
+  }
 
   door(ctx, t, 3.8, 7.0, 0.8, 'h', 1);
   door(ctx, t, 10.8, 7.0, 0.8, 'h', 1);
@@ -637,9 +706,13 @@ function drawClosed(level) {
   hatch(ctx, t, 0.3, 0.3, 21.4, 15.4, '#b6ac9c', 10);
   strokeRect(ctx, t, 0, 0, 22, 16, WALL, 4);
 
-  fillRect(ctx, t, 17.5, 11.5, 3.8, 4.0, '#e7ece9');
-  hatch(ctx, t, 17.5, 11.5, 3.8, 4.0, '#a8bbb5', 8);
-  label(ctx, t.X(19.4), t.Y(13.5), 'WC 封堵', { size: 6.5, weight: 700, color: '#4f6f69', align: 'center', bg: 'rgba(247,240,228,0.85)' });
+  if (level === 1) {
+    fillRect(ctx, t, 17.5, 11.5, 3.8, 4.0, '#e7ece9');
+    hatch(ctx, t, 17.5, 11.5, 3.8, 4.0, '#a8bbb5', 8);
+    label(ctx, t.X(19.4), t.Y(13.5), 'WC 封堵', { size: 6.5, weight: 700, color: '#4f6f69', align: 'center', bg: 'rgba(247,240,228,0.85)' });
+  } else {
+    label(ctx, t.X(19.4), t.Y(13.5), 'WC 核心仅 1F', { size: 5.6, weight: 600, color: MUTED, align: 'center', bg: 'rgba(247,240,228,0.85)' });
+  }
 
   ctx.save();
   ctx.strokeStyle = CLOSED;
@@ -710,7 +783,7 @@ function drawHall3F() {
   // Elevator arrival beside the stair.
   fillRect(ctx, t, 9.2, 17.4, 2.6, 3.4, '#e2d3bc');
   strokeRect(ctx, t, 9.2, 17.4, 2.6, 3.4, WALL, 1.3);
-  label(ctx, t.X(10.5), t.Y(18.3), 'EL', { size: 6.5, weight: 700, color: ACCENT, align: 'center' });
+  label(ctx, t.X(10.5), t.Y(18.3), 'EL 3F', { size: 6.5, weight: 700, color: ACCENT, align: 'center' });
   label(ctx, t.X(10.5), t.Y(19.0), '客梯', { size: 5.4, weight: 600, color: MUTED, align: 'center' });
 
   // Grand stair arrival at south center.
@@ -738,67 +811,65 @@ function drawOverall() {
 
   label(ctx, 58, 30, "HOPE'S PEAK · SPECIAL SCHOOL", { size: 8, weight: 600, color: MUTED });
   label(ctx, 58, 58, '整体骨架 / 1F·2F 翼楼 + 3F 礼堂', { size: 20, weight: 500, color: INK });
-  label(ctx, 58, 80, '四个翼楼均为两层；礼堂独占 3F；每区设厕所', { size: 8, weight: 500, color: MUTED });
+  label(ctx, 58, 80, '四翼贴主走廊布置；礼堂独占 3F；每区一个集中卫生间核心', { size: 8, weight: 500, color: MUTED });
 
-  const t = makeTransform(width, height, 72, 56, 58, 30);
+  const t = makeTransform(width, height, 52, 40, 58, 30);
 
-  // Wing fill.
+  // Four wings touching the main corridor, no empty atrium.
   fillRect(ctx, t, 2, 2, 22, 16, '#fbf4e7');
-  fillRect(ctx, t, 48, 2, 22, 16, '#fbf4e7');
-  fillRect(ctx, t, 2, 38, 22, 16, '#fbf4e7');
-  fillRect(ctx, t, 48, 38, 22, 16, '#fbf4e7');
+  fillRect(ctx, t, 28, 2, 22, 16, '#fbf4e7');
+  fillRect(ctx, t, 2, 22, 22, 16, '#fbf4e7');
+  fillRect(ctx, t, 28, 22, 22, 16, '#fbf4e7');
 
-  // Corridors.
-  fillRect(ctx, t, 24, 18, 2, 20, CORRIDOR);
-  fillRect(ctx, t, 46, 18, 2, 20, CORRIDOR);
-  fillRect(ctx, t, 24, 18, 24, 2, CORRIDOR);
-  fillRect(ctx, t, 24, 36, 24, 2, CORRIDOR);
-
-  // Atrium.
-  fillRect(ctx, t, 26, 20, 20, 16, '#efe5d4');
-  strokeRect(ctx, t, 26, 20, 20, 16, '#b7a68e', 1.2, [5, 4]);
+  // Single main corridor cross, 4 m wide.
+  fillRect(ctx, t, 24, 2, 4, 36, CORRIDOR);
+  fillRect(ctx, t, 2, 18, 48, 4, CORRIDOR);
+  label(ctx, t.X(26), t.Y(6.0), '主走廊', { size: 6.5, weight: 700, color: MUTED, align: 'center', bg: 'rgba(233,222,203,0.9)' });
+  label(ctx, t.X(26), t.Y(34.0), '主走廊', { size: 6.5, weight: 700, color: MUTED, align: 'center', bg: 'rgba(233,222,203,0.9)' });
 
   // 3F hall projection.
-  strokeRect(ctx, t, 20, 17, 32, 22, HALL, 2.5, [10, 7]);
-  fillRect(ctx, t, 20, 17, 32, 22, 'rgba(164,50,63,0.035)');
-  label(ctx, t.X(36), t.Y(16.1), '3F 礼堂投影', { size: 8, weight: 700, color: HALL, align: 'center', bg: PAPER });
-  label(ctx, t.X(36), t.Y(16.6), '32 × 22 m · 最上层', { size: 6.5, weight: 500, color: MUTED, align: 'center', bg: PAPER });
+  strokeRect(ctx, t, 10, 9, 32, 22, HALL, 2.4, [10, 7]);
+  fillRect(ctx, t, 10, 9, 32, 22, 'rgba(164,50,63,0.035)');
+  label(ctx, t.X(26), t.Y(8.0), '3F 礼堂投影', { size: 8, weight: 700, color: HALL, align: 'center', bg: PAPER });
+  label(ctx, t.X(26), t.Y(8.5), '32 × 22 m · 最上层', { size: 6.2, weight: 500, color: MUTED, align: 'center', bg: PAPER });
 
   // Unopened hatch.
-  hatch(ctx, t, 48, 2, 22, 16, '#b6ac9c', 10);
+  hatch(ctx, t, 28, 2, 22, 16, '#b6ac9c', 10);
 
   // Wing walls.
   strokeRect(ctx, t, 2, 2, 22, 16, WALL, 3);
-  strokeRect(ctx, t, 48, 2, 22, 16, WALL, 3);
-  strokeRect(ctx, t, 2, 38, 22, 16, WALL, 3);
-  strokeRect(ctx, t, 48, 38, 22, 16, WALL, 3);
-  strokeRect(ctx, t, 0, 0, 72, 56, WALL, 4.5);
+  strokeRect(ctx, t, 28, 2, 22, 16, WALL, 3);
+  strokeRect(ctx, t, 2, 22, 22, 16, WALL, 3);
+  strokeRect(ctx, t, 28, 22, 22, 16, WALL, 3);
+  strokeRect(ctx, t, 0, 0, 52, 40, WALL, 4.5);
 
-  // Grand stair + passenger elevator in the atrium.
-  stairs(ctx, t, 30, 23, 5.0, 10.0, 'up');
-  stairs(ctx, t, 37, 23, 5.0, 10.0, 'up');
-  label(ctx, t.X(36), t.Y(34.2), '大楼梯：1F → 2F → 3F 礼堂', { size: 7, weight: 700, color: ACCENT, align: 'center', bg: 'rgba(239,229,212,0.9)' });
+  // Central stair + elevator core (cuts into the four corners, no blank space).
+  fillRect(ctx, t, 22, 16, 8, 8, '#e2d3bc');
+  strokeRect(ctx, t, 22, 16, 8, 8, WALL, 1.8);
+  stairs(ctx, t, 22.4, 16.4, 3.6, 3.4, 'up');
+  stairs(ctx, t, 22.4, 20.2, 3.6, 3.4, 'up');
+  fillRect(ctx, t, 26.8, 16.4, 2.8, 3.0, '#efe5d4');
+  strokeRect(ctx, t, 26.8, 16.4, 2.8, 3.0, WALL, 1.2);
+  line(ctx, t, 27.0, 16.8, 29.4, 16.8, '#8f7e66', 0.8);
+  label(ctx, t.X(28.2), t.Y(20.0), 'EL', { size: 6.5, weight: 700, color: ACCENT, align: 'center' });
+  label(ctx, t.X(28.2), t.Y(20.5), '1F/2F/3F', { size: 5.2, weight: 600, color: MUTED, align: 'center' });
+  label(ctx, t.X(24.2), t.Y(24.2), '大楼梯 → 3F 礼堂', { size: 6.2, weight: 700, color: ACCENT, align: 'center', bg: 'rgba(226,211,188,0.9)' });
 
-  fillRect(ctx, t, 26.8, 23, 2.4, 4.6, '#e2d3bc');
-  strokeRect(ctx, t, 26.8, 23, 2.4, 4.6, WALL, 1.4);
-  line(ctx, t, 27.0, 23.4, 29.0, 23.4, '#8f7e66', 0.8);
-  line(ctx, t, 28.0, 23, 28.0, 27.6, '#8f7e66', 0.8);
-  label(ctx, t.X(28.0), t.Y(28.0), 'EL', { size: 6.5, weight: 700, color: ACCENT, align: 'center', bg: 'rgba(239,229,212,0.9)' });
-  label(ctx, t.X(28.0), t.Y(28.5), '客梯 1F–3F', { size: 5.6, weight: 600, color: MUTED, align: 'center', bg: 'rgba(239,229,212,0.85)' });
-
-  // Doors to corridors.
+  // Doors from wings directly onto the main corridor.
   door(ctx, t, 24, 8, 1.2, 'v', -1);
-  door(ctx, t, 46, 8, 1.2, 'v', 1);
-  door(ctx, t, 24, 44, 1.2, 'v', 1);
-  door(ctx, t, 46, 44, 1.2, 'v', -1);
-  door(ctx, t, 36, 20, 1.5, 'h', 1);
-  door(ctx, t, 36, 36, 1.5, 'h', -1);
+  door(ctx, t, 28, 8, 1.2, 'v', 1);
+  door(ctx, t, 24, 30, 1.2, 'v', 1);
+  door(ctx, t, 28, 30, 1.2, 'v', -1);
+  door(ctx, t, 12, 18, 1.5, 'h', 1);
+  door(ctx, t, 40, 18, 1.5, 'h', -1);
+  door(ctx, t, 12, 22, 1.5, 'h', -1);
+  door(ctx, t, 40, 22, 1.5, 'h', 1);
 
-  roomLabel(ctx, t.X(3.0), t.Y(4.0), '生活区', '1F 厨房/后厨 · 2F 16 间寝室', DORM);
-  roomLabel(ctx, t.X(49.0), t.Y(4.0), '未开放区', '1F/2F · 不制作', CLOSED);
-  roomLabel(ctx, t.X(3.0), t.Y(40.0), '休憩区', '锻炼 · 乒乓球 · 杂物', REST);
-  roomLabel(ctx, t.X(49.0), t.Y(40.0), '研究教室区', '10 间教室 · 准备/储藏', RESEARCH);
-  label(ctx, t.X(36), t.Y(21.0), '中庭 / 大楼梯 / 客梯', { size: 9, weight: 700, color: MUTED, align: 'center', bg: 'rgba(239,229,212,0.9)' });
+  roomLabel(ctx, t.X(3.0), t.Y(4.0), '生活区', '1F 厨房/后厨 + 进食区 · 2F 16 间寝室', DORM);
+  roomLabel(ctx, t.X(29.0), t.Y(4.0), '未开放区', '1F/2F · 不制作', CLOSED);
+  roomLabel(ctx, t.X(3.0), t.Y(24.0), '休憩区', '锻炼 · 乒乓球 · 杂物', REST);
+  roomLabel(ctx, t.X(29.0), t.Y(24.0), '研究教室区', '10 间教室 · 准备/储藏', RESEARCH);
+  label(ctx, t.X(26), t.Y(18.2), '主走廊 / 楼梯 / 客梯', { size: 7, weight: 700, color: MUTED, align: 'center', bg: 'rgba(233,222,203,0.9)' });
 
   // Dimensions.
   ctx.save();
@@ -809,18 +880,18 @@ function drawOverall() {
   const topY = t.Y(0) - 14;
   ctx.beginPath();
   ctx.moveTo(t.X(0), topY);
-  ctx.lineTo(t.X(72), topY);
+  ctx.lineTo(t.X(52), topY);
   ctx.stroke();
-  ctx.fillText('72 m', t.X(35), topY - 5);
+  ctx.fillText('52 m', t.X(25), topY - 5);
   const leftX = t.X(0) - 14;
   ctx.beginPath();
   ctx.moveTo(leftX, t.Y(0));
-  ctx.lineTo(leftX, t.Y(56));
+  ctx.lineTo(leftX, t.Y(40));
   ctx.stroke();
   ctx.save();
-  ctx.translate(leftX - 5, t.Y(28));
+  ctx.translate(leftX - 5, t.Y(20));
   ctx.rotate(-Math.PI / 2);
-  ctx.fillText('56 m', 0, 0);
+  ctx.fillText('40 m', 0, 0);
   ctx.restore();
   ctx.restore();
 
@@ -911,7 +982,10 @@ function drawSection() {
   ctx.textAlign = 'center';
   ctx.fillText('EL', (ex1 + ex2) / 2, level2 + 27);
   ctx.restore();
-  label(ctx, (ex1 + ex2) / 2, level3 + 44, '客梯 1F–3F', { size: 6.5, weight: 700, color: ACCENT, align: 'center', bg: PAPER });
+  label(ctx, (ex1 + ex2) / 2, level3 + 44, '客梯 1F/2F/3F', { size: 6.5, weight: 700, color: ACCENT, align: 'center', bg: PAPER });
+  label(ctx, ex1 - 6, level1 + 21, 'EL 1F', { size: 5.5, weight: 700, color: MUTED, align: 'right', bg: PAPER });
+  label(ctx, ex1 - 6, level2 + 24, 'EL 2F', { size: 5.5, weight: 700, color: MUTED, align: 'right', bg: PAPER });
+  label(ctx, ex1 - 6, level3 + 26, 'EL 3F', { size: 5.5, weight: 700, color: MUTED, align: 'right', bg: PAPER });
 
   // Ground label.
   label(ctx, 40, ground + 18, '±0.000 · 1F', { size: 8, weight: 500, color: MUTED });
@@ -925,6 +999,7 @@ function drawAll() {
   drawSection();
   drawLife1F();
   drawLife2F();
+  drawDiningEat();
   drawRec1F();
   drawRec2F();
   drawResearch(1);
