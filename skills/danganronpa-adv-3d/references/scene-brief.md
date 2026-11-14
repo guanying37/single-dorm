@@ -15,7 +15,6 @@ function: "日常对话、上课、放学后探索"
 mood: "明亮、秩序、轻微不安"
 timeOfDay: "下午"
 weather: "晴"
-mode: hybrid            # walk | fixed | hybrid
 dimensions:
   width: 8.6
   depth: 7.2
@@ -24,23 +23,35 @@ connections:
   - id: corridor.1f
     door: south
     type: single
-playerStart:
-  x: 0
-  z: 5.2
-  yaw: 0
-cameraAnchors:
-  - id: teacher
-    position: [0, 1.65, -2.7]
-    yaw: 0
-    fov: 62
-  - id: back
-    position: [0, 1.7, 5.4]
-    yaw: 180
-    fov: 60
-  - id: window
-    position: [2.8, 1.55, 0.5]
-    yaw: -70
-    fov: 55
+cameraModes:
+  fixed:
+    enabled: true
+    anchors:
+      - id: teacher
+        position: [0, 1.65, -2.7]
+        target: [0, 1.0, 2.0]
+        fov: 62
+        use: "上课/俯视学生席"
+      - id: back
+        position: [0, 1.7, 5.4]
+        target: [0, 1.1, -3.0]
+        fov: 60
+        use: "后排看黑板"
+      - id: window
+        position: [2.8, 1.55, 0.5]
+        target: [0, 1.2, 2.8]
+        fov: 55
+        use: "窗边特写"
+  moving:
+    enabled: true
+    start:
+      x: 0
+      z: 5.2
+      yaw: 0
+      pitch: 0
+    eyeHeight: 1.8
+    playerRadius: 0.30
+    collision: true
 interactables:
   - id: door.main
     label: 教室门
@@ -71,8 +82,12 @@ lighting:
     - ceiling.fluorescent.row
     - window.daylight
 budget:
-  triangles: 350000
-  drawCalls: 70
+  fixed:
+    triangles: 200000
+    drawCalls: 50
+  moving:
+    triangles: 350000
+    drawCalls: 70
   texturesMB: 12
 references:
   - "art-direction.md"
@@ -95,12 +110,21 @@ references:
 - 玩家从哪进、视线第一落点是什么？
 - 有没有必须保留的遮挡/纵深/死角？
 
-### 相机锚点
+### 固定机位（`cameraModes.fixed`）
 
-- 3–5 个；每个有 `id`、位置、yaw、pitch、fov、用途。
+- 3–5 个 shot；每个有 `id`、position、target、fov、用途。
+- 镜头是作者构图；只要求镜头内不穿帮，不要求完整可行走。
 - 机位必须能站人、不穿墙、不穿家具。
 - 机位之间要有构图差异，不要全在同一高度/角度。
-- 可走场景也要给 ADV 机位；纯机位场景可以没有 playerStart。
+- 纯固定场景可以没有 `moving`。
+
+### 移动机位（`cameraModes.moving`）
+
+- 有 `start`、眼高、玩家半径、碰撞开关。
+- 玩家可达区域必须完整、可碰撞。
+- 门洞/主通道要能通过。
+- 如果同时有固定机位，移动模式仍要独立成立，不能只保证镜头画面。
+- 纯固定场景可以没有 `moving`；纯移动场景可以没有 `fixed`。
 
 ### 交互
 
@@ -124,7 +148,7 @@ references:
 ### 预算
 
 - 三角面、draw calls、纹理 MB。
-- 可走/纯机位按 `performance.md` 的上限。
+- **固定机位**和**移动机位**分别按 `performance.md` 的上限。
 - 超出预算要写明取舍。
 
 ## 3. 教室简报示例（只做规划，不建模）
@@ -136,7 +160,7 @@ references:
 - 南墙单开门接走廊；东/西墙大窗；北墙黑板。
 - 后墙储物柜与空白布告板。
 
-### 机位
+### 固定机位
 
 | id | 位置 | 看什么 | 用途 |
 |---|---|---|---|
@@ -145,6 +169,13 @@ references:
 | `door` | 门口 | 教室纵深 | 进入/离开 |
 | `window` | 窗边 | 桌椅与光 | 特写/独白 |
 | `desk` | 某张课桌旁 | 桌面道具 | 线索特写 |
+
+### 移动机位
+
+- start：南门内，面向黑板。
+- 玩家可走到窗边、后排、讲台、储物柜；主通道不堵。
+- 门洞 ≥0.90 m；桌角可走近，椅子独立碰撞。
+- 24 套桌椅全部可达区域，不能只优化讲台镜头。
 
 ### 资产
 
@@ -160,14 +191,17 @@ references:
 
 ### 预算
 
-- 可走：≤35 万三角面，≤70 draw calls，纹理 ≤12 MB。
+- 移动机位：≤35 万三角面，≤70 draw calls，纹理 ≤12 MB。
+- 固定机位：≤20 万三角面，≤50 draw calls（可只优化镜头可见区域）。
 - 24 套桌椅必须合批；桌面道具按材质合并。
 
 ## 4. 简报审查
 
 - [ ] 一句话能说清“这是哪、为什么存在”。
 - [ ] 尺寸、层高、门洞、连接房间明确。
-- [ ] 有 3–5 个可用机位。
+- [ ] 固定机位有 3–5 个 shot（position/target/fov）。
+- [ ] 移动机位有 start/眼高/碰撞/动线。
+- [ ] 两者都要时，两份 spec 都填。
 - [ ] 交互物有 id、类型、行为。
 - [ ] 资产分 reuse/new，新增有理由。
 - [ ] 灯光配方明确，影子方向明确。

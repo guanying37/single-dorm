@@ -15,10 +15,10 @@
 
 ## 使用顺序
 
-1. 填 `scene-brief.md`。
-2. 用 `scene-spec.yaml` 固化尺寸、机位、资产、灯光。
+1. 填 `scene-brief.md`；固定机位与移动机位分两节，两者都要时都填。
+2. 用 `scene-spec.yaml` 固化尺寸、`cameraModes.fixed`、`cameraModes.moving`、资产、灯光。
 3. 用 `asset-list.md` 列 reuse/new/oneoff。
-4. 用 `prompt-handoff.md` 检查交接是否完整。
+4. 用 `prompt-handoff.md` 检查交接是否完整（固定 shot / 移动 start 分开）。
 5. 建模提示词阶段再根据交接包生成实际提示词；当前不要写最终提示词。
 
 ## 不要

@@ -3,7 +3,6 @@
 
 sceneId: scene.example
 name: 示例场景
-mode: hybrid            # walk | fixed | hybrid
 chapter: ""
 function: ""
 mood: ""
@@ -21,20 +20,31 @@ connections:
     width: 0.9
     height: 2.2
 
-playerStart:
-  x: 0
-  z: 0
-  yaw: 0
-  eyeHeight: 1.8
-  radius: 0.30
-
-cameraAnchors:
-  - id: anchor.1
-    position: [0, 1.65, 0]
-    yaw: 0
-    pitch: 0
-    fov: 60
-    use: ""
+cameraModes:
+  fixed:
+    enabled: true
+    anchors:
+      - id: anchor.1
+        position: [0, 1.65, 0]
+        target: [0, 1.0, 0]
+        fov: 60
+        use: ""
+    budget:
+      triangles: 250000
+      drawCalls: 60
+  moving:
+    enabled: true
+    start:
+      x: 0
+      z: 0
+      yaw: 0
+      pitch: 0
+    eyeHeight: 1.8
+    playerRadius: 0.30
+    collision: true
+    budget:
+      triangles: 450000
+      drawCalls: 90
 
 interactables: []
 
@@ -50,14 +60,12 @@ lighting:
   fixtures: []
 
 budget:
-  triangles: 450000
-  drawCalls: 90
   texturesMB: 16
   shadowMap: 2048
 
 validation:
-  walkable: true
-  hasAdvAnchors: true
+  fixed: true
+  moving: true
   collision: true
   interactions: true
   offline: true

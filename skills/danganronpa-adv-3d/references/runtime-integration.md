@@ -4,27 +4,34 @@
 
 ## 1. 场景适配器
 
-每个场景导出一个工厂：
+每个场景导出一个工厂。固定机位与移动机位是两套配置，不要混成一个 `mode` 布尔：
 
 ```js
 // scene.classroom.js
 export function createClassroomScene({ renderer, materials, kit }) {
   const scene = new THREE.Scene();
-  // build room...
+
   return {
     id: 'scene.classroom',
     title: '教室',
-    mode: 'hybrid',                 // walk | fixed | hybrid
     scene,
-    cameraAnchors: [
-      { id: 'teacher', position: [0, 1.65, -2.7], yaw: 0, pitch: -0.05, fov: 62 },
-    ],
+    cameraModes: {
+      fixed: {
+        enabled: true,
+        anchors: [
+          { id: 'teacher', position: [0, 1.65, -2.7], target: [0, 1.0, 2.0], fov: 62 },
+        ],
+      },
+      moving: {
+        enabled: true,
+        start: { x: 0, z: 5.2, yaw: 0, pitch: 0 },
+        collision: null, // CollisionWorld
+        eyeHeight: 1.8,
+        playerRadius: 0.3,
+      },
+    },
     interactiveMeshes: [],
     interactiveById: new Map(),
-    collision: null,                // walk/hybrid 需要
-    start: { x: 0, z: 5.2, yaw: 0, pitch: 0 },
-    eyeHeight: 1.8,
-    playerRadius: 0.3,
     update(dt, elapsed) {},
     toggleInteractive(id) {},
     getInteractiveState() {},
@@ -39,27 +46,29 @@ export function createClassroomScene({ renderer, materials, kit }) {
 - 不创建第二个 renderer。
 - 不把固定机位做成第二套模型。
 - 不把场景内容写进 `hub.js`。
+- `fixed.enabled` 与 `moving.enabled` 独立；只做一种时，另一种可以为空。
 
-## 2. 模式
+## 2. 机位模式
 
-| 模式 | 需要 | 用途 |
-|---|---|---|
-| `walk` | collision、start、FirstPersonControls | 探索 |
-| `fixed` | cameraAnchors | 纯 ADV/过场 |
-| `hybrid` | 两者 | 日常可走 + 剧情机位 |
+| 模式 | 需要 | 用途 | 验收 reference |
+|---|---|---|---|
+| 固定 `fixed` | `cameraModes.fixed.anchors` | 纯 ADV/过场/回忆 | `camera-fixed.md` |
+| 移动 `moving` | `start`、`collision`、第一人称控制器 | 探索/走廊/日常 | `camera-moving.md` |
+| 两者 `both` | 两套配置 | 可走 + 剧情机位 | 两份都要 |
 
-`hybrid` 是默认。纯剧情小房间可以 `fixed`。
+默认按场景需求选择；不要默认所有场景都 `both`。
 
-## 3. 相机锚点
+## 3. 固定机位
 
 ```yaml
-cameraAnchors:
-  - id: teacher
-    position: [0, 1.65, -2.7]
-    yaw: 0
-    pitch: -0.05
-    fov: 62
-    use: 上课/俯视
+fixed:
+  enabled: true
+  anchors:
+    - id: teacher
+      position: [0, 1.65, -2.7]
+      target: [0, 1.0, 2.0]
+      fov: 62
+      use: 上课/俯视
 ```
 
 规则：
@@ -67,8 +76,26 @@ cameraAnchors:
 - 3–5 个；每个有明确用途。
 - 机位不穿墙/家具；y 在 1.4–1.8 m 之间。
 - 构图有前景/中景/背景差异。
-- ADV 切换时保留/恢复玩家视角；退出机位回到 walk 位置。
+- 只验收镜头内画面；不要求可行走。
 - 不在锚点位置生成角色模型。
+
+## 3.1 移动机位
+
+```yaml
+moving:
+  enabled: true
+  start: { x: 0, z: 5.2, yaw: 0, pitch: 0 }
+  eyeHeight: 1.8
+  playerRadius: 0.30
+  collision: CollisionWorld
+```
+
+规则：
+
+- 所有可达区域完整、有碰撞。
+- 门洞/主通道可过；不能出现黑洞。
+- 第一人称相机；不把固定 shot 当玩家视角。
+- 与固定机位共用模型；切换时保存/恢复 walk 视角。
 
 ## 4. 场景注册表
 
@@ -78,29 +105,40 @@ export const SCENES = {
   'scene.dining-hall': {
     title: '学生餐厅',
     load: () => import('./scene.dining-hall.js'),
-    mode: 'hybrid',
+    modes: ['fixed', 'moving'],
   },
   'scene.classroom': {
     title: '教室',
     load: () => import('./scene.classroom.js'),
-    mode: 'hybrid',
+    modes: ['fixed', 'moving'],
+  },
+  'scene.trial': {
+    title: '裁判场',
+    load: () => import('./scene.trial.js'),
+    modes: ['fixed'],
   },
 };
 ```
 
 - `sceneId` 唯一、稳定。
-- 懒加载：进入场景才 import，避免同时把所有场景加载进内存。
+- 懒加载：进入场景才 import。
 - 同页切换只渲染 active scene。
 - 切换保存/恢复视角，清空按键，重置 frozen。
+- `modes` 表明这个场景支持哪些机位；纯固定场景不要假装支持移动。
 
 ## 5. 场景外壳状态
 
 ```js
 {
   activeId,
-  mode,                 // walk/fixed/hybrid
-  walkView,             // 玩家位置
-  anchorId,             // 当前 ADV 机位
+  cameraMode: 'fixed' | 'moving',
+  fixed: {
+    active: Boolean,
+    anchorId: String | null,
+  },
+  moving: {
+    walkView: { x, z, yaw, pitch } | null,
+  },
   frozen,
   hovered,
 }
@@ -108,13 +146,16 @@ export const SCENES = {
 
 切换规则：
 
-1. 保存当前 walk 视角；
+1. 保存当前 `walkView`（如果移动模式）；
 2. 禁用旧控制器、清空按键；
 3. 切换 active scene；
-4. 恢复目标 walk 视角或相机锚点；
-5. 重置 frozen；
-6. 触发阴影重烘焙；
-7. 刷新 hover/提示。
+4. 固定模式：应用 `cameraModes.fixed.anchors` 的 anchor；
+5. 移动模式：恢复 `walkView` 或 `start`；
+6. 重置 frozen；
+7. 触发阴影重烘焙；
+8. 刷新 hover/提示。
+
+不要用一个 `mode` 字段同时承担“场景类型”和“相机状态”；固定/移动分开记录。
 
 ## 6. 资产加载
 
@@ -155,7 +196,9 @@ src/scenes/
 ## 10. 验收
 
 - [ ] 场景可注册、可切换。
-- [ ] 同一模型支持 walk + camera anchors。
+- [ ] `cameraModes.fixed` 与 `moving` 独立配置。
+- [ ] 固定机位只验收镜头；移动机位只验收可达空间。
+- [ ] 同场景两者都要时，共用模型、分开 spec/验收。
 - [ ] 切换不刷新、不丢视角、不残留按键。
 - [ ] 只渲染 active scene。
 - [ ] 场景模块不依赖全局状态。
