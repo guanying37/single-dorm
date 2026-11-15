@@ -6,15 +6,20 @@ import { START as DINING_START } from '../dining/src/config.js';
 import { KitchenScene } from '../kitchen/src/scene.js';
 import { KitchenControls } from '../kitchen/src/player.js';
 import { START as KITCHEN_START } from '../kitchen/src/config.js';
+import { ColdStoreScene } from '../coldstore/src/scene.js';
+import { ColdStoreControls } from '../coldstore/src/player.js';
+import { START as COLDSTORE_START } from '../coldstore/src/config.js';
 import { clamp } from '../dining/src/utils.js';
 
 /* ------------------------------------------------------------------ *
- * One page, three scenes.
+ * One page, four scenes.
  *
  * The dorm scene keeps its fixed eye point and look-only interaction;
- * the dining hall and the restaurant kitchen both use first-person
- * walking controllers. Only one scene is rendered at a time, but all
- * three stay resident so switching is instant.
+ * the dining hall, the restaurant kitchen and the walk-in cold store all
+ * use first-person walking controllers. Only one scene is rendered at a
+ * time, but all four stay resident so switching is instant. The kitchen
+ * cold-room door and the cold store's own heavy door are a bidirectional
+ * portal pair.
  * ------------------------------------------------------------------ */
 
 const canvas = document.getElementById('stage');
@@ -37,6 +42,7 @@ const sceneTransitionTitle = document.getElementById('sceneTransitionTitle');
 const dormControls = document.getElementById('dormControls');
 const diningControlsBar = document.getElementById('diningControls');
 const kitchenControlsBar = document.getElementById('kitchenControls');
+const coldstoreControlsBar = document.getElementById('coldstoreControls');
 const sceneTabs = Array.from(document.querySelectorAll('.scene-tab'));
 
 const params = new URLSearchParams(window.location.search);
@@ -69,12 +75,15 @@ let diningScene = null;
 let diningControls = null;
 let kitchenScene = null;
 let kitchenControls = null;
+let coldStoreScene = null;
+let coldStoreControls = null;
 let raycaster = null;
 let dormHome = null;
 let dormYaw = 0;
 let dormPitch = 0;
 let diningView = null;
 let kitchenView = null;
+let coldstoreView = null;
 let rafId = 0;
 let toastTimer = 0;
 let lastFrameTime = performance.now();
@@ -96,18 +105,21 @@ const LOCK_FALLBACK = '点击画面捕获鼠标 · 右键固定视野 · 中键�
 function activeScene() {
   if (state.active === 'dining') return diningScene;
   if (state.active === 'kitchen') return kitchenScene;
+  if (state.active === 'coldstore') return coldStoreScene;
   return dormScene;
 }
 
 function activeMeshes() {
   if (state.active === 'dining') return diningScene.getInteractableMeshes();
   if (state.active === 'kitchen') return kitchenScene.getInteractableMeshes();
+  if (state.active === 'coldstore') return coldStoreScene.getInteractableMeshes();
   return dormScene.interactiveMeshes;
 }
 
 function activeItem(id) {
   if (state.active === 'dining') return diningScene.interactiveById.get(id);
   if (state.active === 'kitchen') return kitchenScene.interactiveById.get(id);
+  if (state.active === 'coldstore') return coldStoreScene.interactiveById.get(id);
   return dormScene.interactiveById.get(id);
 }
 
@@ -134,7 +146,9 @@ function updateProjection() {
     ? DINING_START.fov
     : state.active === 'kitchen'
       ? KITCHEN_START.fov
-      : dormHome.fov;
+      : state.active === 'coldstore'
+        ? COLDSTORE_START.fov
+        : dormHome.fov;
   camera.aspect = aspect;
   camera.fov = aspect < 0.85 ? 78 : baseFov;
   camera.updateProjectionMatrix();
@@ -154,7 +168,13 @@ function shortestAngle(delta) {
 }
 
 function setScene(name, { updateHash = true, resetView = false } = {}) {
-  const next = name === 'dining' ? 'dining' : name === 'kitchen' ? 'kitchen' : 'dorm';
+  const next = name === 'dining'
+    ? 'dining'
+    : name === 'kitchen'
+      ? 'kitchen'
+      : name === 'coldstore'
+        ? 'coldstore'
+        : 'dorm';
   if (state.active === next && state.ready) {
     return;
   }
@@ -169,6 +189,11 @@ function setScene(name, { updateHash = true, resetView = false } = {}) {
     kitchenControls.enabled = false;
     kitchenControls.keys.clear();
   }
+  if (coldStoreControls) {
+    if (state.active === 'coldstore') coldstoreView = coldStoreControls.getView();
+    coldStoreControls.enabled = false;
+    coldStoreControls.keys.clear();
+  }
 
   state.active = next;
   state.recenter = null;
@@ -176,6 +201,7 @@ function setScene(name, { updateHash = true, resetView = false } = {}) {
   if (resetView) {
     if (next === 'dining') diningView = null;
     else if (next === 'kitchen') kitchenView = null;
+    else if (next === 'coldstore') coldstoreView = null;
     else {
       dormYaw = dormHome.yaw;
       dormPitch = dormHome.pitch;
@@ -215,6 +241,20 @@ function setScene(name, { updateHash = true, resetView = false } = {}) {
       pitch: KITCHEN_START.pitch,
     };
     kitchenControls.setView(view);
+  } else if (next === 'coldstore') {
+    camera.near = 0.03;
+    camera.far = 20;
+    camera.fov = COLDSTORE_START.fov;
+    camera.updateProjectionMatrix();
+    coldStoreControls.enabled = true;
+    coldStoreControls.keys.clear();
+    const view = coldstoreView || {
+      x: COLDSTORE_START.x,
+      z: COLDSTORE_START.z,
+      yaw: COLDSTORE_START.yaw,
+      pitch: COLDSTORE_START.pitch,
+    };
+    coldStoreControls.setView(view);
   } else {
     camera.near = 0.035;
     camera.far = 45;
@@ -225,7 +265,7 @@ function setScene(name, { updateHash = true, resetView = false } = {}) {
 
   updateProjection();
   if (renderer) {
-    renderer.toneMappingExposure = next === 'kitchen' ? 0.96 : 1.02;
+    renderer.toneMappingExposure = next === 'kitchen' ? 0.96 : next === 'coldstore' ? 0.85 : 1.02;
     renderer.shadowMap.needsUpdate = true;
   }
   updateSceneUI();
@@ -238,7 +278,13 @@ function setScene(name, { updateHash = true, resetView = false } = {}) {
   markHoverDirty();
 
   if (updateHash) {
-    const hash = next === 'dining' ? '#dining' : next === 'kitchen' ? '#kitchen' : '#dorm';
+    const hash = next === 'dining'
+      ? '#dining'
+      : next === 'kitchen'
+        ? '#kitchen'
+        : next === 'coldstore'
+          ? '#coldstore'
+          : '#dorm';
     try {
       window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
     } catch {
@@ -249,14 +295,20 @@ function setScene(name, { updateHash = true, resetView = false } = {}) {
 }
 
 /* Door-specific spawn points just inside each portal, facing into the
- * destination room with a level pitch. */
+ * destination room with a level pitch. The cold store and the kitchen
+ * share two doors, so the kitchen has a second spawn for the return
+ * trip. */
 const DOOR_SPAWNS = Object.freeze({
   // Dining kitchen door is on the east wall, south end, close to the main entrance.
   dining: { x: 16.7, z: 6.3, yaw: Math.PI / 2, pitch: 0 },
   kitchen: { x: 4.7, z: -7.0, yaw: Math.PI / 2, pitch: 0 },
+  // Just south of the kitchen cold-room door, facing back into the room.
+  kitchenFromCold: { x: 4.6, z: -10.15, yaw: Math.PI, pitch: 0 },
+  // Just inside the cold-store door, facing up the single aisle.
+  coldstore: { x: COLDSTORE_START.x, z: 2.3, yaw: 0, pitch: -0.02 },
 });
 
-function transitionToScene(next, label) {
+function transitionToScene(next, label, spawnOverride = null) {
   if (!state.ready || state.transitioning || state.active === next) return;
   state.transitioning = true;
   state.recenter = null;
@@ -271,6 +323,10 @@ function transitionToScene(next, label) {
     kitchenControls.enabled = false;
     kitchenControls.keys.clear();
   }
+  if (coldStoreControls) {
+    coldStoreControls.enabled = false;
+    coldStoreControls.keys.clear();
+  }
   if (sceneTransitionTitle) sceneTransitionTitle.textContent = label;
   if (sceneTransition) {
     sceneTransition.classList.add('is-active');
@@ -279,7 +335,7 @@ function transitionToScene(next, label) {
 
   window.setTimeout(() => {
     setScene(next, { resetView: true });
-    const spawn = DOOR_SPAWNS[next];
+    const spawn = spawnOverride || DOOR_SPAWNS[next];
     if (spawn) setView(spawn);
     if (diningControls) {
       diningControls.enabled = false;
@@ -288,6 +344,10 @@ function transitionToScene(next, label) {
     if (kitchenControls) {
       kitchenControls.enabled = false;
       kitchenControls.keys.clear();
+    }
+    if (coldStoreControls) {
+      coldStoreControls.enabled = false;
+      coldStoreControls.keys.clear();
     }
 
     window.setTimeout(() => {
@@ -299,6 +359,7 @@ function transitionToScene(next, label) {
         state.transitioning = false;
         if (state.active === 'dining' && diningControls) diningControls.enabled = true;
         if (state.active === 'kitchen' && kitchenControls) kitchenControls.enabled = true;
+        if (state.active === 'coldstore' && coldStoreControls) coldStoreControls.enabled = true;
         markHoverDirty();
       }, 360);
     }, 500);
@@ -308,17 +369,21 @@ function transitionToScene(next, label) {
 function updateSceneUI() {
   const dining = state.active === 'dining';
   const kitchen = state.active === 'kitchen';
-  const title = dining ? '学生餐厅' : kitchen ? '餐厅后厨' : '单人宿舍';
+  const coldstore = state.active === 'coldstore';
+  const title = dining ? '学生餐厅' : kitchen ? '餐厅后厨' : coldstore ? '冷库储藏室' : '单人宿舍';
   const eyebrow = dining
     ? "Hope's Peak · Dining Hall"
     : kitchen
       ? "Hope's Peak · Kitchen"
-      : "Hope's Peak · Dormitory";
+      : coldstore
+        ? "Hope's Peak · Cold Store"
+        : "Hope's Peak · Dormitory";
   if (sceneTitle) sceneTitle.textContent = title;
   if (sceneEyebrow) sceneEyebrow.textContent = eyebrow;
-  if (dormControls) dormControls.classList.toggle('is-hidden', dining || kitchen);
+  if (dormControls) dormControls.classList.toggle('is-hidden', dining || kitchen || coldstore);
   if (diningControlsBar) diningControlsBar.classList.toggle('is-hidden', !dining);
   if (kitchenControlsBar) kitchenControlsBar.classList.toggle('is-hidden', !kitchen);
+  if (coldstoreControlsBar) coldstoreControlsBar.classList.toggle('is-hidden', !coldstore);
   sceneTabs.forEach((tab) => {
     const active = tab.dataset.scene === state.active;
     tab.classList.toggle('is-active', active);
@@ -334,6 +399,8 @@ function look(deltaX, deltaY, sensitivity) {
     diningControls.look(deltaX, deltaY, sensitivity);
   } else if (state.active === 'kitchen') {
     kitchenControls.look(deltaX, deltaY, sensitivity);
+  } else if (state.active === 'coldstore') {
+    coldStoreControls.look(deltaX, deltaY, sensitivity);
   } else {
     dormYaw -= deltaX * sensitivity;
     dormPitch = clamp(dormPitch - deltaY * sensitivity, -Math.PI / 2 + 0.075, Math.PI / 2 - 0.075);
@@ -351,6 +418,11 @@ function recenterView() {
   }
   if (state.active === 'kitchen') {
     if (kitchenControls.recenter()) showToast('视野回正', 700);
+    markHoverDirty();
+    return;
+  }
+  if (state.active === 'coldstore') {
+    if (coldStoreControls.recenter()) showToast('视野回正', 700);
     markHoverDirty();
     return;
   }
@@ -397,6 +469,7 @@ function setFrozen(value, announce = false) {
   state.frozen = Boolean(value);
   if (diningControls) diningControls.setFrozen(state.frozen);
   if (kitchenControls) kitchenControls.setFrozen(state.frozen);
+  if (coldStoreControls) coldStoreControls.setFrozen(state.frozen);
   document.body.classList.toggle('is-view-frozen', state.frozen);
   if (announce) showToast(state.frozen ? '视线已固定 · 右键解锁' : '视线已解锁', 1200);
   markHoverDirty();
@@ -416,7 +489,7 @@ function pickAt(clientX, clientY) {
   camera.updateMatrixWorld(true);
   const ndcX = state.isFullscreen ? 0 : (clientX / window.innerWidth) * 2 - 1;
   const ndcY = state.isFullscreen ? 0 : -(clientY / window.innerHeight) * 2 + 1;
-  raycaster.far = state.active === 'dining' ? 4.2 : state.active === 'kitchen' ? 4.2 : 12;
+  raycaster.far = state.active === 'dining' ? 4.2 : state.active === 'kitchen' ? 4.2 : state.active === 'coldstore' ? 3.6 : 12;
   raycaster.setFromCamera({ x: ndcX, y: ndcY }, camera);
   const hits = raycaster.intersectObjects(activeMeshes(), false);
   for (const hit of hits) {
@@ -491,6 +564,15 @@ function toggleHovered() {
     const result = kitchenScene.toggleInteractive(item.id);
     if (result?.sceneId === 'dining') {
       transitionToScene('dining', '学生餐厅');
+    } else if (result?.sceneId === 'coldstore') {
+      transitionToScene('coldstore', '冷库储藏室');
+    } else {
+      return false;
+    }
+  } else if (state.active === 'coldstore') {
+    const result = coldStoreScene.toggleInteractive(item.id);
+    if (result?.sceneId === 'kitchen') {
+      transitionToScene('kitchen', '餐厅后厨', DOOR_SPAWNS.kitchenFromCold);
     } else {
       return false;
     }
@@ -782,6 +864,10 @@ function animate(now) {
     kitchenControls.update(dt);
     kitchenScene.update(dt, elapsedTime);
     if (kitchenControls.getSpeed() > 0.02) markHoverDirty();
+  } else if (state.active === 'coldstore') {
+    coldStoreControls.update(dt);
+    coldStoreScene.update(dt, elapsedTime);
+    if (coldStoreControls.getSpeed() > 0.02) markHoverDirty();
   } else {
     updateDormRecenter(dt);
     dormScene.update(dt, elapsedTime);
@@ -811,6 +897,7 @@ function animate(now) {
 function getView() {
   if (state.active === 'dining') return diningControls.getView();
   if (state.active === 'kitchen') return kitchenControls.getView();
+  if (state.active === 'coldstore') return coldStoreControls.getView();
   return {
     x: dormHome.position.x,
     z: dormHome.position.z,
@@ -833,6 +920,14 @@ function setView(view = {}) {
   } else if (state.active === 'kitchen') {
     const current = kitchenControls.getView();
     kitchenControls.setView({
+      x: typeof view.x === 'number' ? view.x : current.x,
+      z: typeof view.z === 'number' ? view.z : current.z,
+      yaw: typeof view.yaw === 'number' ? view.yaw : current.yaw,
+      pitch: typeof view.pitch === 'number' ? view.pitch : current.pitch,
+    });
+  } else if (state.active === 'coldstore') {
+    const current = coldStoreControls.getView();
+    coldStoreControls.setView({
       x: typeof view.x === 'number' ? view.x : current.x,
       z: typeof view.z === 'number' ? view.z : current.z,
       yaw: typeof view.yaw === 'number' ? view.yaw : current.yaw,
@@ -865,6 +960,13 @@ function resetView() {
       yaw: KITCHEN_START.yaw,
       pitch: KITCHEN_START.pitch,
     });
+  } else if (state.active === 'coldstore') {
+    coldStoreControls.setView({
+      x: COLDSTORE_START.x,
+      z: COLDSTORE_START.z,
+      yaw: COLDSTORE_START.yaw,
+      pitch: COLDSTORE_START.pitch,
+    });
   } else {
     dormYaw = dormHome.yaw;
     dormPitch = dormHome.pitch;
@@ -878,6 +980,7 @@ function resetView() {
 function getInteractives() {
   if (state.active === 'dining') return diningScene.getInteractiveState();
   if (state.active === 'kitchen') return kitchenScene.getInteractiveState();
+  if (state.active === 'coldstore') return coldStoreScene.getInteractiveState();
   return dormScene.getInteractiveState();
 }
 
@@ -891,6 +994,7 @@ function getStats() {
     memory: renderer.info.memory,
     dining: diningScene.getStats(),
     kitchen: kitchenScene.getStats(),
+    coldstore: coldStoreScene.getStats(),
   };
 }
 
@@ -963,6 +1067,10 @@ async function boot() {
       renderer,
       maxAnisotropy: renderer.capabilities.getMaxAnisotropy(),
     });
+    coldStoreScene = new ColdStoreScene({
+      renderer,
+      maxAnisotropy: renderer.capabilities.getMaxAnisotropy(),
+    });
   } catch (error) {
     console.error(error);
     loader.innerHTML = '<div class="loader-inner"><p class="loader-title">场景构建失败</p><p class="loader-subtitle">请打开控制台查看详细错误</p></div>';
@@ -987,11 +1095,21 @@ async function boot() {
   kitchenControls.attach(window);
   kitchenControls.enabled = false;
 
+  coldStoreControls = new ColdStoreControls(camera, coldStoreScene.collision);
+  coldStoreControls.attach(window);
+  coldStoreControls.enabled = false;
+
   raycaster = new THREE.Raycaster();
   raycaster.near = 0.02;
 
   const requested = params.get('scene') || window.location.hash.replace('#', '');
-  state.active = requested === 'dining' ? 'dining' : requested === 'kitchen' ? 'kitchen' : 'dorm';
+  state.active = requested === 'dining'
+    ? 'dining'
+    : requested === 'kitchen'
+      ? 'kitchen'
+      : requested === 'coldstore'
+        ? 'coldstore'
+        : 'dorm';
   setScene(state.active, { updateHash: false });
   state.ready = true;
 
@@ -1016,6 +1134,13 @@ async function boot() {
         yaw: (number('yaw', (KITCHEN_START.yaw * 180) / Math.PI) * Math.PI) / 180,
         pitch: (number('pitch', (KITCHEN_START.pitch * 180) / Math.PI) * Math.PI) / 180,
       });
+    } else if (state.active === 'coldstore') {
+      setView({
+        x: number('x', COLDSTORE_START.x),
+        z: number('z', COLDSTORE_START.z),
+        yaw: (number('yaw', (COLDSTORE_START.yaw * 180) / Math.PI) * Math.PI) / 180,
+        pitch: (number('pitch', (COLDSTORE_START.pitch * 180) / Math.PI) * Math.PI) / 180,
+      });
     } else {
       setView({
         yaw: (number('yaw', (dormHome.yaw * 180) / Math.PI) * Math.PI) / 180,
@@ -1039,6 +1164,7 @@ async function boot() {
   dormScene.scene.updateMatrixWorld(true);
   diningScene.scene.updateMatrixWorld(true);
   kitchenScene.scene.updateMatrixWorld(true);
+  coldStoreScene.scene.updateMatrixWorld(true);
   try {
     renderer.compile(activeScene().scene, camera);
   } catch (error) {
@@ -1062,7 +1188,9 @@ async function boot() {
     dorm: dormScene,
     dining: diningScene,
     kitchen: kitchenScene,
+    coldstore: coldStoreScene,
     kitchenControls,
+    coldStoreControls,
     getScene: () => state.active,
     setScene: (name) => setScene(name),
     setView,
@@ -1071,7 +1199,8 @@ async function boot() {
     transitionToScene,
     toggle: (id) => {
       if (state.active === 'dining') return diningScene.toggleInteractive(id);
-      if (state.active === 'kitchen') return null;
+      if (state.active === 'kitchen') return kitchenScene.toggleInteractive(id);
+      if (state.active === 'coldstore') return coldStoreScene.toggleInteractive(id);
       return dormScene.toggleInteractive(id);
     },
     setFrozen: (value) => setFrozen(Boolean(value), true),
@@ -1083,6 +1212,7 @@ async function boot() {
   window.__DORM_READY__ = true;
   window.__DINING_READY__ = true;
   window.__KITCHEN_READY__ = true;
+  window.__COLDSTORE_READY__ = true;
   requestAnimationFrame(animate);
 }
 
@@ -1126,7 +1256,9 @@ function attachEvents() {
   });
   window.addEventListener('hashchange', () => {
     const requested = window.location.hash.replace('#', '');
-    if (requested === 'dining' || requested === 'dorm' || requested === 'kitchen') setScene(requested);
+    if (requested === 'dining' || requested === 'dorm' || requested === 'kitchen' || requested === 'coldstore') {
+      setScene(requested);
+    }
   });
 }
 

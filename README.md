@@ -1,16 +1,17 @@
 # 弹丸论破同人 · 3D 场景集
 
-三个纯静态、可离线运行的 Three.js 场景，**在同一个页面里顶部切换**：
+四个纯静态、可离线运行的 Three.js 场景，**在同一个页面里顶部切换**：
 
 | 场景 | 预览地址 | 内容 |
 | --- | --- | --- |
 | **学生餐厅** | **https://guanying37.github.io/single-dorm/#dining** | 36 × 22 m 大厅，10 张餐桌 / 60 座，8 幅美食画、两座挂钟、可交互餐具柜 |
 | **学生餐厅后厨** | **https://guanying37.github.io/single-dorm/#kitchen** | 12 × 22 m 商用厨房，中央岛台、烹饪线、三联水槽、冷库门、货梯、回餐厅门与两台老式 CRT |
+| **后厨冷库储藏室** | **https://guanying37.github.io/single-dorm/#coldstore** | 2.7 × 5.6 m、15 ㎡ 步入式冷库：两侧 4 层重型不锈钢货架、1.26 m 单通道、蒸发器冷风机、防寒服、门边 CRT + 指针温湿度计、冷雾粒子 |
 | **单人宿舍** | **https://guanying37.github.io/single-dorm/** | 黄色墙纸、封死的窗、可开启的衣橱与抽屉 |
 
-> `/dining/` 会自动跳转到 `/#dining`，`/kitchen/` 会跳转到 `/#kitchen`。页面使用 ES Modules，必须通过 HTTP(S) 访问；直接双击 `index.html`（`file://`）不会加载 Three.js 模块。
+> `/dining/`、`/kitchen/`、`/coldstore/` 会分别跳转到对应 hash。页面使用 ES Modules，必须通过 HTTP(S) 访问；直接双击 `index.html`（`file://`）不会加载 Three.js 模块。
 
-![同一页面顶部切换三个场景](single-dorm/kitchen/preview/integration.jpg)
+![同一页面顶部切换四个场景](single-dorm/coldstore/preview/hero-ui.jpg)
 
 ![学生餐厅](single-dorm/dining/preview/hero.jpg)
 
@@ -55,7 +56,7 @@
 
 - **门与切场**：后厨东墙有与餐厅同款的**橡木/磨砂玻璃/黄铜把手**回餐厅门（铰链镜像，z=-7）；餐厅侧后厨门在**东墙 z=6.3、靠正门一端**（甜点画与东南角盆栽之间）。点击任一侧黑屏显示目的地，切场落点在各自门内并回正视角。
 - **动线**：回餐厅门/出餐口 → 中央岛台 → 烹饪区 → 西侧挂杆/货梯 → 冷库 → 南侧清洗/售饭台；设备前操作位 ≥1.2 m。
-- **设备**：3 × 1 m 双层岛台；双头猛火灶（锅具已移除，保留空锅圈）+ 鼓风机、三门蒸箱、双门烤箱、大型排烟罩/风管；三联水槽 + 高压花洒 + 垃圾处理器；保温售饭台 + 打菜勺；1.3 m 冷库门（防凝露加热丝）；1.7 m 货梯门；2.4 m 出餐口双开防撞门 + 传菜台 + 暖光交接廊。
+- **设备**：3 × 1 m 双层岛台；双头猛火灶（锅具已移除，保留空锅圈）+ 鼓风机、三门蒸箱、双门烤箱、大型排烟罩/风管；三联水槽 + 高压花洒 + 垃圾处理器；保温售饭台 + 打菜勺；1.3 m 冷库门（防凝露加热丝，现在可点击进入冷库储藏室）；1.7 m 货梯门；2.4 m 出餐口双开防撞门 + 传菜台 + 暖光交接廊。
 - **天花/安防**：15 盏 LED 防爆平板灯、9 个喷淋、3 个烟感、4 台带黑线缆的半球监控。
 - **监控母题**：墙面老式 CRT（凸弧屏、淡绿荧光、扫描线、支架 + 录像机）与备餐台旁落地分屏 CRT；无文字、无人物。
 - **交互/控制**：WASD、Shift、鼠标、右键固定、中键回正；眼高 1.80 m、俯仰 ±83°、零侧滚；**走路 5.2 m/s、跑步 11.0 m/s**；19 个碰撞体，11 m/s 跑动仍不穿模；轻微步伐起伏。
@@ -73,6 +74,34 @@
 </table>
 
 更多：[后厨说明](single-dorm/kitchen/README.md) · [场景简报](single-dorm/kitchen/BRIEF.md) · [验收记录](single-dorm/kitchen/VALIDATION.md)
+
+## 后厨冷库储藏室
+
+与后厨北墙冷库门相通的步入式冷库：**2.7 × 5.6 m、15.12 ㎡、净高 2.45 m**，进深与单人宿舍一致，只收窄、压低，形成一条单通道。不锈钢银灰 + 保温板本白，工业仓储感，密封 + 保温；**无人物、无文字、无自绘二维画作、无音频、无 CDN、无网络请求**。
+
+![冷库储藏室](single-dorm/coldstore/preview/hero.jpg)
+
+- **空间**：两侧 0.72 m 深 4 层重型不锈钢防滑货架（含立柱、加强筋、前挡边），中间 **1.26 m 通道**；动线只有「门 → 通道 → 尽头挂衣区」。
+- **门与传送**：南墙 1.3 × 2.2 m 厚重不锈钢保温门——防凝露加热丝、加粗防滑把手、**内侧红色应急拉杆 + 绿色荧光底条**、压力平衡阀、底部与门口结霜。后厨冷库门 → 冷库（落点门内），冷库重门 → 后厨（落点门外），黑屏切场与「餐厅 ↔ 后厨」同一套逻辑；**后厨原模型不改动，只新增不可见拾取体**。
+- **陈设**：老式灰白 CRT（弧面荧光、扫描线、库内/门外双画面 + 两枚无刻度指针表）与黄铜指针式温湿度计；北墙角悬挂蒸发器冷风机（双风扇 + 金属网罩 + 深色盘管腔 + 冷凝水管），挂杆上两件加厚防寒服与两副防寒手套；30 个不锈钢食物盆（含冷冻覆霜）、27 个透明食品盒、39 个无标识纸箱，标签只有抽象色块。
+- **天花与地面**：加厚聚氨酯保温板吊顶、2 盏防潮防爆 LED 冷库灯（透明防尘罩 + 冷凝水霜）、温度传感器、1 台带除雾加热圈的监控摄像；铝制防滑花纹地台 + 四周排水沟 + 不锈钢格栅 + 地漏。
+- **冷气**：370 个点精灵两层冷雾（蒸发器出风口 + 通道悬浮），缓慢下沉漂移、循环，无音效。
+- **操作**：WASD 移动（眼高恒定 1.80 m）、Shift 加速（1.9 → 3.9 m/s）、鼠标环顾（俯仰 ±83°、零侧倾）、右键固定、中键回正、E 进出冷库；移动仅有 ±1.1 cm 轻微步伐起伏。
+- **碰撞**：9 个碰撞体（4 墙 + 2 货架 + 挂衣区 + CRT 搁板 + 门框/门叶），0.06 m 子步进；货架前沿停在 `x=±0.31`、门前停在 `z=2.39`，跑动不穿模。
+- **性能**：静态合批 **40 批 / 48,670 三角面**，渲染 **43–70 draw calls**，16 张 ≤512² 程序化贴图，一张 1024² 静态阴影；1600×900 实测 59–60 FPS。
+
+<table>
+  <tr>
+    <td><img src="single-dorm/coldstore/preview/door.jpg" width="400" alt="冷库门、CRT 与指针温湿度计" /></td>
+    <td><img src="single-dorm/coldstore/preview/evaporator.jpg" width="400" alt="蒸发器冷风机与防寒服" /></td>
+  </tr>
+  <tr>
+    <td><img src="single-dorm/coldstore/preview/shelf-west.jpg" width="400" alt="重型不锈钢货架与食物盆" /></td>
+    <td><img src="single-dorm/coldstore/preview/floor.jpg" width="400" alt="铝制防滑地台与四周排水沟" /></td>
+  </tr>
+</table>
+
+更多：[冷库说明](single-dorm/coldstore/README.md) · [场景简报](single-dorm/coldstore/BRIEF.md) · [场景规格](single-dorm/coldstore/scene-spec.yaml) · [资产清单](single-dorm/coldstore/asset-list.md) · [验收记录](single-dorm/coldstore/VALIDATION.md)
 
 ## 单人宿舍
 
@@ -97,13 +126,13 @@
 
 ```
 single-dorm/
-├─ index.html                # 同一页面：单人宿舍 / 学生餐厅 / 餐厅后厨
+├─ index.html                # 同一页面：单人宿舍 / 学生餐厅 / 餐厅后厨 / 冷库储藏室
 ├─ dorm.html                 # 单人宿舍独立页（备用）
-├─ styles.css                # 三个场景共用的预览 UI
+├─ styles.css                # 四个场景共用的预览 UI
 ├─ serve.py                  # 本地预览服务器（自动开浏览器）
 ├─ start-preview.cmd         # Windows 一键启动
 ├─ src/
-│  ├─ hub.js                 # 三场景外壳、切换、输入、全屏、FPS
+│  ├─ hub.js                 # 四场景外壳、切换、输入、全屏、FPS、双向传送
 │  ├─ main.js                # 独立宿舍页的入口（dorm.html 使用）
 │  └─ ...                    # 宿舍场景模块
 ├─ dining/                   # 学生餐厅
@@ -137,6 +166,18 @@ single-dorm/
 │     ├─ player.js           # 第一人称移动、碰撞、步伐起伏
 │     ├─ textures.js / materials.js
 │     └─ config.js / geometry.js
+├─ coldstore/                # 后厨冷库储藏室
+│  ├─ index.html             # 自动跳转 /#coldstore
+│  ├─ README.md / BRIEF.md / scene-spec.yaml / asset-list.md / VALIDATION.md
+│  ├─ preview/               # 13 张冷库预览 JPG
+│  └─ src/
+│     ├─ scene.js            # 装配、灯光、碰撞、交互、冷雾
+│     ├─ room.js             # 保温板墙地顶、重门、CRT、指针表、天灯、冷风机、摄像
+│     ├─ furniture.js        # 4 层重型货架、食物盆、储物盒、纸箱
+│     ├─ props.js            # CRT 荧光屏、扫描带、两层冷雾粒子
+│     ├─ player.js           # 第一人称移动、碰撞、轻微步伐
+│     ├─ textures.js / materials.js
+│     └─ config.js / geometry.js
 ├─ assets/art/               # 宿舍参考画
 ├─ preview/                  # 宿舍预览截图
 └─ vendor/                   # Three.js（本地副本，MIT）
@@ -154,21 +195,23 @@ python -m http.server 8123 --bind 127.0.0.1
 # 同一页面（默认宿舍）: http://127.0.0.1:8123/
 # 直接进入餐厅:         http://127.0.0.1:8123/#dining
 # 直接进入后厨:         http://127.0.0.1:8123/#kitchen
-# 旧地址 /dining/、/kitchen/ 会自动跳转
+# 直接进入冷库:         http://127.0.0.1:8123/#coldstore
+# 旧地址 /dining/、/kitchen/、/coldstore/ 会自动跳转
 ```
 
 或 `npx serve . -l 8123`。
 
-> **不要直接双击 `index.html`**。页面使用 ES Modules，`file://` 协议会被浏览器 CORS 拦截，场景不会加载；现在三个场景页都会显示「需要通过本地服务器打开」的提示。若提示端口被占用，说明服务器已在运行，直接打开上面的地址即可。
+> **不要直接双击 `index.html`**。页面使用 ES Modules，`file://` 协议会被浏览器 CORS 拦截，场景不会加载；现在四个场景页都会显示「需要通过本地服务器打开」的提示。若提示端口被占用，说明服务器已在运行，直接打开上面的地址即可。
 
 ## 发布
 
-`main` 分支保存工程源码；`gh-pages` 分支保存站点根目录（内容即 `single-dorm/`），由 GitHub Pages 托管。三个场景在同一页面：
+`main` 分支保存工程源码；`gh-pages` 分支保存站点根目录（内容即 `single-dorm/`），由 GitHub Pages 托管。四个场景在同一页面：
 
-- `/` → 三场景预览（默认单人宿舍，顶部切换学生餐厅 / 餐厅后厨）
+- `/` → 四场景预览（默认单人宿舍，顶部切换学生餐厅 / 餐厅后厨 / 冷库储藏室）
 - `/#dining` → 直接进入学生餐厅
 - `/#kitchen` → 直接进入餐厅后厨
-- `/dining/`、`/kitchen/` → 自动跳转到对应 hash
+- `/#coldstore` → 直接进入后厨冷库储藏室
+- `/dining/`、`/kitchen/`、`/coldstore/` → 自动跳转到对应 hash
 - `/vendor/` → 本地 Three.js
 
 更新站点：把 `single-dorm/` 的内容同步到 `gh-pages` 分支根目录后推送。

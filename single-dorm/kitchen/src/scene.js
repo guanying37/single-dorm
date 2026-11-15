@@ -32,6 +32,7 @@ export class KitchenScene {
     this.builder = new StaticBuilder();
     this.room = buildRoom(this.builder, this.materials);
     if (this.room.doorGroup) this.root.add(this.room.doorGroup);
+    if (this.room.coldDoorGroup) this.root.add(this.room.coldDoorGroup);
     this.equipment = buildEquipment(this.builder, this.materials);
     this.props = buildProps(this.builder, this.root, this.materials, this.textures);
     this.batches = this.builder.flush(this.root, this.materials, 'kitchen-static-batches');
