@@ -1,0 +1,189 @@
+sceneId: kitchen
+name: 学生餐厅后厨
+locationType: commercial-kitchen
+chapter: "学生餐厅配套后厨"
+function: "备餐、烹饪、清洗、出餐；从餐厅后厨门进入，可从独立木门返回餐厅"
+mood: "冷白、整洁、实用、金属质感，长进深服务空间"
+timeOfDay: "人工照明（无窗）"
+weather: "不适用"
+
+dimensions:
+  width: 12.0
+  depth: 22.0
+  height: 3.25
+  wallThickness: 0.24
+  area: 264
+  relation: "餐厅 792 ㎡ 的 1/3；进深与餐厅 22 m 一致"
+
+connections:
+  - id: dining.return-door
+    wall: east
+    type: mirrored oak service door
+    width: 1.0
+    height: 2.2
+    z: -7.0
+    sceneId: dining
+    transition: black-fade
+  - id: dining.kitchen-door
+    wall: east
+    type: oak service door near main entrance
+    width: 1.0
+    height: 2.2
+    x: 18.0
+    z: 6.3
+    transition: black-fade
+  - id: dining.pass
+    wall: east
+    type: pass-through
+    doors: "double impact doors over a 0.95 m stainless pass counter"
+    width: 2.4
+    height: 2.2
+    z: 5.5
+    vestibuleDepth: 1.65
+  - id: freight.elevator
+    wall: west
+    type: double sliding elevator door
+    width: 1.7
+    height: 2.2
+    z: 3.0
+  - id: cold.storage
+    wall: north
+    type: heavy insulated stainless door
+    width: 1.3
+    height: 2.2
+    x: 4.6
+
+cameraModes:
+  fixed:
+    enabled: false
+  moving:
+    enabled: true
+    start:
+      x: 2.4
+      z: 4.0
+      yaw: 0.32
+      pitch: -0.03
+      fov: 68
+    eyeHeight: 1.8
+    playerRadius: 0.30
+    speed:
+      walk: 5.2
+      run: 11.0
+    acceleration: 18.0
+    lookSensitivity: 0.0022
+    pitchLimitDegrees: 83
+    roll: 0
+    bob:
+      walk: 0.012
+      run: 0.022
+      frequency: 6.3
+      lateral: 0.4
+    substep: 0.075
+    collision: true
+    colliderCount: 19
+    spawns:
+      fromDining:
+        x: 4.7
+        z: -7.0
+        yaw: 1.5708
+        pitch: 0
+      toDining:
+        x: 16.7
+        z: 6.3
+        yaw: 1.5708
+        pitch: 0
+    testCoordinates:
+      islandEastStop: { x: 1.88, z: 0.0 }
+      rangeFrontStop: { x: -3.2, z: -9.62 }
+      sinkFrontStop: { x: -3.2, z: 9.71 }
+      eastWallStop: { x: 5.69, z: 1.0 }
+
+interactables:
+  - id: door.dining
+    label: 学生餐厅
+    type: portal-door
+    sceneId: dining
+    spawn: [4.7, -7.0]
+    transition: "black overlay, destination title, view recentered"
+
+lighting:
+  recipe: kitchen.cool
+  key:
+    type: directional
+    direction: down
+    color: "#f7fbff"
+    intensity: 1.4
+    castShadow: true
+    shadowMap: 2048
+    shadowBake: once
+  fills:
+    hemisphere: { sky: "#f0f7ff", ground: "#5b686e", intensity: 0.55 }
+    ambient: { color: "#f1f7ff", intensity: 0.08 }
+    points: 4
+    hoodSpots: 2
+    passWarmPoint: 1
+  fixtures:
+    - "15 × 600 × 600 LED explosion-proof panel"
+    - "2 × hood task light"
+    - "2 × pass heat lamp"
+    - "cold-room anti-condensation heater wire (emissive only)"
+  postProcessing: none
+
+assets:
+  reuse:
+    - "dining/src/room.js: buildServiceDoor (exported)"
+    - "dining/src/utils.js: StaticBuilder, mergeGeometries, trs, uvScaledPlane"
+    - "dining/src/collision.js: CollisionWorld"
+    - "three.module.min.js (local)"
+    - "single-dorm/styles.css + hub UI shell"
+  new:
+    - kit.room.kitchen-shell.12x22
+    - kit.floor.quarry-tile
+    - kit.wall.white-glazed-tile
+    - kit.ceiling.aluminium-lay-in
+    - kit.ceiling.led-explosion-proof-panel
+    - kit.ceiling.exhaust-hood
+    - kit.ceiling.galvanised-duct
+    - kit.ceiling.sprinkler-pipe
+    - kit.ceiling.dome-camera
+    - prop.island.double-stainless
+    - prop.range.dual-wok
+    - prop.steamer.three-door
+    - prop.oven.double-door
+    - prop.sink.triple
+    - prop.prep-counter.heat-display
+    - prop.cold-door.insulated
+    - prop.freight-elevator.double-slide
+    - prop.pass.double-impact-door
+    - prop.door.dining.return
+    - prop.crt.wall
+    - prop.crt.floor
+  oneoff:
+    - "wall/floor CRT pair (two variants, scene-specific surveillance motif)"
+    - "cold-room door heater wire + thermometer"
+    - "freight elevator call panel/indicator"
+
+budget:
+  moving:
+    triangles: 450000
+    drawCalls: 90
+  measured:
+    triangles: 39000
+    drawCalls: 43
+  texturesMB: 16
+  measuredTexturesMB: 11
+
+constraints:
+  noPeople: true
+  noTextInScene: true
+  noSelfDrawn2DArt: true
+  noAudio: true
+  noExternalRequests: true
+  noCdns: true
+  diningMainDoorLocked: true
+  futureCorridorHook: true
+
+references:
+  - "BRIEF.md"
+  - "asset-list.md"
+  - "VALIDATION.md"

@@ -235,6 +235,38 @@ body.is-fullscreen .chrome {
   box-shadow: 0 0 0 3px rgba(169, 77, 66, 0.12);
 }
 
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.scene-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 13px;
+  border: 1px solid rgba(247, 231, 203, 0.18);
+  border-radius: 10px;
+  background: rgba(22, 16, 12, 0.38);
+  color: rgba(250, 241, 222, 0.78);
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  backdrop-filter: blur(15px) saturate(1.1);
+  -webkit-backdrop-filter: blur(15px) saturate(1.1);
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.scene-link:hover {
+  background: rgba(42, 30, 21, 0.58);
+  border-color: rgba(244, 220, 176, 0.42);
+  color: rgba(255, 247, 230, 0.95);
+}
+
 .fullscreen-button {
   pointer-events: auto;
   display: inline-flex;
@@ -584,6 +616,69 @@ body.is-fullscreen .hint-mouse {
 }
 
 
+/* Full-black scene hand-off. The destination name is UI text, not a
+   texture inside the 3D scene. */
+.scene-transition {
+  position: absolute;
+  inset: 0;
+  z-index: 24;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 50% 44%, rgba(38, 27, 16, 0.28), transparent 52%),
+    #070605;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 300ms ease, visibility 300ms;
+}
+
+.scene-transition.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.scene-transition-inner {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 260ms ease 90ms, transform 420ms cubic-bezier(0.2, 0.75, 0.2, 1) 70ms;
+}
+
+.scene-transition.is-active .scene-transition-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scene-transition-kicker {
+  display: block;
+  color: rgba(234, 207, 164, 0.48);
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.scene-transition strong {
+  display: block;
+  margin-top: 9px;
+  color: #f4e7cf;
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+}
+
+.scene-transition-rule {
+  display: block;
+  width: 72px;
+  height: 1px;
+  margin: 18px auto 0;
+  background: linear-gradient(90deg, transparent, rgba(213, 165, 94, 0.82), transparent);
+}
+
 /* Shown only while fullscreen without pointer lock. Its disappearance is
    the confirmation that the unrestricted 360° mouse capture is active. */
 .pointer-hint {
@@ -657,6 +752,14 @@ body:not(.is-fullscreen) .pointer-hint {
   .fullscreen-button .key {
     display: none;
   }
+  .scene-link {
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 9px;
+  }
+  .top-actions {
+    gap: 6px;
+  }
   .control-strip {
     max-width: 92vw;
     overflow: hidden;
@@ -684,5 +787,81 @@ body:not(.is-fullscreen) .pointer-hint {
   }
   .loader-line::after {
     animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Combined preview shell: dorm / dining / kitchen scene switch.
+ * ------------------------------------------------------------------ */
+
+.scene-switch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid rgba(247, 231, 203, 0.2);
+  border-radius: 11px;
+  background: rgba(22, 16, 12, 0.5);
+  backdrop-filter: blur(16px) saturate(1.12);
+  -webkit-backdrop-filter: blur(16px) saturate(1.12);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  pointer-events: auto;
+  z-index: 7;
+}
+
+.scene-tab {
+  appearance: none;
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(247, 236, 215, 0.62);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 550;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.scene-tab:hover {
+  color: rgba(255, 245, 226, 0.9);
+  background: rgba(255, 244, 224, 0.08);
+}
+
+.scene-tab.is-active {
+  color: #32251a;
+  background: linear-gradient(120deg, rgba(249, 240, 224, 0.97), rgba(240, 228, 205, 0.9));
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.control-strip.is-hidden {
+  display: none;
+}
+
+body.hud-hidden .ui-layer,
+body.hud-hidden #loader {
+  display: none !important;
+}
+
+body.hud-hidden #app::after {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .scene-switch {
+    top: 96px;
+  }
+  .scene-tab {
+    height: 30px;
+    padding: 0 10px;
+    font-size: 9px;
   }
 }

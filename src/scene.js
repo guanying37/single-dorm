@@ -97,33 +97,27 @@ export class SingleDormScene {
     const lights = new THREE.Group();
     lights.name = 'room-lighting';
 
-    const hemisphere = new THREE.HemisphereLight(0xfff2d8, 0x594535, 0.56);
+    const hemisphere = new THREE.HemisphereLight(0xfff2d8, 0x594535, 0.45);
     hemisphere.name = 'warm-sky-fill';
     lights.add(hemisphere);
 
-    // The pendant is the room's visible light source, so it must also be
-    // the light that owns the shadows. A gentle side fill adds modelling
-    // without casting a second, contradictory set of shadows.
-    const fill = new THREE.DirectionalLight(0xffe6cf, 0.28);
-    fill.name = 'soft-side-fill';
-    fill.position.set(2.2, 3.6, 1.9);
-    fill.target.position.set(0, 1.0, -0.3);
-    fill.castShadow = false;
-    lights.add(fill);
-    lights.add(fill.target);
-
-    // One shadow-casting key, placed just under the pendant shade and
-    // aimed straight down. Every shadow in the room therefore radiates
-    // from the same lamp the player sees. The wide, soft cone still
-    // reaches the walls and the room corners.
-    const key = new THREE.SpotLight(0xffd2a0, 34, 9.2, 1.07, 0.62, 1.8);
+    // The pendant is the room's only visible lamp. Its shadow is carried
+    // by one directional light aimed exactly down, so every shadow falls
+    // under the object instead of leaking sideways. No windowSpill and no
+    // side fill: the pendant owns the room's light and its shadows.
+    const key = new THREE.DirectionalLight(0xffd2a0, 0.66);
     key.name = 'pendant-shadow-light';
-    key.position.set(0, 2.275, 0);
+    key.position.set(0, 2.6, 0);
     key.target.position.set(0, 0, 0);
     key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
-    key.shadow.camera.near = 0.18;
-    key.shadow.camera.far = 6.4;
+    key.shadow.camera.left = -3.8;
+    key.shadow.camera.right = 3.8;
+    key.shadow.camera.top = 3.8;
+    key.shadow.camera.bottom = -3.8;
+    key.shadow.camera.near = 0.05;
+    key.shadow.camera.far = 5.2;
+    key.shadow.camera.up.set(0, 0, 1);
     key.shadow.bias = -0.00022;
     key.shadow.normalBias = 0.018;
     key.shadow.radius = 3.0;
@@ -131,26 +125,17 @@ export class SingleDormScene {
     lights.add(key.target);
 
     // The point fill is non-shadowing: it carries the warm glow onto the
-    // ceiling and into the corners while the spotlight handles direction.
-    const pendant = new THREE.PointLight(0xffca84, 14, 8.5, 2);
+    // ceiling and into the corners while the downward key owns the shadow.
+    const pendant = new THREE.PointLight(0xffca84, 8.5, 8.5, 2);
     pendant.name = 'pendant-warm-fill';
     pendant.position.set(0, 2.35, 0);
     pendant.castShadow = false;
     lights.add(pendant);
 
-    // A faint, cool spill near the sealed window. It reads as light
-    // leaking through the plank joins without needing a real exterior.
-    const windowSpill = new THREE.PointLight(0xb8cbc9, 2.6, 3.6, 2);
-    windowSpill.name = 'window-spill';
-    windowSpill.position.set(0.2, 1.65, -2.28);
-    windowSpill.castShadow = false;
-    lights.add(windowSpill);
     this.lights = {
       hemisphere,
-      fill,
       key,
       pendant,
-      windowSpill,
     };
     this.scene.add(lights);
   }
