@@ -24,9 +24,10 @@ export const START = Object.freeze({
 });
 
 export const MOVE = Object.freeze({
-  walkSpeed: 2.6,
-  runSpeed: 6.2,
-  acceleration: 14.0,
+  // Matched to the kitchen controller: same walk, run and acceleration.
+  walkSpeed: 5.2,
+  runSpeed: 11.0,
+  acceleration: 18.0,
   lookSensitivity: 0.0022,
   pitchLimit: Math.PI / 2 - 0.12,
   bobHeight: 0.014,
