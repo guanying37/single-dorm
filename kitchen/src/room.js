@@ -427,6 +427,40 @@ function buildColdDoor(builder, materials) {
   addCylinder(builder, 'ceramic', 0.068, 0.068, 0.012, 24, trs(x + COLD.width / 2 + 0.28, 1.78, frameZ + 0.14, 0, 1, 1, 1, Math.PI / 2, 0));
   addBox(builder, 'fireRed', 0.006, 0.052, 0.006, x + COLD.width / 2 + 0.28, 1.795, frameZ + 0.148, 0, { cast: false });
   addBox(builder, 'blackPlastic', 0.014, 0.014, 0.018, x + COLD.width / 2 + 0.28, 1.78, frameZ + 0.152, 0, { cast: false });
+
+  // Portal hit proxy to the walk-in cold store. The door leaf itself is
+  // welded into the static batch, so a colourless pick volume sits over
+  // it: one draw call, no visual footprint, full raycast coverage.
+  const hitGroup = new THREE.Group();
+  hitGroup.name = 'cold-store-portal-hit';
+  const hit = new THREE.Mesh(
+    boxGeometry(COLD.width, COLD.height, 0.16),
+    new THREE.MeshBasicMaterial({
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      colorWrite: false,
+      toneMapped: false,
+    }),
+  );
+  hit.position.set(x, COLD.height / 2, doorZ + 0.02);
+  hit.name = 'cold-store-portal-volume';
+  hitGroup.add(hit);
+  hitGroup.updateMatrixWorld(true);
+
+  return {
+    group: hitGroup,
+    item: {
+      id: 'door.coldstore',
+      label: '冷库',
+      sceneId: 'coldstore',
+      portal: true,
+      open: false,
+      value: 0,
+      target: 0,
+      hitRoots: [hitGroup],
+    },
+  };
 }
 
 /* --- Ceiling, hood and services ----------------------------------- */
@@ -696,13 +730,15 @@ export function buildRoom(builder, materials) {
   const diningDoor = buildDiningReturnDoor(builder, materials);
   interactables.push(diningDoor.item);
   buildFreightDoor(builder, materials);
-  buildColdDoor(builder, materials);
+  const coldDoor = buildColdDoor(builder, materials);
+  interactables.push(coldDoor.item);
   buildCeiling(builder, materials);
 
   return {
     colliders,
     vestibuleLight: pass.light,
     doorGroup: diningDoor.group,
+    coldDoorGroup: coldDoor.group,
     interactables,
   };
 }

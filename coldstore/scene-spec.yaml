@@ -1,0 +1,177 @@
+sceneId: coldstore
+name: 后厨冷库储藏室
+locationType: walk-in-cold-store
+chapter: "学生餐厅配套冷库"
+function: "食材保鲜与冷冻存放；从后厨北墙冷库门进入，推开同一扇重门返回后厨"
+mood: "冷白、密封、逼仄、工业仓储；轻微结霜与冷雾"
+timeOfDay: "人工照明（无窗）"
+weather: "不适用"
+
+dimensions:
+  width: 2.7
+  depth: 5.6
+  height: 2.45
+  wallThickness: 0.24
+  area: 15.12
+  aisle: 1.26
+  relation: "进深 5.6 m 与单人宿舍一致；宽度收到 2.7 m，净高 2.45 m"
+
+connections:
+  - id: kitchen.coldstore
+    wall: south
+    type: heavy insulated stainless door
+    width: 1.3
+    height: 2.2
+    x: 0.5
+    sceneId: kitchen
+    transition: black-fade
+    spawn: [4.6, -10.15, 3.141592653589793]
+
+cameraModes:
+  fixed:
+    enabled: false
+  moving:
+    enabled: true
+    start:
+      x: 0.26
+      z: 2.3
+      yaw: 0.06
+      pitch: -0.02
+      fov: 70
+    eyeHeight: 1.8
+    playerRadius: 0.30
+    speed:
+      walk: 1.9
+      run: 3.9
+    acceleration: 16.0
+    lookSensitivity: 0.0022
+    pitchLimitDegrees: 83
+    roll: 0
+    bob:
+      walk: 0.011
+      run: 0.021
+      frequency: 5.4
+      lateral: 0.45
+    substep: 0.06
+    collision: true
+    colliderCount: 9
+    spawns:
+      fromKitchen:
+        x: 0.26
+        z: 2.3
+        yaw: 0
+        pitch: -0.02
+      toKitchen:
+        x: 4.6
+        z: -10.15
+        yaw: 3.141592653589793
+        pitch: 0
+    testCoordinates:
+      eastShelfStop: { x: 0.31, z: 0.0 }
+      westShelfStop: { x: -0.31, z: 0.0 }
+      doorStop: { x: 0.3, z: 2.39 }
+      garmentStop: { x: 0.0, z: -2.12 }
+      crtStop: { x: -1.04, z: 2.06 }
+
+interactables:
+  - id: door.kitchen
+    label: 餐厅后厨
+    type: portal-door
+    sceneId: kitchen
+    spawn: [4.6, -10.15]
+    transition: "black overlay, destination title, view recentered"
+  - id: door.coldstore
+    label: 冷库
+    type: portal-door
+    sceneId: coldstore
+    owner: kitchen
+    spawn: [0.26, 2.3]
+    transition: "black overlay, destination title, view recentered"
+
+lighting:
+  recipe: coldstore.led
+  key:
+    type: directional
+    direction: down
+    color: "#f1f9ff"
+    intensity: 1.05
+    castShadow: true
+    shadowMap: 1024
+    shadowBake: once
+  fills:
+    hemisphere: { sky: "#dfeef8", ground: "#4b585e", intensity: 0.34 }
+    ambient: { color: "#eaf4ff", intensity: 0.06 }
+    ledPoints: 2
+    evaporator: 1
+    crtGlow: 1
+    heaterGlow: 1
+    doorFill: 1
+  fixtures:
+    - "2 × moisture-proof explosion-proof LED cold luminaire (clear dust cover + condensation frost)"
+    - "evaporator air cooler with two guarded fans"
+    - "grey CRT with phosphor feed"
+  exposure: 0.85
+  postProcessing: none
+
+assets:
+  reuse:
+    - "dining/src/utils.js: StaticBuilder, mergeGeometries, uvScaledPlane, trs, mulberry32"
+    - "dining/src/collision.js: CollisionWorld"
+    - "kitchen/src/geometry.js: frustumGeometry, crtScreenGeometry, roundedBoxGeometry"
+    - "kitchen room: existing insulated cold-room door leaf (pick proxy only, geometry untouched)"
+    - "single-dorm/styles.css + hub shell + local three.module.min.js"
+  new:
+    - kit.room.coldstore-shell.2.7x5.6
+    - kit.wall.insulation-panel.white-brushed
+    - kit.trim.panel-seam.silicone
+    - kit.trim.corner-post.aluminium
+    - kit.floor.aluminium-tread-deck
+    - kit.floor.perimeter-drain-grate
+    - kit.ceiling.pu-panel
+    - kit.ceiling.led-cold-luminaire.frosted
+    - kit.ceiling.evaporator.air-cooler
+    - kit.ceiling.temperature-sensor
+    - kit.ceiling.camera.defog-dome
+    - kit.door.insulated-heavy.1.3x2.2
+    - kit.door.emergency-release.glow
+    - prop.shelf.stainless-heavy.4tier
+    - prop.pan.stainless.food
+    - prop.container.clear.food-grade
+    - prop.carton.kraft.blank
+    - prop.crt.wall.coldstore
+    - prop.hygrothermometer.pointer
+    - prop.rail.garment.cold-coat
+    - prop.insulated-pipe.run
+  oneoff:
+    - "cold-store door leaf with internal emergency release, heater trace and frost rime"
+    - "evaporator air cooler with guarded twin fans and drain"
+    - "wall CRT + pointer hygrothermometer pair (cold-store surveillance motif)"
+    - "cold-air particle layers (mist from evaporator + aisle haze)"
+
+budget:
+  moving:
+    triangles: 450000
+    drawCalls: 90
+  measured:
+    triangles: 48670
+    drawCalls: 43
+    drawCallsPeak: 70
+  texturesMB: 16
+  measuredTexturesMB: 11
+  textureCount: 16
+
+constraints:
+  noPeople: true
+  noTextInScene: true
+  noSelfDrawn2DArt: true
+  noAudio: true
+  noExternalRequests: true
+  noCdns: true
+  noRoll: true
+  bidirectionPortal: true
+
+references:
+  - "BRIEF.md"
+  - "asset-list.md"
+  - "VALIDATION.md"
+  - "../../skills/danganronpa-adv-3d/references/lighting-recipes.md"
