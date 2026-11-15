@@ -33,8 +33,8 @@
 | 桌面 | 奶油/鼠尾草方格桌布（5 cm 格，垂边 0.32 m）；每座盘、碗、筷、勺、叉五件；白瓷花瓶插 3–5 枝花（共 39 枝） |
 | 画像 | 8 幅 0.96 × 0.72 m 立体浅浮雕美食画（非位图） |
 | 挂钟 | 北墙复古挂钟（木框、白盘、罗马数字、钟摆）；东墙大天鹅时钟 |
-| 门 | 正门双开 2.8 × 2.6 m；后厨门、卫生间门单开 1.0 × 2.2 m |
-| 预留空间 | 正门后 3.2 × 2.7 m 走廊段（地毯 + 端墙边柜 + 壁灯，无第二道门）；后厨/卫生间 `sceneId` 钩子 |
+| 门 | 正门双开 2.8 × 2.6 m（锁定）；后厨门 1.0 × 2.2 m 在**东墙 z=6.3、靠正门一端**（甜点画与东南角盆栽之间）；卫生间门单开 1.0 × 2.2 m |
+| 预留空间 | 正门后 3.2 × 2.7 m 走廊段（地毯 + 端墙边柜 + 壁灯，无第二道门）；正门当前锁定，保留 `sceneId: 'corridor'`；后厨/卫生间同样保留钩子 |
 | 交互家具 | 西墙餐具柜 3.6 × 0.55 × 0.98 m；2 门 + 3 抽屉 |
 | 扬声器 | 东西墙各 1 只壁挂扬声器（装饰，不播放音频） |
 | 碰撞 | 桌面 1.9 × 1.1 m + 6 把椅子各自独立的碰撞体，桌子四个无椅角可走近 |
@@ -69,8 +69,8 @@
 
 | ID | 类型 | 行为 |
 | --- | --- | --- |
-| `door.main` | 双开正门 | 打开/关闭，通向走廊预留段 |
-| `door.kitchen` | 后厨门 | 锁定；提示「后厨 · 暂未开放」，保留 `sceneId: 'kitchen'` |
+| `door.main` | 双开正门 | **锁定，不能打开**；点击提示「正门 · 暂未开放（预留走廊切换）」；保留 `sceneId: 'corridor'` 钩子 |
+| `door.kitchen` | 后厨门 | 位于**东墙 z=6.3、靠正门一端**；**黑屏切场到后厨场景**（`sceneId: 'kitchen'`）；落点在厨房门内并回正视角 |
 | `door.restroom` | 卫生间门 | 锁定；提示「卫生间 · 暂未开放」，保留 `sceneId: 'restroom'` |
 | `sideboard.door.left/right` | 餐具柜门 | 100° 开合 |
 | `sideboard.drawer.1/2/3` | 餐具柜抽屉 | 拉出 0.34 m |
@@ -95,20 +95,20 @@ hall.toggleInteractive('sideboard.drawer.1');
 hall.setClock(10, 10, 32);
 ```
 
-同一页面预览暴露双场景接口：
+同一页面预览暴露三场景接口：
 
 ```js
 window.__PREVIEW__ = {
-  scene, camera, renderer, dorm, dining,
-  getScene(), setScene('dorm' | 'dining'),
+  scene, camera, renderer, dorm, dining, kitchen, kitchenControls,
+  getScene(), setScene('dorm' | 'dining' | 'kitchen'),
   setView({ x, z, yaw, pitch }),
-  getView(), resetView(),
+  getView(), resetView(), transitionToScene(next, label),
   toggle(id), setFrozen(bool), setClock(h, m, s),
   getInteractives(), getStats(),
 };
 ```
 
-独立页 `dining/standalone.html` 仍暴露旧的 `window.__DINING__` 接口。`window.__PREVIEW_READY__`、`window.__DINING_READY__` 都会在首帧完成后置为 `true`。
+独立页 `dining/standalone.html` 仍暴露旧的 `window.__DINING__` 接口。`window.__PREVIEW_READY__`、`window.__DINING_READY__`、`window.__KITCHEN_READY__` 都会在首帧完成后置为 `true`。
 
 ## 性能与实现
 
@@ -138,7 +138,7 @@ dining/
 ├─ BRIEF.md            # 建模任务书 / 验收对照
 ├─ preview/            # 8 张预览截图
 └─ src/
-   ├─ main.js          # 独立页入口；双场景页由 ../src/hub.js 驱动
+   ├─ main.js          # 独立页入口；三场景页由 ../src/hub.js 驱动
    ├─ scene.js         # 场景装配、灯光、静态阴影、碰撞、交互调度
    ├─ room.js          # 地面/墙体/天花/三扇门/走廊预留段/墙面线条
    ├─ furniture.js     # 桌、椅、桌布、餐具、花瓶与花、餐具柜
@@ -153,7 +153,7 @@ dining/
 
 ## 部署与主宿舍联动
 
-学生餐厅现在与单人宿舍位于**同一个页面**：`single-dorm/index.html` 由 `src/hub.js` 驱动，顶部「单人宿舍 / 学生餐厅」切换，两个场景常驻内存、只渲染当前场景。
+学生餐厅现在与单人宿舍、餐厅后厨位于**同一个页面**：`single-dorm/index.html` 由 `src/hub.js` 驱动，顶部「单人宿舍 / 学生餐厅 / 餐厅后厨」切换，三个场景常驻内存、只渲染当前场景。
 
 - 餐厅地址：`/#dining`；旧地址 `/dining/` 会自动跳转。
 - 独立调试页：`dining/standalone.html`（仍可单独打开）。
@@ -167,7 +167,7 @@ dining/
 2. **画像**：本轮没有收到「如图」的位图附件；按「不自行绘图」采用 **0.06 m 深立体浅浮雕**（盘、面包、鱼、果、瓶等低模）。若提供正式画作，可把 `decor.js` 的 `buildRelief` 替换为贴图平面。
 3. **阴影**：为保证 30 FPS 底线，只保留 **1 张定向光静态阴影**，方向垂直向下，与天花灯具一致；3 盏聚光灯只负责光池、不投阴影；动态门/抽屉不参与阴影烘焙。宿舍只保留吊灯主光，删除 `windowSpill` 与侧向 fill；垂直定向光作为吊灯投影代理。
 4. **新增陈设**：餐具柜用于承载「柜门/抽屉」交互；8 盆绿植用于填充 792 ㎡ 的周边空区；正门后走廊段改为「边柜 + 壁灯」，不再在门后放第二道门；东西墙各增加一只装饰扬声器。均为可删除的独立构建函数。
-5. **后厨/卫生间**：不建模，门锁定并保留 `sceneId`；未来接场景切换时，把 `door.kitchen` / `door.restroom` 的锁定标记改为场景跳转即可。
+5. **正门/后厨/卫生间**：正门已按要求锁定，后续再改为交互切到走廊；后厨已建成为独立 `kitchen` 场景，`door.kitchen` 在东墙靠正门一端并黑屏切场过去；卫生间仍未建模，门锁定并保留 `sceneId`。
 6. **无窗**：按原案执行，全部为人工照明；未添加窗外环境。
 7. **碰撞**：餐桌从一个大方块改为「桌面 + 6 把椅子」独立碰撞体，四个无椅角可以走近，不再被整块桌位挡住。
 

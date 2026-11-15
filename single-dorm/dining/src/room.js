@@ -96,7 +96,7 @@ function buildPanelLeaf(materials, { width, height, thickness, direction = 1 }) 
   return group;
 }
 
-function buildServiceDoor(materials, { width, height, hingeDirection = 1 }) {
+export function buildServiceDoor(materials, { width, height, hingeDirection = 1 }) {
   const group = new THREE.Group();
   const builder = new StaticBuilder();
   const thickness = 0.05;
@@ -208,31 +208,9 @@ export function buildRoom(builder, materials) {
     trs(0, DOORS.main.height + (HALL.height - DOORS.main.height) / 2, HALF_D - T, Math.PI),
   );
 
-  // East wall: kitchen opening 1.0 x 2.2 at z=-7.
-  const eastZ = DOORS.kitchen.position.z;
-  const eastBack = HALF_D + eastZ; // -11 -> -7 = 4
-  const eastFront = HALF_D - (eastZ + 0.5); // -6.5 -> 11 = 17.5
-  addPlane(
-    builder,
-    'wall',
-    eastBack - 0.5,
-    HALL.height,
-    trs(HALF_W - T, HALL.height / 2, -HALF_D + (eastBack - 0.5) / 2, -Math.PI / 2),
-  );
-  addPlane(
-    builder,
-    'wall',
-    eastFront,
-    HALL.height,
-    trs(HALF_W - T, HALL.height / 2, eastZ + 0.5 + eastFront / 2, -Math.PI / 2),
-  );
-  addPlane(
-    builder,
-    'wall',
-    1,
-    HALL.height - DOORS.kitchen.height,
-    trs(HALF_W - T, DOORS.kitchen.height + (HALL.height - DOORS.kitchen.height) / 2, eastZ, -Math.PI / 2),
-  );
+  // East wall: solid. The kitchen door is surface-mounted in the blank
+  // bay between the dessert painting and the corner plant (z = 6.3).
+  addPlane(builder, 'wall', HALL.depth, HALL.height, trs(HALF_W - T, HALL.height / 2, 0, -Math.PI / 2));
 
   // West wall: restroom opening at z=+7.
   const westZ = DOORS.restroom.position.z;
@@ -271,10 +249,6 @@ export function buildRoom(builder, materials) {
   addBox(builder, 'wall', 0.03, DOORS.main.height, WALL_T + 0.02, mainHalf + 0.015, DOORS.main.height / 2, HALF_D + WALL_T / 2, 0, { cast: false });
   addBox(builder, 'wall', DOORS.main.width + 0.06, 0.03, WALL_T + 0.02, 0, DOORS.main.height + 0.015, HALF_D + WALL_T / 2, 0, { cast: false });
 
-  addBox(builder, 'wall', WALL_T + 0.02, DOORS.kitchen.height, 0.03, HALF_W + WALL_T / 2, DOORS.kitchen.height / 2, eastZ - 0.515, 0, { cast: false });
-  addBox(builder, 'wall', WALL_T + 0.02, DOORS.kitchen.height, 0.03, HALF_W + WALL_T / 2, DOORS.kitchen.height / 2, eastZ + 0.515, 0, { cast: false });
-  addBox(builder, 'wall', WALL_T + 0.02, 0.03, 1.06, HALF_W + WALL_T / 2, DOORS.kitchen.height + 0.015, eastZ, 0, { cast: false });
-
   addBox(builder, 'wall', WALL_T + 0.02, DOORS.restroom.height, 0.03, -HALF_W - WALL_T / 2, DOORS.restroom.height / 2, westZ - 0.515, 0, { cast: false });
   addBox(builder, 'wall', WALL_T + 0.02, DOORS.restroom.height, 0.03, -HALF_W - WALL_T / 2, DOORS.restroom.height / 2, westZ + 0.515, 0, { cast: false });
   addBox(builder, 'wall', WALL_T + 0.02, 0.03, 1.06, -HALF_W - WALL_T / 2, DOORS.restroom.height + 0.015, westZ, 0, { cast: false });
@@ -287,8 +261,7 @@ export function buildRoom(builder, materials) {
   addSkirting(HALL.width, 0, -HALF_D + skirtingDepth / 2, 0);
   addSkirting(mainHalf + HALF_W - 0.02, -(mainHalf + (HALF_W - mainHalf) / 2), HALF_D - skirtingDepth / 2, 0);
   addSkirting(mainHalf + HALF_W - 0.02, mainHalf + (HALF_W - mainHalf) / 2, HALF_D - skirtingDepth / 2, 0);
-  addSkirting(4 - 0.5, HALF_W - skirtingDepth / 2, -9.25, -Math.PI / 2);
-  addSkirting(17.5 - 0.0, HALF_W - skirtingDepth / 2, 2.25, -Math.PI / 2);
+  addSkirting(HALL.depth, HALF_W - skirtingDepth / 2, 0, -Math.PI / 2);
   addSkirting(17.5, -HALF_W + skirtingDepth / 2, -2.25, Math.PI / 2);
   addSkirting(3.5, -HALF_W + skirtingDepth / 2, 9.25, Math.PI / 2);
 
@@ -322,8 +295,7 @@ export function buildRoom(builder, materials) {
   rail(HALL.width, 0, -HALF_D + 0.016, 0);
   rail(mainHalf + HALF_W - 0.03, -(mainHalf + (HALF_W - mainHalf) / 2), HALF_D - 0.016, 0);
   rail(mainHalf + HALF_W - 0.03, mainHalf + (HALF_W - mainHalf) / 2, HALF_D - 0.016, 0);
-  rail(3.5, HALF_W - 0.016, -9.25, Math.PI / 2);
-  rail(17.5, HALF_W - 0.016, 2.25, Math.PI / 2);
+  rail(HALL.depth, HALF_W - 0.016, 0, Math.PI / 2);
   rail(17.5, -HALF_W + 0.016, -2.25, Math.PI / 2);
   rail(3.5, -HALF_W + 0.016, 9.25, Math.PI / 2);
 
@@ -358,9 +330,15 @@ export function buildRoom(builder, materials) {
   addBox(builder, 'oak', casingWidth, DOORS.main.height + 0.14, casingDepth, mainHalf + 0.045, (DOORS.main.height + 0.14) / 2, mainCasingZ);
   addBox(builder, 'oak', DOORS.main.width + 0.18, 0.12, casingDepth, 0, DOORS.main.height + 0.06, mainCasingZ);
 
-  addBox(builder, 'oak', casingDepth, DOORS.kitchen.height + 0.12, casingWidth, HALF_W - casingDepth / 2, (DOORS.kitchen.height + 0.12) / 2, eastZ - 0.545);
-  addBox(builder, 'oak', casingDepth, DOORS.kitchen.height + 0.12, casingWidth, HALF_W - casingDepth / 2, (DOORS.kitchen.height + 0.12) / 2, eastZ + 0.545);
-  addBox(builder, 'oak', casingDepth, 0.12, DOORS.kitchen.width + 0.18, HALF_W - casingDepth / 2, DOORS.kitchen.height + 0.06, eastZ);
+  // Kitchen door casing on the east wall, in the blank bay between the
+  // dessert painting and the south-east corner plant.
+  const kitchenDoorZ = DOORS.kitchen.position.z;
+  addBox(builder, 'oak', casingDepth, DOORS.kitchen.height + 0.14, casingWidth, HALF_W - casingDepth / 2, (DOORS.kitchen.height + 0.14) / 2, kitchenDoorZ - 0.545);
+  addBox(builder, 'oak', casingDepth, DOORS.kitchen.height + 0.14, casingWidth, HALF_W - casingDepth / 2, (DOORS.kitchen.height + 0.14) / 2, kitchenDoorZ + 0.545);
+  addBox(builder, 'oak', casingDepth, 0.12, DOORS.kitchen.width + 0.18, HALF_W - casingDepth / 2, DOORS.kitchen.height + 0.06, kitchenDoorZ);
+  // Dark backing so the frosted glass never reveals a void.
+  addBox(builder, 'oakDark', 0.018, DOORS.kitchen.height + 0.06, DOORS.kitchen.width + 0.12, HALF_W - 0.006, (DOORS.kitchen.height + 0.06) / 2, kitchenDoorZ);
+  builder.add('brass', boxGeometry(0.09, 0.012, DOORS.kitchen.width + 0.12), trs(HALF_W - 0.02, 0.006, kitchenDoorZ), { cast: false, receive: true });
 
   addBox(builder, 'oak', casingDepth, DOORS.restroom.height + 0.12, casingWidth, -HALF_W + casingDepth / 2, (DOORS.restroom.height + 0.12) / 2, westZ - 0.545);
   addBox(builder, 'oak', casingDepth, DOORS.restroom.height + 0.12, casingWidth, -HALF_W + casingDepth / 2, (DOORS.restroom.height + 0.12) / 2, westZ + 0.545);
@@ -448,8 +426,7 @@ export function buildRoom(builder, materials) {
     { x: 0, z: -HALF_D - 0.13, hx: HALF_W + 0.2, hz: 0.14 },
     { x: -(mainHalf + southSeg / 2), z: HALF_D + 0.13, hx: southSeg / 2, hz: 0.14 },
     { x: mainHalf + southSeg / 2, z: HALF_D + 0.13, hx: southSeg / 2, hz: 0.14 },
-    { x: HALF_W + 0.13, z: -9.25, hx: 0.14, hz: 1.75 },
-    { x: HALF_W + 0.13, z: 2.25, hx: 0.14, hz: 8.75 },
+    { x: HALF_W + 0.13, z: 0, hx: 0.14, hz: HALF_D + 0.2 },
     { x: -HALF_W - 0.13, z: -2.25, hx: 0.14, hz: 8.75 },
     { x: -HALF_W - 0.13, z: 9.25, hx: 0.14, hz: 1.75 },
     { x: -stubHalfWidth - 0.06, z: HALF_D + stubDepth / 2, hx: 0.06, hz: stubDepth / 2 },
@@ -461,8 +438,6 @@ export function buildRoom(builder, materials) {
   // Wall segments around the service openings (thin door blocks live
   // with the door leaf itself).
   colliders.push(
-    { x: HALF_W + 0.13, z: eastZ - 0.75, hx: 0.14, hz: 0.25 },
-    { x: HALF_W + 0.13, z: eastZ + 0.75, hx: 0.14, hz: 0.25 },
     { x: -HALF_W - 0.13, z: westZ - 0.75, hx: 0.14, hz: 0.25 },
     { x: -HALF_W - 0.13, z: westZ + 0.75, hx: 0.14, hz: 0.25 },
   );
@@ -523,6 +498,8 @@ export function buildRoom(builder, materials) {
   interactables.push({
     id: DOORS.main.id,
     label: DOORS.main.label,
+    locked: true,
+    sceneId: 'corridor',
     open: false,
     value: 0,
     target: 0,
@@ -538,7 +515,11 @@ export function buildRoom(builder, materials) {
 
   /* Service doors (locked, reserved scene hooks) -------------------- */
   const kitchenDoor = buildServiceDoor(materials, { width: DOORS.kitchen.width, height: DOORS.kitchen.height, hingeDirection: 1 });
-  kitchenDoor.group.position.set(HALF_W - 0.03, 0.02, eastZ - DOORS.kitchen.width / 2 + 0.02);
+  kitchenDoor.group.position.set(
+    HALF_W - 0.03,
+    0.02,
+    DOORS.kitchen.position.z - DOORS.kitchen.width / 2 + 0.02,
+  );
   kitchenDoor.group.rotation.y = -Math.PI / 2;
 
   const restroomDoor = buildServiceDoor(materials, { width: DOORS.restroom.width, height: DOORS.restroom.height, hingeDirection: 1 });
@@ -550,6 +531,7 @@ export function buildRoom(builder, materials) {
       id: DOORS.kitchen.id,
       label: DOORS.kitchen.label,
       locked: true,
+      portal: true,
       sceneId: DOORS.kitchen.sceneId,
       hitRoots: [kitchenDoor.group],
       handle: kitchenDoor.handle,
@@ -567,7 +549,6 @@ export function buildRoom(builder, materials) {
   );
 
   colliders.push(
-    { x: HALF_W + 0.04, z: eastZ, hx: 0.06, hz: 0.5 },
     { x: -HALF_W - 0.04, z: westZ, hx: 0.06, hz: 0.5 },
   );
 

@@ -3,14 +3,18 @@ import { SingleDormScene } from './scene.js';
 import { DiningHallScene } from '../dining/src/scene.js';
 import { FirstPersonControls } from '../dining/src/player.js';
 import { START as DINING_START } from '../dining/src/config.js';
+import { KitchenScene } from '../kitchen/src/scene.js';
+import { KitchenControls } from '../kitchen/src/player.js';
+import { START as KITCHEN_START } from '../kitchen/src/config.js';
 import { clamp } from '../dining/src/utils.js';
 
 /* ------------------------------------------------------------------ *
- * One page, two scenes.
+ * One page, three scenes.
  *
  * The dorm scene keeps its fixed eye point and look-only interaction;
- * the dining hall adds the walking controller. Only one scene is
- * rendered at a time, but both stay resident so switching is instant.
+ * the dining hall and the restaurant kitchen both use first-person
+ * walking controllers. Only one scene is rendered at a time, but all
+ * three stay resident so switching is instant.
  * ------------------------------------------------------------------ */
 
 const canvas = document.getElementById('stage');
@@ -28,8 +32,11 @@ const lockHint = document.getElementById('lockHint');
 const lockHintText = document.getElementById('lockHintText');
 const sceneTitle = document.getElementById('sceneTitle');
 const sceneEyebrow = document.getElementById('sceneEyebrow');
+const sceneTransition = document.getElementById('sceneTransition');
+const sceneTransitionTitle = document.getElementById('sceneTransitionTitle');
 const dormControls = document.getElementById('dormControls');
 const diningControlsBar = document.getElementById('diningControls');
+const kitchenControlsBar = document.getElementById('kitchenControls');
 const sceneTabs = Array.from(document.querySelectorAll('.scene-tab'));
 
 const params = new URLSearchParams(window.location.search);
@@ -52,6 +59,7 @@ const state = {
   hovered: null,
   ready: false,
   recenter: null,
+  transitioning: false,
 };
 
 let renderer = null;
@@ -59,11 +67,14 @@ let camera = null;
 let dormScene = null;
 let diningScene = null;
 let diningControls = null;
+let kitchenScene = null;
+let kitchenControls = null;
 let raycaster = null;
 let dormHome = null;
 let dormYaw = 0;
 let dormPitch = 0;
 let diningView = null;
+let kitchenView = null;
 let rafId = 0;
 let toastTimer = 0;
 let lastFrameTime = performance.now();
@@ -83,19 +94,21 @@ const FULLSCREEN_HINT = '移动鼠标环顾 · 右键固定视线 · 中键回�
 const LOCK_FALLBACK = '点击画面捕获鼠标 · 右键固定视野 · 中键回正';
 
 function activeScene() {
-  return state.active === 'dining' ? diningScene : dormScene;
+  if (state.active === 'dining') return diningScene;
+  if (state.active === 'kitchen') return kitchenScene;
+  return dormScene;
 }
 
 function activeMeshes() {
-  return state.active === 'dining'
-    ? diningScene.getInteractableMeshes()
-    : dormScene.interactiveMeshes;
+  if (state.active === 'dining') return diningScene.getInteractableMeshes();
+  if (state.active === 'kitchen') return kitchenScene.getInteractableMeshes();
+  return dormScene.interactiveMeshes;
 }
 
 function activeItem(id) {
-  return state.active === 'dining'
-    ? diningScene.interactiveById.get(id)
-    : dormScene.interactiveById.get(id);
+  if (state.active === 'dining') return diningScene.interactiveById.get(id);
+  if (state.active === 'kitchen') return kitchenScene.interactiveById.get(id);
+  return dormScene.interactiveById.get(id);
 }
 
 function showToast(message, duration = 2200) {
@@ -117,7 +130,11 @@ function updateProjection() {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const aspect = width / Math.max(1, height);
-  const baseFov = state.active === 'dining' ? DINING_START.fov : dormHome.fov;
+  const baseFov = state.active === 'dining'
+    ? DINING_START.fov
+    : state.active === 'kitchen'
+      ? KITCHEN_START.fov
+      : dormHome.fov;
   camera.aspect = aspect;
   camera.fov = aspect < 0.85 ? 78 : baseFov;
   camera.updateProjectionMatrix();
@@ -136,21 +153,34 @@ function shortestAngle(delta) {
   return ((delta + Math.PI) % twoPi + twoPi) % twoPi - Math.PI;
 }
 
-function setScene(name, { updateHash = true } = {}) {
-  const next = name === 'dining' ? 'dining' : 'dorm';
+function setScene(name, { updateHash = true, resetView = false } = {}) {
+  const next = name === 'dining' ? 'dining' : name === 'kitchen' ? 'kitchen' : 'dorm';
   if (state.active === next && state.ready) {
     return;
   }
 
-  if (state.active === 'dining' && diningControls) {
-    diningView = diningControls.getView();
+  if (diningControls) {
+    if (state.active === 'dining') diningView = diningControls.getView();
     diningControls.enabled = false;
     diningControls.keys.clear();
+  }
+  if (kitchenControls) {
+    if (state.active === 'kitchen') kitchenView = kitchenControls.getView();
+    kitchenControls.enabled = false;
+    kitchenControls.keys.clear();
   }
 
   state.active = next;
   state.recenter = null;
   state.frozen = false;
+  if (resetView) {
+    if (next === 'dining') diningView = null;
+    else if (next === 'kitchen') kitchenView = null;
+    else {
+      dormYaw = dormHome.yaw;
+      dormPitch = dormHome.pitch;
+    }
+  }
   state.hovered = null;
   state.dragging = false;
   document.body.classList.remove('is-dragging', 'can-interact');
@@ -171,6 +201,20 @@ function setScene(name, { updateHash = true } = {}) {
       pitch: DINING_START.pitch,
     };
     diningControls.setView(view);
+  } else if (next === 'kitchen') {
+    camera.near = 0.04;
+    camera.far = 60;
+    camera.fov = KITCHEN_START.fov;
+    camera.updateProjectionMatrix();
+    kitchenControls.enabled = true;
+    kitchenControls.keys.clear();
+    const view = kitchenView || {
+      x: KITCHEN_START.x,
+      z: KITCHEN_START.z,
+      yaw: KITCHEN_START.yaw,
+      pitch: KITCHEN_START.pitch,
+    };
+    kitchenControls.setView(view);
   } else {
     camera.near = 0.035;
     camera.far = 45;
@@ -180,8 +224,11 @@ function setScene(name, { updateHash = true } = {}) {
   }
 
   updateProjection();
+  if (renderer) {
+    renderer.toneMappingExposure = next === 'kitchen' ? 0.96 : 1.02;
+    renderer.shadowMap.needsUpdate = true;
+  }
   updateSceneUI();
-  if (renderer) renderer.shadowMap.needsUpdate = true;
   statsSnapshot = { calls: 0, triangles: 0, active: next };
   try {
     renderer.compile(activeScene().scene, camera);
@@ -191,7 +238,7 @@ function setScene(name, { updateHash = true } = {}) {
   markHoverDirty();
 
   if (updateHash) {
-    const hash = next === 'dining' ? '#dining' : '#dorm';
+    const hash = next === 'dining' ? '#dining' : next === 'kitchen' ? '#kitchen' : '#dorm';
     try {
       window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
     } catch {
@@ -201,25 +248,92 @@ function setScene(name, { updateHash = true } = {}) {
   if (window.__PREVIEW__) window.__PREVIEW__.scene = activeScene().scene;
 }
 
+/* Door-specific spawn points just inside each portal, facing into the
+ * destination room with a level pitch. */
+const DOOR_SPAWNS = Object.freeze({
+  // Dining kitchen door is on the east wall, south end, close to the main entrance.
+  dining: { x: 16.7, z: 6.3, yaw: Math.PI / 2, pitch: 0 },
+  kitchen: { x: 4.7, z: -7.0, yaw: Math.PI / 2, pitch: 0 },
+});
+
+function transitionToScene(next, label) {
+  if (!state.ready || state.transitioning || state.active === next) return;
+  state.transitioning = true;
+  state.recenter = null;
+  state.hovered = null;
+  state.frozen = false;
+  setPromptItem(null);
+  if (diningControls) {
+    diningControls.enabled = false;
+    diningControls.keys.clear();
+  }
+  if (kitchenControls) {
+    kitchenControls.enabled = false;
+    kitchenControls.keys.clear();
+  }
+  if (sceneTransitionTitle) sceneTransitionTitle.textContent = label;
+  if (sceneTransition) {
+    sceneTransition.classList.add('is-active');
+    sceneTransition.setAttribute('aria-hidden', 'false');
+  }
+
+  window.setTimeout(() => {
+    setScene(next, { resetView: true });
+    const spawn = DOOR_SPAWNS[next];
+    if (spawn) setView(spawn);
+    if (diningControls) {
+      diningControls.enabled = false;
+      diningControls.keys.clear();
+    }
+    if (kitchenControls) {
+      kitchenControls.enabled = false;
+      kitchenControls.keys.clear();
+    }
+
+    window.setTimeout(() => {
+      if (sceneTransition) {
+        sceneTransition.classList.remove('is-active');
+        sceneTransition.setAttribute('aria-hidden', 'true');
+      }
+      window.setTimeout(() => {
+        state.transitioning = false;
+        if (state.active === 'dining' && diningControls) diningControls.enabled = true;
+        if (state.active === 'kitchen' && kitchenControls) kitchenControls.enabled = true;
+        markHoverDirty();
+      }, 360);
+    }, 500);
+  }, 420);
+}
+
 function updateSceneUI() {
   const dining = state.active === 'dining';
-  if (sceneTitle) sceneTitle.textContent = dining ? '学生餐厅' : '单人宿舍';
-  if (sceneEyebrow) sceneEyebrow.textContent = dining ? "Hope's Peak · Dining Hall" : "Hope's Peak · Dormitory";
-  if (dormControls) dormControls.classList.toggle('is-hidden', dining);
+  const kitchen = state.active === 'kitchen';
+  const title = dining ? '学生餐厅' : kitchen ? '餐厅后厨' : '单人宿舍';
+  const eyebrow = dining
+    ? "Hope's Peak · Dining Hall"
+    : kitchen
+      ? "Hope's Peak · Kitchen"
+      : "Hope's Peak · Dormitory";
+  if (sceneTitle) sceneTitle.textContent = title;
+  if (sceneEyebrow) sceneEyebrow.textContent = eyebrow;
+  if (dormControls) dormControls.classList.toggle('is-hidden', dining || kitchen);
   if (diningControlsBar) diningControlsBar.classList.toggle('is-hidden', !dining);
+  if (kitchenControlsBar) kitchenControlsBar.classList.toggle('is-hidden', !kitchen);
   sceneTabs.forEach((tab) => {
     const active = tab.dataset.scene === state.active;
     tab.classList.toggle('is-active', active);
     tab.setAttribute('aria-selected', active ? 'true' : 'false');
   });
-  document.title = dining ? '学生餐厅 · 3D 场景预览' : '单人宿舍 · 3D 场景预览';
+  document.title = `${title} · 3D 场景预览`;
 }
 
 function look(deltaX, deltaY, sensitivity) {
-  if (state.frozen) return;
+  if (state.frozen || state.transitioning) return;
   state.recenter = null;
   if (state.active === 'dining') {
     diningControls.look(deltaX, deltaY, sensitivity);
+  } else if (state.active === 'kitchen') {
+    kitchenControls.look(deltaX, deltaY, sensitivity);
   } else {
     dormYaw -= deltaX * sensitivity;
     dormPitch = clamp(dormPitch - deltaY * sensitivity, -Math.PI / 2 + 0.075, Math.PI / 2 - 0.075);
@@ -229,8 +343,14 @@ function look(deltaX, deltaY, sensitivity) {
 }
 
 function recenterView() {
+  if (state.transitioning) return;
   if (state.active === 'dining') {
     if (diningControls.recenter()) showToast('视野回正', 700);
+    markHoverDirty();
+    return;
+  }
+  if (state.active === 'kitchen') {
+    if (kitchenControls.recenter()) showToast('视野回正', 700);
     markHoverDirty();
     return;
   }
@@ -276,6 +396,7 @@ function updateDormRecenter(dt) {
 function setFrozen(value, announce = false) {
   state.frozen = Boolean(value);
   if (diningControls) diningControls.setFrozen(state.frozen);
+  if (kitchenControls) kitchenControls.setFrozen(state.frozen);
   document.body.classList.toggle('is-view-frozen', state.frozen);
   if (announce) showToast(state.frozen ? '视线已固定 · 右键解锁' : '视线已解锁', 1200);
   markHoverDirty();
@@ -295,7 +416,7 @@ function pickAt(clientX, clientY) {
   camera.updateMatrixWorld(true);
   const ndcX = state.isFullscreen ? 0 : (clientX / window.innerWidth) * 2 - 1;
   const ndcY = state.isFullscreen ? 0 : -(clientY / window.innerHeight) * 2 + 1;
-  raycaster.far = state.active === 'dining' ? 4.2 : 12;
+  raycaster.far = state.active === 'dining' ? 4.2 : state.active === 'kitchen' ? 4.2 : 12;
   raycaster.setFromCamera({ x: ndcX, y: ndcY }, camera);
   const hits = raycaster.intersectObjects(activeMeshes(), false);
   for (const hit of hits) {
@@ -311,7 +432,12 @@ function setPromptItem(item) {
   state.hovered = item;
   if (!interactionBadge || !interactionText) return;
   if (item) {
-    if (item.locked) {
+    if (item.portal) {
+      const portalLabel = item.label.endsWith('门') ? item.label.slice(0, -1) : item.label;
+      interactionText.textContent = `进入${portalLabel}`;
+      crosshair.classList.add('has-target');
+      if (!state.isFullscreen) document.body.classList.add('can-interact');
+    } else if (item.locked) {
       interactionText.textContent = `${item.label} · 暂未开放`;
       crosshair.classList.remove('has-target');
       document.body.classList.remove('can-interact');
@@ -345,6 +471,7 @@ function refreshHover() {
 function lockResultMessage(item) {
   if (item?.sceneId === 'kitchen') return '后厨 · 暂未开放（已预留入口）';
   if (item?.sceneId === 'restroom') return '卫生间 · 暂未开放（已预留入口）';
+  if (item?.sceneId === 'corridor') return '正门 · 暂未开放（预留走廊切换）';
   return `${item?.label ?? '该区域'} · 暂未开放`;
 }
 
@@ -353,8 +480,20 @@ function toggleHovered() {
   const item = state.hovered;
   if (state.active === 'dining') {
     const result = diningScene.toggleInteractive(item.id);
-    if (result?.locked) showToast(lockResultMessage(result), 2400);
-    else if (result) showToast(`${result.open ? '已打开' : '已关闭'}${result.label}`, 1100);
+    if (result?.sceneId === 'kitchen') {
+      transitionToScene('kitchen', '餐厅后厨');
+    } else if (result?.locked) {
+      showToast(lockResultMessage(result), 2400);
+    } else if (result) {
+      showToast(`${result.open ? '已打开' : '已关闭'}${result.label}`, 1100);
+    }
+  } else if (state.active === 'kitchen') {
+    const result = kitchenScene.toggleInteractive(item.id);
+    if (result?.sceneId === 'dining') {
+      transitionToScene('dining', '学生餐厅');
+    } else {
+      return false;
+    }
   } else {
     const result = dormScene.toggleInteractive(item.id);
     if (result) showToast(`${result.open ? '已打开' : '已关闭'}${result.label}`, 1100);
@@ -475,7 +614,7 @@ function onPointerLockChange() {
 /* --- Input --------------------------------------------------------- */
 
 function onPointerDown(event) {
-  if (!state.ready) return;
+  if (!state.ready || state.transitioning) return;
   if (event.button === 1) {
     event.preventDefault();
     recenterView();
@@ -588,7 +727,7 @@ function endDrag(event) {
 }
 
 function onKeyDown(event) {
-  if (!state.ready) return;
+  if (!state.ready || state.transitioning) return;
   if (event.code === 'KeyE' && !event.repeat) {
     if (toggleHovered()) event.preventDefault();
     return;
@@ -639,6 +778,10 @@ function animate(now) {
     diningControls.update(dt);
     diningScene.update(dt, elapsedTime);
     if (diningControls.getSpeed() > 0.02) markHoverDirty();
+  } else if (state.active === 'kitchen') {
+    kitchenControls.update(dt);
+    kitchenScene.update(dt, elapsedTime);
+    if (kitchenControls.getSpeed() > 0.02) markHoverDirty();
   } else {
     updateDormRecenter(dt);
     dormScene.update(dt, elapsedTime);
@@ -667,6 +810,7 @@ function animate(now) {
 
 function getView() {
   if (state.active === 'dining') return diningControls.getView();
+  if (state.active === 'kitchen') return kitchenControls.getView();
   return {
     x: dormHome.position.x,
     z: dormHome.position.z,
@@ -681,6 +825,14 @@ function setView(view = {}) {
   if (state.active === 'dining') {
     const current = diningControls.getView();
     diningControls.setView({
+      x: typeof view.x === 'number' ? view.x : current.x,
+      z: typeof view.z === 'number' ? view.z : current.z,
+      yaw: typeof view.yaw === 'number' ? view.yaw : current.yaw,
+      pitch: typeof view.pitch === 'number' ? view.pitch : current.pitch,
+    });
+  } else if (state.active === 'kitchen') {
+    const current = kitchenControls.getView();
+    kitchenControls.setView({
       x: typeof view.x === 'number' ? view.x : current.x,
       z: typeof view.z === 'number' ? view.z : current.z,
       yaw: typeof view.yaw === 'number' ? view.yaw : current.yaw,
@@ -706,6 +858,13 @@ function resetView() {
       yaw: DINING_START.yaw,
       pitch: DINING_START.pitch,
     });
+  } else if (state.active === 'kitchen') {
+    kitchenControls.setView({
+      x: KITCHEN_START.x,
+      z: KITCHEN_START.z,
+      yaw: KITCHEN_START.yaw,
+      pitch: KITCHEN_START.pitch,
+    });
   } else {
     dormYaw = dormHome.yaw;
     dormPitch = dormHome.pitch;
@@ -718,6 +877,7 @@ function resetView() {
 
 function getInteractives() {
   if (state.active === 'dining') return diningScene.getInteractiveState();
+  if (state.active === 'kitchen') return kitchenScene.getInteractiveState();
   return dormScene.getInteractiveState();
 }
 
@@ -730,6 +890,7 @@ function getStats() {
     renderer: renderer.info.render,
     memory: renderer.info.memory,
     dining: diningScene.getStats(),
+    kitchen: kitchenScene.getStats(),
   };
 }
 
@@ -798,6 +959,10 @@ async function boot() {
       renderer,
       maxAnisotropy: renderer.capabilities.getMaxAnisotropy(),
     });
+    kitchenScene = new KitchenScene({
+      renderer,
+      maxAnisotropy: renderer.capabilities.getMaxAnisotropy(),
+    });
   } catch (error) {
     console.error(error);
     loader.innerHTML = '<div class="loader-inner"><p class="loader-title">场景构建失败</p><p class="loader-subtitle">请打开控制台查看详细错误</p></div>';
@@ -818,35 +983,40 @@ async function boot() {
   diningControls.attach(window);
   diningControls.enabled = false;
 
+  kitchenControls = new KitchenControls(camera, kitchenScene.collision);
+  kitchenControls.attach(window);
+  kitchenControls.enabled = false;
+
   raycaster = new THREE.Raycaster();
   raycaster.near = 0.02;
 
   const requested = params.get('scene') || window.location.hash.replace('#', '');
-  state.active = requested === 'dining' ? 'dining' : 'dorm';
+  state.active = requested === 'dining' ? 'dining' : requested === 'kitchen' ? 'kitchen' : 'dorm';
   setScene(state.active, { updateHash: false });
   state.ready = true;
 
   if (captureMode) {
+    const number = (name, fallback) => {
+      const raw = params.get(name);
+      if (raw === null) return fallback;
+      const value = Number(raw);
+      return Number.isFinite(value) ? value : fallback;
+    };
     if (state.active === 'dining') {
-      const number = (name, fallback) => {
-        const raw = params.get(name);
-        if (raw === null) return fallback;
-        const value = Number(raw);
-        return Number.isFinite(value) ? value : fallback;
-      };
       setView({
         x: number('x', DINING_START.x),
         z: number('z', DINING_START.z),
         yaw: (number('yaw', (DINING_START.yaw * 180) / Math.PI) * Math.PI) / 180,
         pitch: (number('pitch', (DINING_START.pitch * 180) / Math.PI) * Math.PI) / 180,
       });
+    } else if (state.active === 'kitchen') {
+      setView({
+        x: number('x', KITCHEN_START.x),
+        z: number('z', KITCHEN_START.z),
+        yaw: (number('yaw', (KITCHEN_START.yaw * 180) / Math.PI) * Math.PI) / 180,
+        pitch: (number('pitch', (KITCHEN_START.pitch * 180) / Math.PI) * Math.PI) / 180,
+      });
     } else {
-      const number = (name, fallback) => {
-        const raw = params.get(name);
-        if (raw === null) return fallback;
-        const value = Number(raw);
-        return Number.isFinite(value) ? value : fallback;
-      };
       setView({
         yaw: (number('yaw', (dormHome.yaw * 180) / Math.PI) * Math.PI) / 180,
         pitch: (number('pitch', (dormHome.pitch * 180) / Math.PI) * Math.PI) / 180,
@@ -868,6 +1038,7 @@ async function boot() {
 
   dormScene.scene.updateMatrixWorld(true);
   diningScene.scene.updateMatrixWorld(true);
+  kitchenScene.scene.updateMatrixWorld(true);
   try {
     renderer.compile(activeScene().scene, camera);
   } catch (error) {
@@ -890,13 +1061,17 @@ async function boot() {
     renderer,
     dorm: dormScene,
     dining: diningScene,
+    kitchen: kitchenScene,
+    kitchenControls,
     getScene: () => state.active,
     setScene: (name) => setScene(name),
     setView,
     getView,
     resetView,
+    transitionToScene,
     toggle: (id) => {
       if (state.active === 'dining') return diningScene.toggleInteractive(id);
+      if (state.active === 'kitchen') return null;
       return dormScene.toggleInteractive(id);
     },
     setFrozen: (value) => setFrozen(Boolean(value), true),
@@ -907,6 +1082,7 @@ async function boot() {
   window.__PREVIEW_READY__ = true;
   window.__DORM_READY__ = true;
   window.__DINING_READY__ = true;
+  window.__KITCHEN_READY__ = true;
   requestAnimationFrame(animate);
 }
 
@@ -943,13 +1119,14 @@ function attachEvents() {
     tab.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
+      if (state.transitioning) return;
       setScene(tab.dataset.scene);
       markHoverDirty();
     });
   });
   window.addEventListener('hashchange', () => {
     const requested = window.location.hash.replace('#', '');
-    if (requested === 'dining' || requested === 'dorm') setScene(requested);
+    if (requested === 'dining' || requested === 'dorm' || requested === 'kitchen') setScene(requested);
   });
 }
 

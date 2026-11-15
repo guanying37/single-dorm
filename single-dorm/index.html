@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#17120f" />
-  <meta name="description" content="弹丸论破同人 3D 场景预览：单人宿舍与学生餐厅，同一页面切换，纯静态 Three.js。" />
-  <title>场景预览 · 单人宿舍 / 学生餐厅</title>
+  <meta name="description" content="弹丸论破同人 3D 场景预览：单人宿舍、学生餐厅与餐厅后厨，同一页面切换，纯静态 Three.js。" />
+  <title>场景预览 · 单人宿舍 / 学生餐厅 / 餐厅后厨</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23721f26'/%3E%3Cpath d='M16 6l8 10-8 10-8-10z' fill='none' stroke='%23f2ddb4' stroke-width='1.4'/%3E%3Cpath d='M16 10v12M10 16h12' stroke='%23f2ddb4' stroke-opacity='.45' stroke-width='1'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <main id="app">
-    <canvas id="stage" tabindex="0" aria-label="可切换的单人宿舍与学生餐厅三维场景"></canvas>
+    <canvas id="stage" tabindex="0" aria-label="可切换的单人宿舍、学生餐厅与餐厅后厨三维场景"></canvas>
 
     <div class="ui-layer">
       <div class="top-bar chrome">
@@ -32,6 +32,7 @@
         <div class="scene-switch chrome" role="tablist" aria-label="场景切换">
           <button class="scene-tab is-active" type="button" role="tab" aria-selected="true" data-scene="dorm">单人宿舍</button>
           <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="dining">学生餐厅</button>
+          <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="kitchen">餐厅后厨</button>
         </div>
 
         <div class="top-actions">
@@ -74,6 +75,21 @@
           <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
           <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
         </div>
+        <div class="control-strip is-hidden" id="kitchenControls" aria-label="后厨操作说明">
+          <div class="control-item"><span class="keycap">WASD</span><span>移动</span></div>
+          <div class="control-item"><span class="keycap">Shift</span><span>加速</span></div>
+          <div class="control-item"><span class="keycap">鼠标</span><span>环顾</span></div>
+          <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
+          <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-transition" id="sceneTransition" aria-hidden="true">
+      <div class="scene-transition-inner">
+        <span class="scene-transition-kicker">前往</span>
+        <strong id="sceneTransitionTitle">学生餐厅</strong>
+        <span class="scene-transition-rule" aria-hidden="true"></span>
       </div>
     </div>
 

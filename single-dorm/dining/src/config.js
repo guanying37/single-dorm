@@ -86,7 +86,9 @@ export const DOORS = Object.freeze({
     label: '后厨门',
     width: 1.0,
     height: 2.2,
-    position: { x: 18, z: -7 },
+    // East wall, south end: the blank bay between the dessert painting
+    // and the corner plant, close to the main entrance.
+    position: { x: 18, z: 6.3 },
     wall: 'east',
     sceneId: 'kitchen',
   },

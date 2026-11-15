@@ -616,6 +616,69 @@ body.is-fullscreen .hint-mouse {
 }
 
 
+/* Full-black scene hand-off. The destination name is UI text, not a
+   texture inside the 3D scene. */
+.scene-transition {
+  position: absolute;
+  inset: 0;
+  z-index: 24;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 50% 44%, rgba(38, 27, 16, 0.28), transparent 52%),
+    #070605;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 300ms ease, visibility 300ms;
+}
+
+.scene-transition.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.scene-transition-inner {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 260ms ease 90ms, transform 420ms cubic-bezier(0.2, 0.75, 0.2, 1) 70ms;
+}
+
+.scene-transition.is-active .scene-transition-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scene-transition-kicker {
+  display: block;
+  color: rgba(234, 207, 164, 0.48);
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.scene-transition strong {
+  display: block;
+  margin-top: 9px;
+  color: #f4e7cf;
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+}
+
+.scene-transition-rule {
+  display: block;
+  width: 72px;
+  height: 1px;
+  margin: 18px auto 0;
+  background: linear-gradient(90deg, transparent, rgba(213, 165, 94, 0.82), transparent);
+}
+
 /* Shown only while fullscreen without pointer lock. Its disappearance is
    the confirmation that the unrestricted 360° mouse capture is active. */
 .pointer-hint {
@@ -728,7 +791,7 @@ body:not(.is-fullscreen) .pointer-hint {
 }
 
 /* ------------------------------------------------------------------ *
- * Combined preview shell: dorm / dining scene switch.
+ * Combined preview shell: dorm / dining / kitchen scene switch.
  * ------------------------------------------------------------------ */
 
 .scene-switch {
@@ -794,7 +857,7 @@ body.hud-hidden #app::after {
 
 @media (max-width: 760px) {
   .scene-switch {
-    top: 58px;
+    top: 96px;
   }
   .scene-tab {
     height: 30px;

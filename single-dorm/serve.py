@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Start a local preview server for both scenes and open the browser."""
+"""Start a local preview server for all three scenes and open the browser."""
 
 import http.server
 import os
@@ -37,6 +37,7 @@ if __name__ == "__main__":
     threading.Timer(1.2, open_preview).start()
     with httpd:
         print(f"Combined preview : http://127.0.0.1:{PORT}/#dining")
+        print(f"Kitchen preview  : http://127.0.0.1:{PORT}/#kitchen")
         print(f"Single dorm home : http://127.0.0.1:{PORT}/")
         print("Press Ctrl+C to stop.")
         try:
