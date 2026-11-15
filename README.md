@@ -177,13 +177,13 @@ python -m http.server 8123 --bind 127.0.0.1
 
 根据手绘草图整理的概念户型图（Canvas，非施工图）：
 
-- 页面：[single-dorm/floorplan/](single-dorm/floorplan/)
-- 说明：[floorplan/README.md](single-dorm/floorplan/README.md)
-- 本地地址：http://127.0.0.1:8123/floorplan/
+- 页面：[single-dorm/school-plan/](single-dorm/school-plan/)
+- 说明：[school-plan/README.md](single-dorm/school-plan/README.md)
+- 本地地址：http://127.0.0.1:8123/school-plan/
 
-内容：1F/2F 四翼楼（生活区含现有厨房/后厨与厕所、休憩区含乒乓球/运动杂物间、研究教室 10 间、未开放区）、3F 中央礼堂、通往礼堂的大楼梯与竖向剖面。每区均有厕所。
+内容：1F/2F 四翼贴主走廊；生活区 1F 餐厅/后厨/医务/洗衣/杂物/楼梯/电梯，2F 10 间男生宿舍 + 8 间女生宿舍（女生独立无窗厕所，男生用洗浴室）；休憩区 1F 运动/器材、2F 画室；研究教室 10 间；3F 礼堂环形走廊 + 四角 4 部客梯与楼梯间。
 
-![校区整体骨架](single-dorm/floorplan/preview/overview.png)
+![校区整体骨架](single-dorm/school-plan/preview/overview.png)
 
 ## 制作 Skill
 
