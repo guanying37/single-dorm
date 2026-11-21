@@ -1,0 +1,46 @@
+{
+  "scene": "readingroom",
+  "fpsLabel": "60",
+  "smoothFps": 60,
+  "calls": 80,
+  "triangles": 140180,
+  "textures": 45,
+  "geometries": 138,
+  "quality": 1,
+  "title": "阅览室",
+  "tabs": [
+    "单人宿舍",
+    "学生餐厅",
+    "餐厅后厨",
+    "冷库储藏室",
+    "杂物间",
+    "垃圾处理场",
+    "阅览室",
+    "二层休息厅",
+    "医务室"
+  ],
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 3GB (0x00001C02) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "readingroom": {
+    "batches": 52,
+    "triangles": 120626,
+    "colliders": 28,
+    "interactives": 4,
+    "area": 62.5,
+    "ratio": "5:8",
+    "contents": {
+      "shelfRuns": 6,
+      "shelfModules": 10,
+      "books": 1188,
+      "tables": 3,
+      "chairs": 10,
+      "bankerLamps": 6,
+      "pendants": 3,
+      "frames": 5,
+      "cameras": 2,
+      "windowBoards": 18
+    },
+    "lightOn": true,
+    "tableLampsOn": true,
+    "ladderOpen": false
+  }
+}

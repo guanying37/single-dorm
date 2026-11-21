@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="垃圾处理场 · 独立 3D 场景预览" />
+  <title>垃圾处理场 · 独立场景预览</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23721f26'/%3E%3Cpath d='M16 6l8 10-8 10-8-10z' fill='none' stroke='%23f2ddb4' stroke-width='1.4'/%3E%3Cpath d='M16 10v12M10 16h12' stroke='%23f2ddb4' stroke-opacity='.45' stroke-width='1'/%3E%3C/svg%3E" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #080706; }
+    body { font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif; color: #e8e0cf; }
+    #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; }
+    .hud { position: fixed; inset: 0; pointer-events: none; }
+    .hud.is-hidden { display: none; }
+    .top { display: flex; justify-content: space-between; align-items: flex-start; padding: 18px 22px; gap: 16px; background: linear-gradient(to bottom, rgba(6,5,4,.78), rgba(6,5,4,0)); }
+    .eyebrow { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #b09a7c; }
+    h1 { margin: 4px 0 0; font-size: 20px; font-weight: 600; letter-spacing: .06em; }
+    .meta { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 11px; color: #a99b85; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fae76; box-shadow: 0 0 8px #7fae76; }
+    .right { text-align: right; font-size: 11px; line-height: 1.7; color: #a99b85; }
+    .crosshair { position: fixed; left: 50%; top: 50%; width: 18px; height: 18px; transform: translate(-50%, -50%); opacity: .55; }
+    .crosshair::before, .crosshair::after { content: ""; position: absolute; background: #e8e0cf; }
+    .crosshair::before { left: 8px; top: 0; width: 1.5px; height: 18px; }
+    .crosshair::after { top: 8px; left: 0; width: 18px; height: 1.5px; }
+    .prompt { position: fixed; left: 50%; bottom: 92px; transform: translateX(-50%); padding: 9px 15px; border: 1px solid rgba(232,224,207,.22); background: rgba(10,9,7,.72); backdrop-filter: blur(4px); font-size: 13px; letter-spacing: .04em; opacity: 0; transition: opacity .16s ease; white-space: nowrap; }
+    .prompt.visible { opacity: 1; }
+    .prompt kbd { display: inline-block; min-width: 1.4em; padding: 1px 5px; margin-right: 8px; border: 1px solid rgba(232,224,207,.4); border-radius: 3px; font: inherit; font-size: 11px; text-align: center; }
+    .hint { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); font-size: 11px; letter-spacing: .08em; color: #91856f; white-space: nowrap; }
+    .toast { position: fixed; left: 50%; top: 84px; transform: translateX(-50%); padding: 8px 16px; border-left: 2px solid #b69763; background: rgba(10,9,7,.78); font-size: 12px; opacity: 0; transition: opacity .2s ease; }
+    .toast.visible { opacity: 1; }
+    .loader { position: fixed; inset: 0; display: grid; place-items: center; background: #080706; transition: opacity .6s ease; z-index: 5; }
+    .loader.is-hidden { opacity: 0; pointer-events: none; }
+    .loader p { margin: 0; font-size: 12px; letter-spacing: .28em; color: #8d7f68; text-transform: uppercase; }
+    .file-warning { position: fixed; inset: 0; display: none; place-items: center; background: #15100d; color: #f1e2c8; text-align: center; padding: 2rem; line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <canvas id="stage" tabindex="0" aria-label="垃圾处理场三维场景"></canvas>
+
+  <div class="hud" id="hud">
+    <div class="top">
+      <div>
+        <div class="eyebrow">Hope's Peak · Refuse Yard</div>
+        <h1>垃圾处理场</h1>
+        <div class="meta"><span class="dot"></span><span>4.32 × 5.40 m · 4 : 5 · 23.33 ㎡</span></div>
+      </div>
+      <div class="right">
+        <div>FPS <strong id="fps">--</strong></div>
+        <div>WASD 移动 · Shift 加速 · E 互动</div>
+      </div>
+    </div>
+    <div class="crosshair" aria-hidden="true"></div>
+    <div class="prompt" id="prompt"><kbd>E</kbd><span id="promptText">互动</span></div>
+    <div class="hint">点击画面捕获鼠标 · 右键固定视野 · 中键回正 · ESC 释放</div>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <div class="loader" id="loader"><p>正在布置垃圾处理场</p></div>
+  <div class="file-warning" id="fileWarning">
+    <div>
+      <h2>需要通过本地服务器打开</h2>
+      <p>双击 single-dorm / start-preview.cmd，或在该目录运行 python -m http.server 8123</p>
+    </div>
+  </div>
+
+  <script>
+    if (window.location.protocol === 'file:') {
+      document.getElementById('fileWarning').style.display = 'grid';
+      document.getElementById('loader').classList.add('is-hidden');
+    }
+  </script>
+
+  <script type="importmap">
+    { "imports": { "three": "../vendor/three.module.min.js" } }
+  </script>
+  <script type="module" src="./src/standalone.js"></script>
+</body>
+</html>

@@ -499,7 +499,7 @@ export function buildRoom(builder, materials) {
     id: DOORS.main.id,
     label: DOORS.main.label,
     locked: true,
-    sceneId: 'corridor',
+    sceneId: 'residence',
     open: false,
     value: 0,
     target: 0,

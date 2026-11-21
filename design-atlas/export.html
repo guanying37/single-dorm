@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atlas export</title>
+  <style>
+    html, body { margin: 0; padding: 0; background: #f6efe3; }
+    canvas { display: block; width: 1800px; height: 1273px; }
+  </style>
+</head>
+<body>
+  <canvas id="sheet" width="1800" height="1273"></canvas>
+  <script>window.__ATLAS_EXPORT__ = true;</script>
+  <script src="./src/atlas.js"></script>
+  <script>
+    (() => {
+      const id = new URLSearchParams(location.search).get('sheet') || 'a01';
+      const c = document.getElementById('sheet');
+      c.id = id;
+      window.__ATLAS__.drawSheet(id);
+    })();
+  </script>
+</body>
+</html>

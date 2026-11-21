@@ -1,0 +1,18 @@
+{
+  "scene": "storage",
+  "fpsLabel": "60",
+  "smoothFps": 60,
+  "calls": 74,
+  "triangles": 32212,
+  "textures": 27,
+  "quality": 1,
+  "title": "杂物间",
+  "tabs": [
+    "单人宿舍",
+    "学生餐厅",
+    "餐厅后厨",
+    "冷库储藏室",
+    "杂物间"
+  ],
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 3GB (0x00001C02) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}

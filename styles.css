@@ -791,7 +791,7 @@ body:not(.is-fullscreen) .pointer-hint {
 }
 
 /* ------------------------------------------------------------------ *
- * Combined preview shell: dorm / dining / kitchen scene switch.
+ * Combined preview shell: dorm / dining / kitchen / cold store / storage / lounge.
  * ------------------------------------------------------------------ */
 
 .scene-switch {
@@ -801,7 +801,11 @@ body:not(.is-fullscreen) .pointer-hint {
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: max-content;
   gap: 3px;
+  max-width: calc(100vw - 340px);
   padding: 3px;
   border: 1px solid rgba(247, 231, 203, 0.2);
   border-radius: 11px;

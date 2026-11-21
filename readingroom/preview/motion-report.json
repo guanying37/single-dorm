@@ -1,0 +1,377 @@
+{
+  "generatedAt": "2026-11-21T06:34:50.939Z",
+  "ready": {
+    "ready": true,
+    "readingroom": true,
+    "scene": "readingroom"
+  },
+  "keysDown": [
+    "KeyW",
+    "Shift"
+  ],
+  "otherKeys": {
+    "kitchen": [],
+    "cold": [],
+    "garbage": [],
+    "enabled": true
+  },
+  "motion": {
+    "start": {
+      "view": {
+        "x": -1.45,
+        "z": 4.3,
+        "y": 1.8,
+        "yaw": -0.08,
+        "pitch": -0.03,
+        "frozen": false
+      },
+      "penetration": 0,
+      "roll": 0
+    },
+    "walk": {
+      "distance": 2.3093902148654526,
+      "view": {
+        "x": -1.7300000000000002,
+        "z": 1.0968753475948585,
+        "y": 1.7923928495796926,
+        "yaw": 0,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "run": {
+      "distance": 4.953984088949582,
+      "view": {
+        "x": -1.7300000000000002,
+        "z": -1.551066385493697,
+        "y": 1.7774661659883664,
+        "yaw": 0,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "westShelf": {
+      "view": {
+        "x": -2.465,
+        "z": -2.3,
+        "y": 1.773835306399293,
+        "yaw": 1.5707963267948966,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "eastShelf": {
+      "view": {
+        "x": 2.465,
+        "z": -2.3,
+        "y": 1.7710796127079156,
+        "yaw": -1.5707963267948966,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "bench": {
+      "view": {
+        "x": -1.17,
+        "z": -4.180000000000001,
+        "y": 1.7692902528427625,
+        "yaw": 0,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "door": {
+      "view": {
+        "x": -1.45,
+        "z": 4.590000000000001,
+        "y": 1.768527015732229,
+        "yaw": 3.141592653589793,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "tableChair": {
+      "view": {
+        "x": -0.8049999999999999,
+        "z": 0.25,
+        "y": 1.768815403864574,
+        "yaw": -1.5707963267948966,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "ladder": {
+      "view": {
+        "x": -1.7300000000000002,
+        "z": 1.35,
+        "y": 1.7701457811583525,
+        "yaw": 1.5707963267948966,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "globe": {
+      "view": {
+        "x": 1.6400000000000001,
+        "z": -4.3,
+        "y": 1.7724736949384452,
+        "yaw": -1.5707963267948966,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "coatRack": {
+      "view": {
+        "x": -2.1100000000000003,
+        "z": 4.5,
+        "y": 1.7757213612592349,
+        "yaw": 1.5707963267948966,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "diagonal": {
+      "view": {
+        "x": -2.465,
+        "z": 1.9500000000000002,
+        "y": 1.787784021968864,
+        "yaw": 0,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "pitchHigh": {
+      "pitch": 1.4486232791552935,
+      "roll": 0
+    },
+    "pitchLow": {
+      "pitch": -1.4486232791552935,
+      "roll": 0
+    },
+    "bob": {
+      "minY": 1.787009106911424,
+      "maxY": 1.8129685355563325,
+      "range": 0.025959428644908522,
+      "maxRoll": 0
+    },
+    "bobSettle": {
+      "y": 1.8000000000003071,
+      "roll": 0
+    },
+    "look": {
+      "yawDelta": -0.308,
+      "pitch": 0.198,
+      "roll": 0
+    },
+    "doorItem": {
+      "id": "door.readingroom",
+      "locked": true,
+      "sceneId": "corridor"
+    },
+    "ladderOpen": {
+      "open": true,
+      "front": 0.185,
+      "back": -0.185
+    },
+    "ladderClosed": {
+      "open": false,
+      "front": 0.055,
+      "back": -0.055
+    },
+    "lightOff": {
+      "on": false,
+      "level": 0,
+      "pendant": 0,
+      "key": 0.48
+    },
+    "lightOn": {
+      "on": true,
+      "level": 1
+    },
+    "tableOff": {
+      "on": false,
+      "level": 0,
+      "point": 0
+    },
+    "tableOn": {
+      "on": true,
+      "level": 1
+    },
+    "final": {
+      "x": -1.45,
+      "z": 4.3,
+      "y": 1.8000000000003071,
+      "yaw": -0.08,
+      "pitch": -0.03,
+      "frozen": false
+    },
+    "colliderCount": 28,
+    "sceneStats": {
+      "batches": 52,
+      "triangles": 120626,
+      "colliders": 28,
+      "interactives": 4,
+      "area": 62.5,
+      "ratio": "5:8",
+      "contents": {
+        "shelfRuns": 6,
+        "shelfModules": 10,
+        "books": 1188,
+        "tables": 3,
+        "chairs": 10,
+        "bankerLamps": 6,
+        "pendants": 3,
+        "frames": 5,
+        "cameras": 2,
+        "windowBoards": 18
+      },
+      "lightOn": true,
+      "tableLampsOn": true,
+      "ladderOpen": false
+    },
+    "cameraNearFar": {
+      "near": 0.03,
+      "far": 26
+    }
+  },
+  "switching": [
+    {
+      "wanted": "dining",
+      "got": "dining",
+      "view": {
+        "x": 3.5,
+        "z": 7.4,
+        "y": 1.8,
+        "yaw": 0.17453292519943295,
+        "pitch": -0.06981317007977318,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "kitchen",
+      "got": "kitchen",
+      "view": {
+        "x": 2.4,
+        "z": 4,
+        "y": 1.8,
+        "yaw": 0.32,
+        "pitch": -0.03,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "coldstore",
+      "got": "coldstore",
+      "view": {
+        "x": 0.26,
+        "z": 2.3,
+        "y": 1.8,
+        "yaw": 0.06,
+        "pitch": -0.02,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "storage",
+      "got": "storage",
+      "view": {
+        "x": 0.3,
+        "z": 1.9,
+        "y": 1.8,
+        "yaw": 0.03,
+        "pitch": -0.02,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "garbage",
+      "got": "garbage",
+      "view": {
+        "x": 0.62,
+        "z": 2.16,
+        "y": 1.8,
+        "yaw": 0.1,
+        "pitch": -0.035,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "lounge",
+      "got": "lounge",
+      "view": {
+        "x": -10.6,
+        "z": 0.7,
+        "y": 1.8,
+        "yaw": -1.5271630954950384,
+        "pitch": -0.020943951023931952,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "dorm",
+      "got": "dorm",
+      "view": {
+        "x": 0.02,
+        "z": 0.92,
+        "y": 1.855,
+        "yaw": -0.19,
+        "pitch": -0.055,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "readingroom",
+      "got": "readingroom",
+      "view": {
+        "x": -1.45,
+        "z": 4.3,
+        "y": 1.8000000000000094,
+        "yaw": -0.08,
+        "pitch": -0.03,
+        "frozen": false
+      }
+    }
+  ],
+  "stats": {
+    "calls": 80,
+    "triangles": 140180,
+    "textures": 138,
+    "geometries": 590,
+    "fps": 35,
+    "readingroom": {
+      "batches": 52,
+      "triangles": 120626,
+      "colliders": 28,
+      "interactives": 4,
+      "area": 62.5,
+      "ratio": "5:8",
+      "contents": {
+        "shelfRuns": 6,
+        "shelfModules": 10,
+        "books": 1188,
+        "tables": 3,
+        "chairs": 10,
+        "bankerLamps": 6,
+        "pendants": 3,
+        "frames": 5,
+        "cameras": 2,
+        "windowBoards": 18
+      },
+      "lightOn": true,
+      "tableLampsOn": true,
+      "ladderOpen": false
+    }
+  },
+  "events": []
+}

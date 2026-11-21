@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#17120f" />
-  <meta name="description" content="弹丸论破同人 3D 场景预览：单人宿舍、学生餐厅、餐厅后厨与后厨冷库储藏室，同一页面切换，纯静态 Three.js。" />
-  <title>场景预览 · 单人宿舍 / 学生餐厅 / 餐厅后厨 / 冷库储藏室</title>
+  <meta name="description" content="弹丸论破同人 3D 场景预览：单人宿舍、学生餐厅、餐厅后厨、冷库储藏室、杂物间、垃圾处理场、阅览室、生活区二层休息厅、住宿区 2F 与医务室，同一页面切换，纯静态 Three.js。" />
+  <title>场景预览 · 单人宿舍 / 学生餐厅 / 餐厅后厨 / 冷库储藏室 / 杂物间 / 垃圾处理场 / 阅览室 / 二层休息厅 / 住宿区 2F / 医务室</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23721f26'/%3E%3Cpath d='M16 6l8 10-8 10-8-10z' fill='none' stroke='%23f2ddb4' stroke-width='1.4'/%3E%3Cpath d='M16 10v12M10 16h12' stroke='%23f2ddb4' stroke-opacity='.45' stroke-width='1'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <main id="app">
-    <canvas id="stage" tabindex="0" aria-label="可切换的单人宿舍、学生餐厅、餐厅后厨与冷库储藏室三维场景"></canvas>
+    <canvas id="stage" tabindex="0" aria-label="可切换的单人宿舍、学生餐厅、餐厅后厨、冷库储藏室、杂物间、垃圾处理场、阅览室、生活区二层休息厅、住宿区 2F 与医务室三维场景"></canvas>
 
     <div class="ui-layer">
       <div class="top-bar chrome">
@@ -25,6 +25,8 @@
               <span class="fps-readout"><span>FPS</span><strong id="fpsValue">--</strong></span>
               <span class="rule" aria-hidden="true"></span>
               <span class="fps-readout" id="qualityLabel" style="opacity:.62">实时</span>
+              <span class="rule" aria-hidden="true"></span>
+              <span class="fps-readout" id="tabletStatus" title="学生平板门禁状态">平板 · 已解锁</span>
             </div>
           </div>
         </div>
@@ -34,6 +36,12 @@
           <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="dining">学生餐厅</button>
           <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="kitchen">餐厅后厨</button>
           <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="coldstore">冷库储藏室</button>
+          <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="storage">杂物间</button>
+          <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="garbage">垃圾处理场</button>
+          <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="readingroom">阅览室</button>
+          <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="lounge">二层休息厅</button>
+          <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="residence">住宿区 2F</button>
+          <button class="scene-tab" type="button" role="tab" aria-selected="false" data-scene="infirmary">医务室</button>
         </div>
 
         <div class="top-actions">
@@ -88,6 +96,54 @@
           <div class="control-item"><span class="keycap">Shift</span><span>加速</span></div>
           <div class="control-item"><span class="keycap">鼠标</span><span>环顾</span></div>
           <div class="control-item"><span class="keycap">E</span><span>进出冷库</span></div>
+          <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
+          <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
+        </div>
+        <div class="control-strip is-hidden" id="storageControls" aria-label="杂物间操作说明">
+          <div class="control-item"><span class="keycap">WASD</span><span>移动</span></div>
+          <div class="control-item"><span class="keycap">Shift</span><span>加速</span></div>
+          <div class="control-item"><span class="keycap">鼠标</span><span>环顾</span></div>
+          <div class="control-item"><span class="keycap">E</span><span>开关灯 / 工具箱</span></div>
+          <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
+          <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
+        </div>
+        <div class="control-strip is-hidden" id="garbageControls" aria-label="垃圾处理场操作说明">
+          <div class="control-item"><span class="keycap">WASD</span><span>移动</span></div>
+          <div class="control-item"><span class="keycap">Shift</span><span>加速</span></div>
+          <div class="control-item"><span class="keycap">鼠标</span><span>环顾</span></div>
+          <div class="control-item"><span class="keycap">E</span><span>开关灯 / 垃圾桶盖</span></div>
+          <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
+          <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
+        </div>
+        <div class="control-strip is-hidden" id="readingroomControls" aria-label="阅览室操作说明">
+          <div class="control-item"><span class="keycap">WASD</span><span>移动</span></div>
+          <div class="control-item"><span class="keycap">Shift</span><span>加速</span></div>
+          <div class="control-item"><span class="keycap">鼠标</span><span>环顾</span></div>
+          <div class="control-item"><span class="keycap">E</span><span>开关灯 / 人字梯</span></div>
+          <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
+          <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
+        </div>
+        <div class="control-strip is-hidden" id="loungeControls" aria-label="休息厅操作说明">
+          <div class="control-item"><span class="keycap">WASD</span><span>移动</span></div>
+          <div class="control-item"><span class="keycap">Shift</span><span>加速</span></div>
+          <div class="control-item"><span class="keycap">鼠标</span><span>环顾</span></div>
+          <div class="control-item"><span class="keycap">E</span><span>开关门 / 刷卡</span></div>
+          <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
+          <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
+        </div>
+        <div class="control-strip is-hidden" id="infirmaryControls" aria-label="医务室操作说明">
+          <div class="control-item"><span class="keycap">WASD</span><span>移动</span></div>
+          <div class="control-item"><span class="keycap">Shift</span><span>加速</span></div>
+          <div class="control-item"><span class="keycap">鼠标</span><span>环顾</span></div>
+          <div class="control-item"><span class="keycap">E</span><span>隔帘 / 柜门 / 抽屉 / 桶盖</span></div>
+          <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
+          <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
+        </div>
+        <div class="control-strip is-hidden" id="residenceControls" aria-label="住宿区操作说明">
+          <div class="control-item"><span class="keycap">WASD</span><span>移动</span></div>
+          <div class="control-item"><span class="keycap">Shift</span><span>加速</span></div>
+          <div class="control-item"><span class="keycap">鼠标</span><span>环顾</span></div>
+          <div class="control-item"><span class="keycap">E</span><span>开门 / 刷卡</span></div>
           <div class="control-item"><span class="keycap">MMB</span><span>回正</span></div>
           <div class="control-item"><span class="keycap">F11</span><span>全屏</span></div>
         </div>

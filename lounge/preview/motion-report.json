@@ -1,0 +1,181 @@
+{
+  "results": [
+    {
+      "test": "walk-east",
+      "from": {
+        "x": -10.6,
+        "z": 0.7
+      },
+      "to": {
+        "x": -2.8,
+        "z": 0.06
+      },
+      "inside": true
+    },
+    {
+      "test": "walk-west",
+      "from": {
+        "x": -10.6,
+        "z": 0.7
+      },
+      "to": {
+        "x": -15.65,
+        "z": 0.7
+      },
+      "inside": true
+    },
+    {
+      "test": "walk-north",
+      "from": {
+        "x": -10.6,
+        "z": 0.7
+      },
+      "to": {
+        "x": -10.6,
+        "z": -3.73
+      },
+      "inside": true
+    },
+    {
+      "test": "walk-south",
+      "from": {
+        "x": -10.6,
+        "z": 0.7
+      },
+      "to": {
+        "x": -10.6,
+        "z": 3.73
+      },
+      "inside": true
+    },
+    {
+      "test": "walk-ne",
+      "from": {
+        "x": -10.6,
+        "z": 0.7
+      },
+      "to": {
+        "x": -4.4,
+        "z": 4.23
+      },
+      "inside": true
+    },
+    {
+      "test": "walk-nw",
+      "from": {
+        "x": -10.6,
+        "z": 0.7
+      },
+      "to": {
+        "x": -4.4,
+        "z": -4.23
+      },
+      "inside": true
+    },
+    {
+      "test": "walk-se",
+      "from": {
+        "x": -10.6,
+        "z": 0.7
+      },
+      "to": {
+        "x": -15.55,
+        "z": -4.7
+      },
+      "inside": true
+    },
+    {
+      "test": "walk-sw",
+      "from": {
+        "x": -10.6,
+        "z": 0.7
+      },
+      "to": {
+        "x": -15.55,
+        "z": 4.7
+      },
+      "inside": true
+    },
+    {
+      "test": "table-blocks",
+      "to": {
+        "x": -2.8,
+        "z": 0
+      },
+      "stoppedBeforeTable": true
+    },
+    {
+      "test": "closed-door-blocks",
+      "to": {
+        "x": -15.65,
+        "z": 0.16
+      },
+      "blocked": true
+    },
+    {
+      "test": "door-open-enter-landing",
+      "before": {
+        "id": "door.main",
+        "label": "大门",
+        "open": false,
+        "locked": false,
+        "message": null,
+        "value": 0
+      },
+      "open": {
+        "open": true,
+        "value": 1
+      },
+      "to": {
+        "x": -17.99,
+        "z": 0
+      },
+      "inLanding": true
+    },
+    {
+      "test": "door-closed-again",
+      "to": {
+        "x": -15.65,
+        "z": 0
+      },
+      "blocked": true
+    },
+    {
+      "test": "supervisor-locked",
+      "supervisor": {
+        "locked": true,
+        "message": "男生宿管处 · 需刷学生平板"
+      },
+      "reader": {
+        "locked": true,
+        "message": "检测器 · 请刷学生平板（平板尚未接入）"
+      }
+    },
+    {
+      "test": "clock",
+      "set": {
+        "hour": 3,
+        "minute": 45,
+        "second": 10
+      },
+      "later": {
+        "hour": 3,
+        "minute": 45,
+        "second": 11.199999999982538
+      },
+      "secondsAdvanced": true
+    },
+    {
+      "test": "keyboard-input",
+      "moved": true,
+      "movedBy": 3.91
+    }
+  ],
+  "stats": {
+    "calls": 51,
+    "triangles": 235020,
+    "textures": 14,
+    "fps": 60
+  },
+  "errors": []
+}

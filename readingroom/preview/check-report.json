@@ -1,0 +1,350 @@
+{
+  "generatedAt": "2026-11-21T06:40:30.500Z",
+  "page": {
+    "scene": "readingroom",
+    "readingroomReady": true,
+    "title": "阅览室",
+    "eyebrow": "Hope's Peak · Reading Room",
+    "tabs": [
+      {
+        "id": "dorm",
+        "text": "单人宿舍",
+        "active": false
+      },
+      {
+        "id": "dining",
+        "text": "学生餐厅",
+        "active": false
+      },
+      {
+        "id": "kitchen",
+        "text": "餐厅后厨",
+        "active": false
+      },
+      {
+        "id": "coldstore",
+        "text": "冷库储藏室",
+        "active": false
+      },
+      {
+        "id": "storage",
+        "text": "杂物间",
+        "active": false
+      },
+      {
+        "id": "garbage",
+        "text": "垃圾处理场",
+        "active": false
+      },
+      {
+        "id": "readingroom",
+        "text": "阅览室",
+        "active": true
+      },
+      {
+        "id": "lounge",
+        "text": "二层休息厅",
+        "active": false
+      },
+      {
+        "id": "infirmary",
+        "text": "医务室",
+        "active": false
+      }
+    ],
+    "controlsVisible": [
+      "readingroomControls"
+    ],
+    "loaderHidden": true,
+    "view": {
+      "x": -1.45,
+      "z": 4.3,
+      "y": 1.8,
+      "yaw": -0.08,
+      "pitch": -0.03,
+      "frozen": false
+    },
+    "stats": {
+      "batches": 52,
+      "triangles": 120626,
+      "colliders": 28,
+      "interactives": 4,
+      "area": 62.5,
+      "ratio": "5:8",
+      "contents": {
+        "shelfRuns": 6,
+        "shelfModules": 10,
+        "books": 1188,
+        "tables": 3,
+        "chairs": 10,
+        "bankerLamps": 6,
+        "pendants": 3,
+        "frames": 5,
+        "cameras": 2,
+        "windowBoards": 18
+      },
+      "lightOn": true,
+      "tableLampsOn": true,
+      "ladderOpen": false
+    },
+    "interactives": [
+      {
+        "id": "door.readingroom",
+        "label": "阅览室门",
+        "open": false,
+        "locked": true,
+        "portal": false,
+        "sceneId": "corridor"
+      },
+      {
+        "id": "light.switch",
+        "label": "吊灯",
+        "open": true,
+        "locked": false,
+        "portal": false,
+        "sceneId": null
+      },
+      {
+        "id": "ladder",
+        "label": "木制人字梯",
+        "open": false,
+        "locked": false,
+        "portal": false,
+        "sceneId": null
+      },
+      {
+        "id": "lamp.tables",
+        "label": "阅读桌绿灯",
+        "open": true,
+        "locked": false,
+        "portal": false,
+        "sceneId": null
+      }
+    ],
+    "camera": {
+      "near": 0.03,
+      "far": 26,
+      "fov": 68
+    }
+  },
+  "interactions": {
+    "door": {
+      "id": "door.readingroom",
+      "locked": true,
+      "open": false,
+      "sceneId": "corridor"
+    },
+    "ladderOpen": {
+      "open": true,
+      "front": 0.185,
+      "back": -0.185
+    },
+    "ladderClosed": {
+      "open": false,
+      "front": 0.055,
+      "back": -0.055
+    },
+    "pendantOff": {
+      "on": false,
+      "level": 0,
+      "pendant": 0,
+      "key": 0.48
+    },
+    "pendantOn": {
+      "on": true,
+      "level": 1
+    },
+    "tableLampsOff": {
+      "on": false,
+      "level": 0,
+      "point": 0,
+      "glass": 0.16
+    },
+    "tableLampsOn": {
+      "on": true,
+      "level": 1
+    },
+    "final": {
+      "x": -1.45,
+      "z": 4.3,
+      "y": 1.8,
+      "yaw": -0.08,
+      "pitch": -0.03,
+      "frozen": false
+    },
+    "state": [
+      {
+        "id": "door.readingroom",
+        "label": "阅览室门",
+        "open": false,
+        "locked": true,
+        "portal": false,
+        "sceneId": "corridor"
+      },
+      {
+        "id": "light.switch",
+        "label": "吊灯",
+        "open": true,
+        "locked": false,
+        "portal": false,
+        "sceneId": null
+      },
+      {
+        "id": "ladder",
+        "label": "木制人字梯",
+        "open": false,
+        "locked": false,
+        "portal": false,
+        "sceneId": null
+      },
+      {
+        "id": "lamp.tables",
+        "label": "阅读桌绿灯",
+        "open": true,
+        "locked": false,
+        "portal": false,
+        "sceneId": null
+      }
+    ]
+  },
+  "switching": [
+    {
+      "wanted": "dining",
+      "got": "dining",
+      "view": {
+        "x": 3.5,
+        "z": 7.4,
+        "y": 1.8,
+        "yaw": 0.17453292519943295,
+        "pitch": -0.06981317007977318,
+        "frozen": false
+      },
+      "tabs": 1
+    },
+    {
+      "wanted": "kitchen",
+      "got": "kitchen",
+      "view": {
+        "x": 2.4,
+        "z": 4,
+        "y": 1.8,
+        "yaw": 0.32,
+        "pitch": -0.03,
+        "frozen": false
+      },
+      "tabs": 1
+    },
+    {
+      "wanted": "coldstore",
+      "got": "coldstore",
+      "view": {
+        "x": 0.26,
+        "z": 2.3,
+        "y": 1.8,
+        "yaw": 0.06,
+        "pitch": -0.02,
+        "frozen": false
+      },
+      "tabs": 1
+    },
+    {
+      "wanted": "storage",
+      "got": "storage",
+      "view": {
+        "x": 0.3,
+        "z": 1.9,
+        "y": 1.8,
+        "yaw": 0.03,
+        "pitch": -0.02,
+        "frozen": false
+      },
+      "tabs": 1
+    },
+    {
+      "wanted": "garbage",
+      "got": "garbage",
+      "view": {
+        "x": 0.62,
+        "z": 2.16,
+        "y": 1.8,
+        "yaw": 0.1,
+        "pitch": -0.035,
+        "frozen": false
+      },
+      "tabs": 1
+    },
+    {
+      "wanted": "lounge",
+      "got": "lounge",
+      "view": {
+        "x": -10.6,
+        "z": 0.7,
+        "y": 1.8,
+        "yaw": -1.5271630954950384,
+        "pitch": -0.020943951023931952,
+        "frozen": false
+      },
+      "tabs": 1
+    },
+    {
+      "wanted": "dorm",
+      "got": "dorm",
+      "view": {
+        "x": 0.02,
+        "z": 0.92,
+        "y": 1.855,
+        "yaw": -0.19,
+        "pitch": -0.055,
+        "frozen": false
+      },
+      "tabs": 1
+    },
+    {
+      "wanted": "readingroom",
+      "got": "readingroom",
+      "view": {
+        "x": -1.45,
+        "z": 4.3,
+        "y": 1.8,
+        "yaw": -0.08,
+        "pitch": -0.03,
+        "frozen": false
+      },
+      "tabs": 1
+    }
+  ],
+  "perf": {
+    "gpu": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 3GB (0x00001C02) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "calls": 80,
+    "triangles": 140180,
+    "textures": 45,
+    "geometries": 138,
+    "quality": 1,
+    "fps": 60,
+    "fpsLabel": "--",
+    "readingroom": {
+      "batches": 52,
+      "triangles": 120626,
+      "colliders": 28,
+      "interactives": 4,
+      "area": 62.5,
+      "ratio": "5:8",
+      "contents": {
+        "shelfRuns": 6,
+        "shelfModules": 10,
+        "books": 1188,
+        "tables": 3,
+        "chairs": 10,
+        "bankerLamps": 6,
+        "pendants": 3,
+        "frames": 5,
+        "cameras": 2,
+        "windowBoards": 18
+      },
+      "lightOn": true,
+      "tableLampsOn": true,
+      "ladderOpen": false
+    }
+  },
+  "events": []
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Start a local preview server for all three scenes and open the browser."""
+"""Start a local preview server for every scene and open the browser."""
 
 import http.server
 import os
@@ -38,6 +38,10 @@ if __name__ == "__main__":
     with httpd:
         print(f"Combined preview : http://127.0.0.1:{PORT}/#dining")
         print(f"Kitchen preview  : http://127.0.0.1:{PORT}/#kitchen")
+        print(f"Cold store       : http://127.0.0.1:{PORT}/#coldstore")
+        print(f"Storage room     : http://127.0.0.1:{PORT}/#storage")
+        print(f"Refuse yard      : http://127.0.0.1:{PORT}/#garbage")
+        print(f"Reading room     : http://127.0.0.1:{PORT}/#readingroom")
         print(f"Single dorm home : http://127.0.0.1:{PORT}/")
         print("Press Ctrl+C to stop.")
         try:

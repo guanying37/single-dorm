@@ -8,8 +8,8 @@
 
 | 脚本 | 内容 | 结果 |
 | --- | --- | --- |
-| `tools/check.mjs` | 加载、console/异常、场景统计、碰撞数、三/四场景 ready 标记 | 通过，`EVENTS []` |
-| `tools/motion-test.mjs` | 键盘/Shift、走路/跑步、货架/门/挂衣区/CRT 碰撞、斜向滑动、俯仰、步伐、鼠标视角、双向门重定向、四场景切换 | 通过（数据见下） |
+| `tools/check.mjs` | 加载、console/异常、场景统计、碰撞数、场景 ready 标记 | 通过，`EVENTS []` |
+| `tools/motion-test.mjs` | 键盘/Shift、走路/跑步、货架/门/挂衣区/CRT 碰撞、斜向滑动、俯仰、步伐、鼠标视角、双向门重定向、场景切换 | 通过（数据见下） |
 | `tools/portal-test.mjs` | 真实鼠标点击冷库门 → 后厨；后厨冷库门 → 冷库 | 通过 |
 | `tools/capture.mjs` | 13 张确定性截图 + 切场黑屏 + 带 HUD 全景 | 通过 |
 
@@ -49,9 +49,9 @@ pitch 下限            -1.4486 rad (-83°)   camera.rotation.z = 0
 - 切场期间输入锁定，落点均在门内 0.4–0.6 m，视角水平朝向房间内部。
 - 餐厅 ↔ 后厨原有传送未受影响（`kitchen` 交互列表仍为 `door.dining`、`door.coldstore`）。
 
-## 4. 四场景切换
+## 4. 同页场景切换
 
-`dorm → dining → kitchen → coldstore → kitchen → coldstore` 往返 6 次：每次 `getScene()` 与目标一致，视角保存/恢复，无报错，只渲染当前场景。
+`dorm → dining → kitchen → coldstore → storage → kitchen → coldstore`：每次 `getScene()` 与目标一致，视角保存/恢复，无报错，只渲染当前场景。五场景完整切换记录见 [storage/VALIDATION.md](../storage/VALIDATION.md) 第 6 节。
 
 ## 5. 光影 gate
 
@@ -74,7 +74,7 @@ pitch 下限            -1.4486 rad (-83°)   camera.rotation.z = 0
 
 ## 7. 截图
 
-`preview/hero.jpg` 入口、`aisle.jpg` 通道、`door.jpg` 冷库门与监控角、`monitor.jpg` CRT + 指针温湿度计、`shelf-west/east.jpg` 两侧货架与货物、`evaporator.jpg` 冷风机、`ceiling.jpg` 吊顶/冷库灯/传感器、`coats.jpg` 防寒服与手套、`floor.jpg` 铝地台与排水沟、`camera.jpg` 除霜摄像、`transition.jpg` 切场黑屏、`hero-ui.jpg` 四场景 UI。
+`preview/hero.jpg` 入口、`aisle.jpg` 通道、`door.jpg` 冷库门与监控角、`monitor.jpg` CRT + 指针温湿度计、`shelf-west/east.jpg` 两侧货架与货物、`evaporator.jpg` 冷风机、`ceiling.jpg` 吊顶/冷库灯/传感器、`coats.jpg` 防寒服与手套、`floor.jpg` 铝地台与排水沟、`camera.jpg` 除霜摄像、`transition.jpg` 切场黑屏、`hero-ui.jpg` 冷库页 UI。
 
 ## 8. 未完成 / 已知取舍
 

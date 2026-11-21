@@ -1,0 +1,222 @@
+﻿sceneId: infirmary
+name: 医务室
+locationType: school-clinic
+chapter: "生活区 1F · 医务室"
+function: "日常诊疗、体检、包扎、隔离观察与小型处置/手术；五张可移动病床与可开合隔帘"
+mood: "白、亮、干净、略带无菌感；浅蓝隔帘与防撞扶手是唯一冷色大块面，绿萝与浅橡木药柜把空间拉回学校"
+timeOfDay: "人工照明（无窗）"
+weather: "不适用"
+
+dimensions:
+  width: 5.0
+  depth: 8.0
+  height: 3.0
+  wallThickness: 0.2
+  area: 40.0
+  ratio: "5 : 8（宽 : 深）"
+  grid: 0.25
+  note: "设计图未随仓库提交图像文件；按用户 5:8 比例与图示关系落位。门在南墙偏东 x=+1.15，进门右手为东墙洗手池/药柜。"
+  bedRow:
+    beds: 5
+    bed: "1.95 × 0.92 m，床头靠西墙"
+    centersZ: [-3.15, -1.60, -0.05, 1.50, 3.05]
+    pitch: 1.55
+    gap: 0.63
+  curtainDividersZ: [-2.60, -1.05, 0.50, 2.05, 3.60]
+  mainAisle: "床尾 x=-0.51 → 药柜前 x=+2.09，约 2.60 m"
+  treatmentAisle: "手术台东侧 x=+1.27 → 墙/柜前，约 1.0–1.2 m"
+
+connections:
+  - id: door.infirmary
+    wall: south
+    type: white painted timber door
+    width: 0.95
+    height: 2.18
+    x: 1.15
+    hinge: east
+    sceneId: corridor
+    status: locked
+
+cameraModes:
+  fixed:
+    enabled: false
+  moving:
+    enabled: true
+    start: { x: 1.15, z: 3.48, yaw: 0.0, pitch: -0.02, fov: 68 }
+    eyeHeight: 1.8
+    playerRadius: 0.3
+    speed: { walk: 2.2, run: 4.4 }
+    acceleration: 15.0
+    lookSensitivity: 0.0022
+    pitchLimitDegrees: 83
+    roll: 0
+    bob: { walk: 0.012, run: 0.022, frequency: 5.6, lateral: 0.45 }
+    substep: 0.06
+    collision: true
+    colliderCount: 22
+    testStops:
+      bedRow: { x: -0.21, z: 1.50 }
+      cabinet: { x: 1.78, z: 0.80 }
+      sink: { x: 1.64, z: 3.34 }
+      operatingTable: { x: 0.95, z: 0.095 }
+      door: { x: 1.15, z: 3.68 }
+      northWestCorner: { x: -1.54, z: -0.84 }
+
+interactables:
+  - id: door.infirmary
+    label: 医务室门
+    type: locked-door
+    sceneId: corridor
+    behavior: "toast: 医务室门 · 暂未开放（预留走廊切换）"
+  - id: curtain.1
+    label: 隔帘
+    type: open-close
+    behavior: "two pleated panels; open scale.x 0.5 at aisle end; closed scale.x 1 meeting at centre"
+  - id: curtain.2
+    label: 隔帘
+    type: open-close
+  - id: curtain.3
+    label: 隔帘
+    type: open-close
+  - id: curtain.4
+    label: 隔帘
+    type: open-close
+  - id: curtain.5
+    label: 隔帘
+    type: open-close
+  - id: cabinet.glass
+    label: 玻璃柜门
+    type: slide
+    behavior: "west glass panel slides 0.735 m behind the east panel"
+  - id: cabinet.drawer.1
+    label: 药柜抽屉
+    type: pull-out
+    behavior: "drawer slides 0.30 m toward the room; packages visible"
+  - id: cabinet.drawer.2
+    label: 药柜抽屉
+    type: pull-out
+  - id: cabinet.drawer.3
+    label: 药柜抽屉
+    type: pull-out
+  - id: waste.bin
+    label: 医疗废弃物桶
+    type: lid
+    behavior: "red lid hinged on the north edge opens to -1.15 rad"
+
+lighting:
+  recipe: infirmary.daylight-clinic
+  key:
+    type: directional
+    direction: down
+    color: "#fff7ea"
+    intensity: 1.75
+    castShadow: true
+    shadowMap: 2048
+    shadowBake: once
+  fills:
+    hemisphere: { sky: "#e7f1f4", ground: "#9aa5a0", intensity: 0.42 }
+    ambient: { color: "#ffffff", intensity: 0.12 }
+    ceilingPanels: { color: "#f1f8ff", intensity: 1.45, distance: 5.2, count: 3 }
+    surgical: { color: "#fff2dc", intensity: 2.8, distance: 3.4 }
+    cabinet: { color: "#fff7e8", intensity: 0.9, distance: 1.5 }
+    basin: { color: "#eaf5f8", intensity: 0.7, distance: 2.6 }
+    northBounce: { color: "#f2f7ee", intensity: 0.5, distance: 3.0 }
+  fixtures:
+    - "6 × 5000–6000K LED ceiling panels"
+    - "ceiling surgical lamp: 6 emissive lenses + additive halo"
+    - "warm light inside the glass medicine cabinet"
+    - "mirror: one 128 px cube-map bake"
+    - "camera recording LED and display feed dot"
+  exposure: 0.96
+  postProcessing: none
+  shadows:
+    dynamicMeshesCastShadow: false
+    note: "curtains, glass panels, drawers, waste lid, display and halo do not cast"
+
+assets:
+  reuse:
+    - "dining/src/utils.js: StaticBuilder, mergeGeometries, uvScaledPlane, trs, mulberry32"
+    - "dining/src/collision.js: CollisionWorld"
+    - "kitchen/src/geometry.js: roundedBoxGeometry, frustumGeometry, bowlGeometry"
+    - "single-dorm/src/hub.js + styles.css + local vendor/three.module.min.js"
+  new:
+    - kit.room.infirmary.5x8x3.0
+    - kit.wall.white-plaster
+    - kit.floor.white-tile.600
+    - kit.ceiling.white-panel
+    - kit.trim.plaster-cornice.two-step
+    - kit.skirting.white.100
+    - kit.door.timber.white.0.95x2.18
+    - kit.rail.bumper.pale-blue
+    - kit.light.led-panel.5000k
+    - kit.light.surgical.ceiling
+    - kit.hvac.wall-split
+    - kit.camera.wall.bullet
+    - kit.display.wall-feed
+    - prop.bed.mobile.clinic
+    - prop.curtain.privacy.pleated
+    - prop.cart.bedside.two-tier
+    - prop.cabinet.medicine.glass-drawer
+    - prop.cabinet.steel.tall
+    - prop.basin.scrub-sink.single-bowl
+    - prop.mirror.frameless
+    - prop.soap.dispenser.sensor
+    - prop.table.operating
+    - prop.stand.instrument-tray
+    - prop.instrument.set.clinic
+    - prop.bin.medical-waste.pedal
+    - prop.stool.doctor.round
+    - prop.plant.pothos
+  oneoff:
+    - "medicine cabinet with sliding glass above and three pull-out oak drawers below"
+    - "ceiling surgical lamp + operating table + instrument tray"
+    - "five two-panel privacy curtains with a shared pleat geometry"
+
+budget:
+  moving:
+    triangles: 450000
+    drawCalls: 90
+  measured:
+    batches: 36
+    staticTriangles: 106342
+    renderTriangles: 116734
+    drawCalls: 70
+    drawCallsMin: 23
+    drawCallsMax: 70
+    textureObjects: 14
+    generatedTextures: 14
+    fps: 60
+    fpsNote: "headless Edge/SwiftShader 1600×900; hub with all nine scenes resident drops to 48–55 FPS in headless"
+  texturesMB: 16
+
+validation:
+  penetration: 0
+  pitchLimitDegrees: 83
+  roll: 0
+  bobRange: 0.024
+  interactions: 11
+  nineSceneSwitching: true
+  consoleErrors: 0
+  mirrorCubeMap: true
+  curtainStates: "open scale 0.5 / closed scale 1.0"
+  drawerTravel: 0.30
+  glassSlide: 0.735
+  wasteLid: -1.15
+
+constraints:
+  noPeople: true
+  noTextInScene: true
+  noSelfDrawn2DArt: true
+  noAudio: true
+  noExternalRequests: true
+  noCdns: true
+  noRoll: true
+  singleShadowCaster: true
+  dynamicCastShadow: false
+
+references:
+  - "BRIEF.md"
+  - "asset-list.md"
+  - "VALIDATION.md"
+  - "preview/motion-report.json"
+  - "../../skills/danganronpa-adv-3d/references/lighting-recipes.md"

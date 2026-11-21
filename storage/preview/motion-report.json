@@ -1,0 +1,331 @@
+{
+  "generatedAt": "2026-11-20T11:55:54.072Z",
+  "ready": {
+    "ready": true,
+    "storage": true,
+    "scene": "storage"
+  },
+  "keysDown": [
+    "KeyW",
+    "Shift"
+  ],
+  "otherKeys": {
+    "kitchen": [],
+    "cold": [],
+    "enabled": true
+  },
+  "motion": {
+    "start": {
+      "view": {
+        "x": 0.3,
+        "z": 1.9,
+        "y": 1.8,
+        "yaw": 0.03,
+        "pitch": -0.02,
+        "frozen": false
+      },
+      "penetration": 0,
+      "roll": 0
+    },
+    "walk": {
+      "distance": 1.8826396470945552,
+      "view": {
+        "x": 0.3,
+        "z": 0.01736035290544468,
+        "y": 1.8107957313529612,
+        "yaw": 0,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "run": {
+      "distance": 3.4851755651653793,
+      "view": {
+        "x": 0.04000000000000006,
+        "z": -1.5754638136550667,
+        "y": 1.8328887801993605,
+        "yaw": 0,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "westShelf": {
+      "view": {
+        "x": -0.32,
+        "z": 0,
+        "y": 1.8231356809065407,
+        "yaw": 1.5707963267948966,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "eastStack": {
+      "view": {
+        "x": 0.37999999999999995,
+        "z": 0.18,
+        "y": 1.802131062694937,
+        "yaw": -1.5707963267948966,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "door": {
+      "view": {
+        "x": 0.3,
+        "z": 1.99,
+        "y": 1.7800901818630208,
+        "yaw": 3.141592653589793,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "northEnd": {
+      "view": {
+        "x": 0.04000000000000004,
+        "z": -2.09,
+        "y": 1.767730762004325,
+        "yaw": 0,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "sacks": {
+      "view": {
+        "x": 0.8899999999999999,
+        "z": -1.23,
+        "y": 1.7710627646459123,
+        "yaw": -0.7,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "diagonal": {
+      "view": {
+        "x": -0.32,
+        "z": -2.09,
+        "y": 1.8129065008759047,
+        "yaw": 0,
+        "pitch": 0,
+        "frozen": false
+      },
+      "penetration": 0
+    },
+    "pitchHigh": {
+      "pitch": 1.4486232791552935,
+      "roll": 0
+    },
+    "pitchLow": {
+      "pitch": -1.4486232791552935,
+      "roll": 0
+    },
+    "bob": {
+      "minY": 1.7880282111738668,
+      "maxY": 1.8119999037965377,
+      "range": 0.02397169262267096,
+      "maxRoll": 0
+    },
+    "bobSettle": {
+      "y": 1.800000000000028,
+      "roll": 0
+    },
+    "look": {
+      "yawDelta": -0.308,
+      "pitch": 0.198,
+      "roll": 0
+    },
+    "doorItem": {
+      "id": "door.storage",
+      "locked": true,
+      "sceneId": "corridor"
+    },
+    "toolboxOpen": {
+      "open": true,
+      "lid": 1.62,
+      "trayY": 0.075
+    },
+    "toolboxClosed": {
+      "open": false,
+      "lid": 0,
+      "trayY": 0
+    },
+    "lightOff": {
+      "on": false,
+      "level": 0,
+      "bulb": 0,
+      "key": 0.18
+    },
+    "lightOn": {
+      "on": true,
+      "level": 1
+    },
+    "vent": {
+      "inside": {
+        "rays": 21,
+        "seeThrough": 16,
+        "samples": [
+          {
+            "y": 1.42,
+            "hitZ": 2.47
+          },
+          {
+            "y": 1.44,
+            "hitZ": 2.44
+          },
+          {
+            "y": 1.46,
+            "hitZ": 4.1
+          },
+          {
+            "y": 1.48,
+            "hitZ": 2.46
+          }
+        ]
+      },
+      "outside": {
+        "rays": 21,
+        "leaks": 0,
+        "samples": []
+      },
+      "note": "positive horizontal probes; slats are tilted, so a few grazing angles can still pass"
+    },
+    "final": {
+      "x": 0.3,
+      "z": 1.9,
+      "y": 1.800000000000028,
+      "yaw": 0.03,
+      "pitch": -0.02,
+      "frozen": false
+    },
+    "colliderCount": 10,
+    "sceneStats": {
+      "batches": 50,
+      "triangles": 30724,
+      "colliders": 10,
+      "interactives": 3,
+      "area": 11.52,
+      "contents": {
+        "sacks": 5,
+        "boxes": 6,
+        "paintCans": 5,
+        "sprayBottles": 3,
+        "buckets": 5,
+        "clothes": 6,
+        "ropes": 3,
+        "tools": 8,
+        "jars": 3,
+        "papers": 1
+      },
+      "lightOn": true
+    }
+  },
+  "switching": [
+    {
+      "wanted": "dining",
+      "got": "dining",
+      "view": {
+        "x": 3.5,
+        "z": 7.4,
+        "y": 1.8,
+        "yaw": 0.17453292519943295,
+        "pitch": -0.06981317007977318,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "kitchen",
+      "got": "kitchen",
+      "view": {
+        "x": 2.4,
+        "z": 4,
+        "y": 1.8,
+        "yaw": 0.32,
+        "pitch": -0.03,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "coldstore",
+      "got": "coldstore",
+      "view": {
+        "x": 0.26,
+        "z": 2.3,
+        "y": 1.8,
+        "yaw": 0.06,
+        "pitch": -0.02,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "storage",
+      "got": "storage",
+      "view": {
+        "x": 0.3,
+        "z": 1.9,
+        "y": 1.800000000000028,
+        "yaw": 0.03,
+        "pitch": -0.02,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "dorm",
+      "got": "dorm",
+      "view": {
+        "x": 0.02,
+        "z": 0.92,
+        "y": 1.855,
+        "yaw": -0.19,
+        "pitch": -0.055,
+        "frozen": false
+      }
+    },
+    {
+      "wanted": "storage",
+      "got": "storage",
+      "view": {
+        "x": 0.3,
+        "z": 1.9,
+        "y": 1.800000000000028,
+        "yaw": 0.03,
+        "pitch": -0.02,
+        "frozen": false
+      }
+    }
+  ],
+  "stats": {
+    "calls": 74,
+    "triangles": 32212,
+    "textures": 27,
+    "geometries": 72,
+    "fps": null,
+    "fpsNote": "headless rAF is throttled; use tools/gpu-check.mjs with a visible Edge window",
+    "storage": {
+      "batches": 50,
+      "triangles": 30724,
+      "colliders": 10,
+      "interactives": 3,
+      "area": 11.52,
+      "contents": {
+        "sacks": 5,
+        "boxes": 6,
+        "paintCans": 5,
+        "sprayBottles": 3,
+        "buckets": 5,
+        "clothes": 6,
+        "ropes": 3,
+        "tools": 8,
+        "jars": 3,
+        "papers": 1
+      },
+      "lightOn": true
+    }
+  },
+  "events": []
+}

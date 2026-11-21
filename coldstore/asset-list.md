@@ -1,4 +1,4 @@
-# 冷库储藏室 · 资产清单
+﻿# 冷库储藏室 · 资产清单
 
 > `sceneId: coldstore` · 15.12 ㎡ · 2.7 × 5.6 × 2.45 m · 静态合批 40 批、48,670 三角面。
 > 尺寸单位 m，pivot 均为底部中心（门为铰链侧），正面 +Z，材质槽标注见括号。
@@ -15,7 +15,7 @@
 | `lib.crt-screen` | 同上 | CRT 弧面玻璃 | — |
 | `lib.rounded-box` | 同上 | CRT/摄像机外壳 | — |
 | `kit.door.insulated` | `kitchen/src/room.js`（冷库门本体） | 后厨侧门扇与门框 | 只新增不可见拾取体，不改几何 |
-| `ui.hub` | `single-dorm/src/hub.js` + `styles.css` | 顶部四场景切换、全屏、Toast、黑屏切场 | — |
+| `ui.hub` | `single-dorm/src/hub.js` + `styles.css` | 顶部五场景切换、全屏、Toast、黑屏切场 | — |
 | `vendor.three` | `vendor/three.module.min.js` | 渲染 | 本地副本 |
 
 ## 2. 新增 kit 模块

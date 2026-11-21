@@ -1,0 +1,20 @@
+{
+  "scene": "infirmary",
+  "generatedAt": "2026-11-21T14:05:00+08:00",
+  "viewport": "1600x900",
+  "renderer": "headless Edge 158 / SwiftShader",
+  "standalone": {
+    "hero": { "drawCalls": 70, "triangles": 116734, "fps": 60 },
+    "drawCallsRange": [23, 70],
+    "staticBatches": 36,
+    "staticTriangles": 106342,
+    "textureObjects": 14
+  },
+  "combinedNineScenes": {
+    "hero": { "drawCalls": 70, "triangles": 116734, "fps": 55 },
+    "fpsRange": [48, 55],
+    "textureObjects": 34
+  },
+  "budget": { "movingDrawCalls": 90, "movingTriangles": 450000 },
+  "note": "Headless SwiftShader FPS is a stability check, not a hardware benchmark; the scene is within the draw-call and triangle budgets."
+}

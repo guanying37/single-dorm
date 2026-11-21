@@ -1,0 +1,158 @@
+sceneId: readingroom
+name: 阅览室
+locationType: reading-room
+chapter: 生活区 1F 日常
+function: 学生自习、翻书、查地图；日常探索与安静独处的房间。北墙三扇窗完全封死，室内只有灯具照明；三张长桌与窗下长凳可放线索书，角落 CRT 与两台监控摄像制造被注视的不安。
+mood: 温暖、木质、封闭的旧学园阅览室；没有窗光，灯光全部来自吊灯与绿罩桌灯，三处红色录像灯持续注视
+timeOfDay: 白天（但房间封窗，室内只开灯）
+weather: 晴（无窗可看）
+
+dimensions:
+  width: 6.25
+  depth: 10.0
+  height: 3.3
+  wallThickness: 0.24
+  area: 62.5
+  ratio: "5:8"
+  eyeHeight: 1.8
+  grid: 0.25
+
+connections:
+  - id: corridor.1f
+    door: south
+    type: single
+    width: 1.0
+    height: 2.2
+    locked: true
+    hook: "sceneId: corridor"
+
+cameraModes:
+  fixed:
+    enabled: false
+    note: 本场景为移动机位房间；如剧情需要固定 ADV 机位，须另写 3–5 个 shot 并单独验收。
+  moving:
+    enabled: true
+    start: { x: -1.45, z: 4.30, yaw: -0.08, pitch: -0.03, fov: 68 }
+    eyeHeight: 1.8
+    playerRadius: 0.30
+    collision: true
+    colliders: 28
+    speed: { walk: 2.6, run: 5.4 }
+    acceleration: 16.0
+    pitchLimitDeg: 83
+    roll: 0
+    substep: 0.06
+    bob: { walk: 0.013, run: 0.021, frequency: 6.2, lateral: 0.35 }
+    route: 南门 → 中央阅读桌西侧走道 → 北墙封窗/长凳/地球仪 → 东侧走道 → 人字梯/书架缺口 → 折返 → 西南角衣帽架/门
+
+interactables:
+  - id: door.readingroom
+    label: 阅览室门
+    type: locked-door
+    behavior: 提示「暂未开放（预留走廊切换）」，不切场
+    sceneId: corridor
+  - id: light.switch
+    label: 吊灯
+    type: switch
+    behavior: 三盏吊灯开/关；关灯后桌灯、书架补光、屏幕与红灯保留
+    default: on
+  - id: lamp.tables
+    label: 阅读桌绿灯
+    type: switch-group
+    behavior: 六盏绿玻璃罩阅读灯开/关（罩体自发光、桌面绿光池、三盏桌心点光）
+    default: on
+  - id: ladder
+    label: 木制人字梯
+    type: fold
+    behavior: 两级框架绕顶部铰链 0.055 → 0.185 rad 开合
+    default: closed
+
+assets:
+  reuse:
+    - builder.static（餐厅 StaticBuilder / mergeGeometries）
+    - collision.world（餐厅 CollisionWorld）
+    - geometry.helpers（uvScaledPlane / trs / roundedBox / frustum / lathe / tube）
+    - player.first-person（存储/冷库同构的 0.30 m 圆碰撞控制器）
+    - texture.procedural（mulberry32 + CanvasTexture）
+    - prop.contact-shadow
+    - prop.dust
+  new:
+    - kit.wall.brick（2.4 m 砖纹，含 bump）
+    - kit.floor.wood-parquet（1.6 m 拼板 + 深色镶嵌）
+    - kit.ceiling.plank（2 m 木板 + 4 道横梁）
+    - kit.window.boarded-shut（三扇 1.42 × 1.62 m 窗全部用生木板封死；6 板/扇 + 竖压条 + 斜撑 + 黑铁钉 + 近黑深腔；参考单人宿舍封窗）
+    - kit.door.panelled（1.0 × 2.2 实木门）
+    - furniture.shelf.rosewood（6 组 / 10 跨）
+    - prop.shelf.books-varied（约 1 188 本，9 色）
+    - furniture.table.reading（3 张）
+    - furniture.chair.back（10 把）
+    - prop.lamp.banker-green（6 盏）
+    - prop.lamp.pendant-wood（3 盏）
+    - prop.bench.window（飘窗式软垫长凳）
+    - prop.globe.floor（顶点色大陆 + 黄铜子午圈 + 车木立柱 + 宽木底盘 + 铜托碗；已修复悬空）
+    - prop.coat-rack.floor
+    - prop.ladder.folding（木制人字梯）
+    - prop.crt.ceiling-corner（监控显示屏 + 云台）
+    - prop.camera.bullet（西北吊顶角 + 门上方 ×2，吸顶杆 + 黑色枪机 + 红色录像灯）
+    - prop.relief.map（3 幅）
+    - prop.relief.landscape（2 幅）
+  oneOff:
+    - prop.globe.vertex-color（无位图大陆/经纬线）
+    - prop.crt.monitor（凸弧屏 + 扫描带 + 录像灯）
+    - prop.camera.bullet（两台新增枪机）
+    - prop.ladder.folding（两级框架开合）
+    - prop.window.boarded-shut（整组封窗木板）
+
+lighting:
+  recipe: readingroom.sealed-warm-pendant
+  keyShadow: vertical-down
+  windowFill: none（北窗已完全封死，无窗光/无日光方向光）
+  shadowMap: 2048
+  exposure: 1.16
+  pointLights: 11
+  directionalLights: 1
+  fixtures:
+    - lamp.pendant.wooden-cone x3
+    - lamp.banker.green-glass x6
+    - fill.shelf-aisle x4
+    - fill.entry x1
+    - screen.crt
+    - led.recording x3（CRT + 两台枪机）
+  variants:
+    - id: pendants-off
+      behavior: 吊灯 0，主光 0.48，保留桌灯/书架补光/屏幕/红灯
+    - id: table-lamps-off
+      behavior: 阅读灯 0，吊灯、书架补光与屏幕不变
+
+budget:
+  moving:
+    triangles: 450000
+    drawCalls: 90
+  fixed:
+    triangles: null
+    drawCalls: null
+    note: 无固定机位
+  texturesMB: 16
+  measured:
+    batches: 52
+    staticTriangles: 120626
+    heroDrawCalls: 80
+    heroTriangles: 140180
+    drawCallRange: 42..80
+    triangleRange: 76572..140180
+    fps: 60
+    fpsNote: 干净环境 1600×900 quality 1；多场景并行截图时共享 GPU 会跌到 30–50 FPS，同环境杂物间对照也只有 33–47 FPS
+    quality: 1
+    resolution: "1600x900"
+    gpu: "NVIDIA GeForce GTX 1060 3GB (D3D11)"
+    textures: 15
+    texturesApproxMB: 14.4
+    shadowMaps: 1
+
+references:
+  - "skills/danganronpa-adv-3d/references/scene-brief.md"
+  - "skills/danganronpa-adv-3d/references/camera-moving.md"
+  - "skills/danganronpa-adv-3d/references/lighting-recipes.md"
+  - "single-dorm/design-atlas（A-01 生活区 1F，F 阅览）"
+  - "single-dorm/src/room.js（单人宿舍封窗做法参考）"
+  - "single-dorm/storage（小房间参照）"

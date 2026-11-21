@@ -1,0 +1,43 @@
+{
+  "fpsSamples": [
+    50.7,
+    55.4,
+    53.7
+  ],
+  "fps": 50.7,
+  "stats": {
+    "batches": 49,
+    "triangles": 31872,
+    "colliders": 11,
+    "interactives": 3,
+    "area": 23.328000000000003,
+    "contents": {
+      "bins": 2,
+      "bags": 6,
+      "boxes": 5,
+      "paintCans": 4,
+      "jars": 3,
+      "bottles": 2,
+      "tools": 6,
+      "rags": 2,
+      "papers": 11,
+      "webs": 6
+    },
+    "lightOn": true,
+    "flicker": 0.16
+  },
+  "render": {
+    "frame": 1116,
+    "calls": 73,
+    "triangles": 34516,
+    "points": 140,
+    "lines": 0
+  },
+  "pixelRatio": 1,
+  "viewport": {
+    "w": 1600,
+    "h": 900,
+    "dpr": 1
+  },
+  "quality": null
+}

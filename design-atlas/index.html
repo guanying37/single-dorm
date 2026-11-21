@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>特殊学园 · 建筑设计图集 | Special School Design Atlas</title>
+  <meta name="description" content="依据六张手绘草图与已建 3D 模型重绘的特殊学园方案设计图集：生活区、住宿区、休憩区、礼堂与南面视图。Canvas 绘制，米制比例。" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body id="top">
+  <div class="page-grain" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="hero-top">
+      <a class="back-link" href="../">← 返回场景预览</a>
+      <div class="hero-meta">
+        <span>REV A</span>
+        <span>2026.11</span>
+        <span>6 PLATES</span>
+      </div>
+    </div>
+
+    <div class="hero-main">
+      <p class="eyebrow">HOPE'S PEAK · SPECIAL SCHOOL · DESIGN ATLAS</p>
+      <h1>特殊学园<span>建筑设计图集</span></h1>
+      <p class="lede">
+        依据六张手绘设计草图，并对照已建成的 <strong>36 × 22 m 学生餐厅</strong>、
+        <strong>12 × 22 m 后厨</strong>、<strong>2.7 × 5.6 m 冷库</strong> 与
+        <strong>4.8 × 5.6 m 单人宿舍</strong> 重绘。全部图形按米制绘制，
+        平面与南面视图统一 <strong>1:150</strong>，并附尺寸链、面积、图例与自检记录。
+      </p>
+      <div class="chips">
+        <span>生活区 1F / 住宿区 2F</span>
+        <span>休憩区 1F / 2F</span>
+        <span>礼堂 3F</span>
+        <span>南面视图 A–A</span>
+        <span>严格比例</span>
+      </div>
+      <div class="hero-actions">
+        <button type="button" class="primary" id="downloadAll">下载全部图纸 PNG</button>
+        <button type="button" class="ghost" id="printAtlas">打印 / 导出 A2</button>
+        <a class="text-link" href="./preview/special-school-design-atlas-A2.pdf" download>下载 A2 PDF</a>
+        <a class="text-link" href="#sheets">查看图纸 ↓</a>
+      </div>
+    </div>
+
+    <div class="hero-stats" aria-label="图纸摘要">
+      <div><b>56.4 × 30.4</b><span>生活 / 住宿楼 m</span></div>
+      <div><b>50.4 × 24.0</b><span>休憩楼 m</span></div>
+      <div><b>50.0 × 38.0</b><span>礼堂 + 核心 m</span></div>
+      <div><b>440</b><span>礼堂座席</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="brief-grid" aria-label="设计依据与校核">
+      <article class="brief-card">
+        <p class="kicker">SOURCE 01</p>
+        <h2>六张手绘草图</h2>
+        <p>住宿区 2F、生活区 1F、礼堂 3F、南面视图、休憩区 1F、休憩区 2F。房间编号、相邻关系、门的开启方向与文字注记均按原图保留。</p>
+        <ul class="mini-list">
+          <li>编号 A–Z 原样保留，不改字母含义</li>
+          <li>“铁栏杆 / 刷卡铁门 / 内侧释放”注记保留</li>
+          <li>女生宿舍南墙无窗作为设定保留</li>
+        </ul>
+      </article>
+
+      <article class="brief-card">
+        <p class="kicker">SOURCE 02</p>
+        <h2>已建 3D 模型</h2>
+        <p>平面中的餐厅、后厨、冷库与宿舍按模型实际尺寸嵌入，而不是按草图方格估算。</p>
+        <table class="dim-table">
+          <tr><th>学生餐厅</th><td>36.0 × 22.0 m</td><td>净高 4.2 m</td></tr>
+          <tr><th>后厨</th><td>12.0 × 22.0 m</td><td>净高 3.25 m</td></tr>
+          <tr><th>冷库</th><td>2.7 × 5.6 m</td><td>净高 2.45 m</td></tr>
+          <tr><th>单人宿舍</th><td>4.8 × 5.6 m</td><td>净高 2.8 m</td></tr>
+        </table>
+      </article>
+
+      <article class="brief-card">
+        <p class="kicker">CONTROL</p>
+        <h2>统一模数与比例</h2>
+        <p>以 4.8 m 宿舍开间为基本模数，走廊净宽 2.4 m，外墙 300 mm，内墙 120 mm。每张图都带独立比例尺与尺寸链。</p>
+        <ul class="mini-list">
+          <li>平面：1:150，A2 横向</li>
+          <li>南面视图：1:150，A2 横向</li>
+          <li>尺寸单位：米（m），面积：㎡</li>
+          <li>北向上，图纸不旋转</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="audit" aria-labelledby="auditTitle">
+      <div class="section-heading">
+        <div>
+          <p class="kicker">SELF-CHECK / 反复自检</p>
+          <h2 id="auditTitle">已发现并修正的不合理处</h2>
+        </div>
+        <p>这些不是隐藏假设，而是图中真实发生的修改。每一条都能在对应图纸上找到。</p>
+      </div>
+      <ol class="audit-list">
+        <li><b>餐厅与后厨的真实尺寸放不进 52 m 旧轮廓。</b><span>生活楼外轮廓改为 <strong>56.4 × 30.4 m</strong>：12 m 后厨 + 36 m 餐厅 + 2.4 m 东走廊 + 5.16 m 东侧房间。</span></li>
+        <li><b>1F 的 I/J 与 2F 的 W/X 必须上下对齐。</b><span>两层的楼梯、电梯核心统一落在东南角同一结构网格；1F 东走廊贯通到北门厅。</span></li>
+        <li><b>B 冷藏库与 C 后厨隔着公共走廊。</b><span>B 定位为“收货冷藏库”，在 C 内另设已建 <strong>2.7 × 5.6 m</strong> 冷库，并加 1.2 m 服务门，后厨日常动线不穿越公共走廊。</span></li>
+        <li><b>1F 没有公共卫生间。</b><span>在北门厅东侧补 <strong>3.0 × 2.4 m</strong> 无障碍卫生间；2F 仍集中设置 K/L 淋浴与 Y/Z 厕所，不重复布置。</span></li>
+        <li><b>2F 十间男生宿舍正好 49.08 m，端部只剩 4.2 m。</b><span>N 杂物间放在东北角，东侧让出 2.4 m 纵向走廊；J 宿舍与 N 之间用走廊分隔。</span></li>
+        <li><b>礼堂四角核心与环廊会互相打架。</b><span>四角核心做成 6 × 6 m 外挂塔，K–N 电梯 + G–J 楼梯；楼梯只向下，环廊 3.0 m 连续。</span></li>
+        <li><b>礼堂原图没有座席与卫生间。</b><span>补齐 <strong>10 排 × 44 座 = 440 座</strong>、后区无障碍座、男女卫生间、后台准备室与舞台飞塔。</span></li>
+        <li><b>休憩区 2F 的 J 房间原图漏注。</b><span>暂定为 <strong>J 多功能教室</strong>，与 I 美术馆、K 游戏机房形成可调整的公共教学带。</span></li>
+        <li><b>手绘外轮廓不是规整矩形。</b><span>A 垃圾场、J 电梯、G/H 核心均有凸出；图集统一为 <strong>56.4 × 30.4 m</strong> 矩形结构网格，J 与 2F X 同轴，A 保留西侧铁栏门。</span></li>
+      </ol>
+    </section>
+
+    <section class="sheet-index" aria-labelledby="indexTitle">
+      <div class="section-heading">
+        <div>
+          <p class="kicker">DRAWING INDEX</p>
+          <h2 id="indexTitle">图纸目录</h2>
+        </div>
+        <p>点击任意图纸放大；放大时按 4× 重新绘制，文字保持清晰。画布可直接下载 PNG。平面统一 1:150，便于比较真实大小。</p>
+      </div>
+      <div class="index-table" role="table" aria-label="图纸目录">
+        <div class="index-row head" role="row"><span>图号</span><span>图纸名称</span><span>比例</span><span>主要内容</span><span></span></div>
+        <div class="index-row" role="row"><span>A-01</span><span>生活区 1F 平面</span><span>1:150</span><span>垃圾场 / 冷藏 / 后厨 / 餐厅 / 医务 / 阅览 / 便利店 / 楼梯电梯</span><a href="#sheet-a01">查看</a></div>
+        <div class="index-row" role="row"><span>A-02</span><span>住宿区 2F 平面</span><span>1:150</span><span>10 男宿 + 8 女宿 + 淋浴 / 厕所 / 大厅 / 杂物 / 楼梯电梯</span><a href="#sheet-a02">查看</a></div>
+        <div class="index-row" role="row"><span>A-03</span><span>休憩区 1F 平面</span><span>1:150</span><span>篮球 / 排球网球 / 羽毛球乒乓 / 足球 / 游泳 / 健身 / 器材</span><a href="#sheet-a03">查看</a></div>
+        <div class="index-row" role="row"><span>A-04</span><span>休憩区 2F 平面</span><span>1:150</span><span>美术 / 音乐美术 / 信息 / 厕所 / 器材 / 美术馆 / 多功能 / 游戏机</span><a href="#sheet-a04">查看</a></div>
+        <div class="index-row" role="row"><span>A-05</span><span>礼堂 3F 平面</span><span>1:150</span><span>440 座礼堂 / 舞台 / 准备室 / 环廊 / 四角电梯楼梯</span><a href="#sheet-a05">查看</a></div>
+        <div class="index-row" role="row"><span>A-06</span><span>礼堂南面视图</span><span>1:150</span><span>3F 礼堂 + 五根支撑柱 / 隐藏电梯 / 两侧楼梯电梯 / 封闭环廊</span><a href="#sheet-a06">查看</a></div>
+      </div>
+    </section>
+
+    <section class="sheets" id="sheets" aria-label="设计图纸">
+      <article class="sheet-card" id="sheet-a01">
+        <div class="sheet-head">
+          <div>
+            <p class="kicker">PLATE 01 · 1F · 1:150</p>
+            <h2>生活区 1F 平面</h2>
+          </div>
+          <div class="sheet-actions">
+            <button type="button" data-download="a01">下载 PNG</button>
+            <button type="button" data-zoom="a01">放大</button>
+          </div>
+        </div>
+        <div class="canvas-shell">
+          <canvas id="a01" width="1800" height="1273" aria-label="生活区一层平面图：A垃圾场、B冷藏库、C后厨12×22米、D学生餐厅36×22米、E医务室、F阅览室、G便利店、H杂物间、I楼梯间、J电梯间"></canvas>
+        </div>
+        <p class="caption"><b>A</b> 垃圾场（原外通口，铁栏封死） · <b>B</b> 收货冷藏库 · <b>C</b> 后厨 12×22 · <b>D</b> 学生餐厅 36×22 · <b>E</b> 医务室 · <b>F</b> 阅览室 · <b>G</b> 便利店 · <b>H</b> 杂物间 · <b>I</b> 楼梯间（上 2F） · <b>J</b> 电梯间。北门厅补无障碍卫生间；C 内嵌已建 2.7×5.6 冷库。</p>
+      </article>
+
+      <article class="sheet-card" id="sheet-a02">
+        <div class="sheet-head">
+          <div>
+            <p class="kicker">PLATE 02 · 2F · 1:150</p>
+            <h2>住宿区 2F 平面</h2>
+          </div>
+          <div class="sheet-actions">
+            <button type="button" data-download="a02">下载 PNG</button>
+            <button type="button" data-zoom="a02">放大</button>
+          </div>
+        </div>
+        <div class="canvas-shell">
+          <canvas id="a02" width="1800" height="1273" aria-label="住宿区二层平面图：A到J十间男生宿舍、O到V八间女生宿舍、K男淋浴、L女淋浴、Y男厕、Z女厕、M宿舍大厅、N杂物间、W楼梯间、X电梯间"></canvas>
+        </div>
+        <p class="caption"><b>A–J</b> 男生宿舍 10 间（各 4.8×5.6） · <b>O–V</b> 女生宿舍 8 间 · <b>K/L</b> 男女淋浴 · <b>Y/Z</b> 男女厕所 · <b>M</b> 宿舍大厅 · <b>N</b> 杂物间 · <b>W</b> 楼梯间 · <b>X</b> 电梯间。O–V 南墙按设定不开窗；走道设刷卡铁门与内侧释放。</p>
+      </article>
+
+      <article class="sheet-card" id="sheet-a03">
+        <div class="sheet-head">
+          <div>
+            <p class="kicker">PLATE 03 · 1F · 1:150</p>
+            <h2>休憩区 1F 平面</h2>
+          </div>
+          <div class="sheet-actions">
+            <button type="button" data-download="a03">下载 PNG</button>
+            <button type="button" data-zoom="a03">放大</button>
+          </div>
+        </div>
+        <div class="canvas-shell">
+          <canvas id="a03" width="1800" height="1273" aria-label="休憩区一层平面图：A篮球馆、B排球网球馆、C羽毛球乒乓球馆、D小足球场、E游泳馆、F健身房、I器材室、G楼梯间、H电梯间"></canvas>
+        </div>
+        <p class="caption"><b>A</b> 篮球馆（训练半场） · <b>B</b> 排球 / 网球馆 · <b>C</b> 羽毛球 / 乒乓球馆 · <b>D</b> 小足球场 · <b>E</b> 游泳馆（训练池） · <b>F</b> 健身房 · <b>I</b> 器材室 · <b>G</b> 楼梯间 · <b>H</b> 电梯间。东侧补公共卫生间与门厅。</p>
+      </article>
+
+      <article class="sheet-card" id="sheet-a04">
+        <div class="sheet-head">
+          <div>
+            <p class="kicker">PLATE 04 · 2F · 1:150</p>
+            <h2>休憩区 2F 平面</h2>
+          </div>
+          <div class="sheet-actions">
+            <button type="button" data-download="a04">下载 PNG</button>
+            <button type="button" data-zoom="a04">放大</button>
+          </div>
+        </div>
+        <div class="canvas-shell">
+          <canvas id="a04" width="1800" height="1273" aria-label="休憩区二层平面图：A美术教室、B音乐美术教室、C信息教室、D楼梯间、E电梯间、F男厕、G女厕、H音乐美术器材室、I美术馆、J多功能教室、K游戏机房"></canvas>
+        </div>
+        <p class="caption"><b>A</b> 美术教室 · <b>B</b> 音乐 / 美术教室 · <b>C</b> 信息教室 · <b>D</b> 楼梯间 · <b>E</b> 电梯间 · <b>F/G</b> 男女厕所 · <b>H</b> 音乐 / 美术器材室 · <b>I</b> 美术馆 · <b>J</b> 多功能教室（原图漏注，补齐） · <b>K</b> 游戏机房。</p>
+      </article>
+
+      <article class="sheet-card" id="sheet-a05">
+        <div class="sheet-head">
+          <div>
+            <p class="kicker">PLATE 05 · 3F · 1:150</p>
+            <h2>礼堂 3F 平面</h2>
+          </div>
+          <div class="sheet-actions">
+            <button type="button" data-download="a05">下载 PNG</button>
+            <button type="button" data-zoom="a05">放大</button>
+          </div>
+        </div>
+        <div class="canvas-shell">
+          <canvas id="a05" width="1800" height="1273" aria-label="礼堂三层平面图：F礼堂440座、舞台、A电力调控房、B和C准备室、D舞台总控室、环形走廊、四角K到N电梯与G到J楼梯"></canvas>
+        </div>
+        <p class="caption"><b>F</b> 礼堂 440 座 · 舞台 14×5 · <b>A</b> 电力调控房 · <b>B/C</b> 准备室 · <b>D</b> 舞台总控室 · 四周 3.0 m 环形走廊，<strong>外墙无门、窗全部封死</strong>，仅经四角核心筒进入 · <b>K/L/M/N</b> 电梯、<b>G/H/I/J</b> 楼梯（仅向下，无向上）。</p>
+      </article>
+
+      <article class="sheet-card" id="sheet-a06">
+        <div class="sheet-head">
+          <div>
+            <p class="kicker">PLATE 06 · SOUTH VIEW · 1:150</p>
+            <h2>礼堂南面视图</h2>
+          </div>
+          <div class="sheet-actions">
+            <button type="button" data-download="a06">下载 PNG</button>
+            <button type="button" data-zoom="a06">放大</button>
+          </div>
+        </div>
+        <div class="canvas-shell">
+          <canvas id="a06" width="1800" height="1273" aria-label="礼堂南面视图：三层礼堂下方仅五根支撑柱，四角小柱与中心2×2大柱，中心柱内隐藏电梯，两侧为休闲区和教学区楼梯及电梯，外围环廊外墙无门窗"></canvas>
+        </div>
+        <p class="caption">3F 礼堂大正方形下方仅五根支撑柱：四角 1×1 小柱 + 中心 2×2 大柱（4 倍面积） · 中心柱内隐藏电梯（不制作、上层地板不标） · 两侧休闲区 / 教学区楼梯各 8 格（下 4 格 1F、上 4 格 2F）与旁侧电梯 · 环廊外墙无门、窗全部封死。</p>
+      </article>
+    </section>
+
+    <section class="principles" aria-labelledby="principlesTitle">
+      <div class="section-heading">
+        <div>
+          <p class="kicker">DESIGN NOTES</p>
+          <h2 id="principlesTitle">图集使用说明</h2>
+        </div>
+      </div>
+      <div class="principle-grid">
+        <div><h3>01 · 比例</h3><p>平面图与南面视图统一 1:150；每张图左下角有独立比例尺。图内尺寸单位为米，面积单位为平方米，保留一位小数。打印请选 A2 横向、100% 比例。</p></div>
+        <div><h3>02 · 墙体</h3><p>外墙 300 mm、内墙 120 mm；门洞、窗洞在墙上真实开洞，门扇与开启弧线按 90° 绘制。未注门宽：宿舍 0.9 m、房间 1.2 m、公共 1.8–2.4 m。</p></div>
+        <div><h3>03 · 竖向</h3><p>1F I/J 与 2F W/X 同轴；休憩区 1F G/H 与 2F D/E 同轴；礼堂 K–N 电梯四角对称。楼梯箭头向下表示仅下行。</p></div>
+        <div><h3>04 · 方案深度</h3><p>本图集为方案设计图，不是施工图；结构柱、楼面梁、机电井道为控制性表达，施工前需结构、机电、消防专业复核。</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-foot">
+    <div>
+      <span class="foot-mark">SS</span>
+      <p>特殊学园 · 建筑设计图集 · REV A</p>
+    </div>
+    <p>依据手绘草图 1–6 与已建 3D 模型重绘 · Canvas 2D · 2026.11</p>
+    <a href="#top">回到顶部 ↑</a>
+  </footer>
+
+  <div class="lightbox" id="lightbox" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="图纸放大">
+    <div class="lightbox-bar">
+      <span id="lightboxTitle">图纸</span>
+      <div>
+        <button type="button" id="zoomOut" aria-label="缩小">−</button>
+        <span id="zoomLevel">100%</span>
+        <button type="button" id="zoomIn" aria-label="放大">+</button>
+        <button type="button" id="zoomReset">1:1</button>
+        <button type="button" id="lightboxClose" aria-label="关闭">×</button>
+      </div>
+    </div>
+    <div class="lightbox-stage" id="lightboxStage">
+      <canvas id="lightboxCanvas" width="1800" height="1273" aria-label="高清放大图纸"></canvas>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script defer src="./src/atlas.js"></script>
+</body>
+</html>

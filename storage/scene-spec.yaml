@@ -1,0 +1,215 @@
+sceneId: storage
+name: 杂物间
+locationType: storage-room
+chapter: "生活区 1F · 后勤杂物间"
+function: "清洁工具、旧货与修理工具的储藏；可藏身、可透过门上百叶单向窥视走廊"
+mood: "昏暗、旧、尘土、被监视；毛坯混凝土、一盏裸灯、门缝外漏进的冷白走廊光"
+timeOfDay: "人工照明（无窗）"
+weather: "不适用"
+
+dimensions:
+  width: 2.4
+  depth: 4.8
+  height: 2.7
+  wallThickness: 0.24
+  area: 11.52
+  ratio: "1 : 2（宽 : 深）"
+  aisle: "货架前脸 x=-0.64 → 东墙 x=+1.2，共 1.84 m；东侧箱堆/麻袋处最窄约 1.2 m"
+  shelf:
+    depth: 0.56
+    length: 3.7
+    height: 2.02
+    tiers: 5
+    bays: 4
+    posts: 10
+  corridor:
+    width: 2.8
+    depth: 1.7
+    note: "门外走廊切片，只从百叶和门缝看见，不可进入"
+
+connections:
+  - id: door.storage
+    wall: south
+    type: locked steel door with louvred vent
+    width: 0.9
+    height: 2.06
+    x: 0.3
+    sceneId: corridor
+    status: locked
+    vent:
+      width: 0.5
+      height: 0.44
+      centerY: 1.63
+      vanes: 8
+      tiltDegrees: 28.6
+      behavior: "inside sees out; outside cannot see in"
+
+cameraModes:
+  fixed:
+    enabled: false
+  moving:
+    enabled: true
+    start:
+      x: 0.3
+      z: 1.9
+      yaw: 0.03
+      pitch: -0.02
+      fov: 68
+    eyeHeight: 1.8
+    playerRadius: 0.3
+    speed:
+      walk: 2.0
+      run: 4.2
+    acceleration: 15.0
+    lookSensitivity: 0.0022
+    pitchLimitDegrees: 83
+    roll: 0
+    bob:
+      walk: 0.012
+      run: 0.022
+      frequency: 5.6
+      lateral: 0.45
+    substep: 0.06
+    collision: true
+    colliderCount: 10
+    testStops:
+      westShelf: { x: -0.32, z: 0.0 }
+      eastBoxStack: { x: 0.38, z: 0.18 }
+      door: { x: 0.3, z: 1.99 }
+      northEnd: { x: 0.04, z: -2.09 }
+      sacks: { x: 0.89, z: -1.23 }
+
+interactables:
+  - id: door.storage
+    label: 杂物间门
+    type: locked-door
+    sceneId: corridor
+    behavior: "toast: 杂物间门 · 暂未开放（预留走廊切换）"
+  - id: toolbox
+    label: 修理工具箱
+    type: open-close
+    behavior: "lid hinged at the wall side opens to 1.62 rad; tray rises 0.075 m so the tools clear the rim"
+  - id: light.switch
+    label: 顶灯
+    type: toggle
+    behavior: "bare bulb on/off; off keeps the vent/corridor fill and the red camera LED"
+
+lighting:
+  recipe: storage.dim-bulb
+  key:
+    type: directional
+    direction: down
+    color: "#ffdfb0"
+    intensity: 0.58
+    castShadow: true
+    shadowMap: 1024
+    shadowBake: once
+  fills:
+    hemisphere: { sky: "#c9d0c8", ground: "#3a3733", intensity: 0.4 }
+    ambient: { color: "#9a8e7c", intensity: 0.12 }
+    bareBulb: { color: "#ffc98c", intensity: 2.3, distance: 4.6 }
+    corridorCeiling: { color: "#e6f0ec", intensity: 1.8, distance: 3.5 }
+    corridorBulkhead: { color: "#e4eef2", intensity: 1.0, distance: 2.3 }
+    vent: { color: "#d6e6ec", intensity: 0.75, distance: 2.2 }
+    doorFill: { color: "#ffd7ac", intensity: 0.52, distance: 2.8 }
+    floorBounce: { color: "#ffd0a0", intensity: 0.18, distance: 1.8 }
+    garmentFill: { color: "#ffd7ac", intensity: 0.34, distance: 2.2 }
+    deadEndBounce: { color: "#ffd9a8", intensity: 0.3, distance: 3.0 }
+  fixtures:
+    - "bare tungsten bulb in an enamel shade on a drop cord"
+    - "8-vane louvred door vent (the only outside sight line)"
+    - "corridor ceiling fluorescent + caged bulkhead"
+    - "old box camera with red recording LED"
+  exposure: 0.9
+  postProcessing: none
+  lightOffVariant:
+    key: 0.18
+    bulb: 0
+    note: "vent/corridor fill and camera LED remain; room stays navigable"
+
+assets:
+  reuse:
+    - "dining/src/utils.js: StaticBuilder, mergeGeometries, uvScaledPlane, trs, mulberry32"
+    - "dining/src/collision.js: CollisionWorld"
+    - "kitchen/src/geometry.js: roundedBoxGeometry"
+    - "single-dorm/src/hub.js + styles.css + local three.module.min.js"
+  new:
+    - kit.room.storage.2.4x4.8x2.7
+    - kit.wall.concrete.board-formed
+    - kit.floor.concrete.stained
+    - kit.ceiling.concrete.soffit
+    - kit.door.steel.louvred.0.9x2.06
+    - kit.corridor.slice.2.8x1.7
+    - kit.trim.conduit-and-junction
+    - kit.pipe.rust.valve
+    - kit.light.bare-bulb.enamel
+    - kit.camera.wall.box.recording-led
+    - prop.shelf.angle-iron.5tier
+    - prop.bucket.plastic
+    - prop.mop-bucket.wringer
+    - prop.broom
+    - prop.mop
+    - prop.dustpan
+    - prop.squeegee
+    - prop.spray-bottle
+    - prop.detergent-jug
+    - prop.toolbox.repair.cantilever
+    - prop.jar.screws
+    - prop.paint-tin
+    - prop.carton.kraft.blank
+    - prop.sack.burlap
+    - prop.rope.coil
+    - prop.clothes.folded
+    - prop.jacket.hanging
+    - prop.work-coat.hanging
+    - prop.newspaper.bundle
+    - prop.wet-floor.sign (corridor)
+    - prop.extinguisher.cabinet (corridor)
+  oneoff:
+    - "louvred steel door with a real vent opening and a 1.7 m corridor slice outside (the scene's narrative device)"
+    - "cantilever repair toolbox whose tray rises with the lid"
+    - "bare bulb + enamel shade + swinging camera as the room's only moving light source"
+
+budget:
+  moving:
+    triangles: 450000
+    drawCalls: 90
+  measured:
+    batches: 50
+    staticTriangles: 30724
+    renderTriangles: 32212
+    drawCalls: 74
+    drawCallsMin: 34
+    drawCallsMax: 74
+    textureObjects: 27
+    generatedTextures: 19
+    fps: 60
+    fpsDevice: "NVIDIA GeForce GTX 1060 3GB / D3D11 / 1600×900"
+  texturesMB: 16
+
+validation:
+  penetration: 0
+  ventProbeInside: "16 / 21 horizontal probes reach past the door plane"
+  ventProbeOutside: "0 / 21 horizontal probes reach into the room"
+  pitchLimitDegrees: 83
+  roll: 0
+  fiveSceneSwitching: true
+  consoleErrors: 0
+
+constraints:
+  noPeople: true
+  noTextInScene: true
+  noSelfDrawn2DArt: true
+  noAudio: true
+  noExternalRequests: true
+  noCdns: true
+  noRoll: true
+  singleShadowCaster: true
+  corridorNotWalkable: true
+
+references:
+  - "BRIEF.md"
+  - "asset-list.md"
+  - "VALIDATION.md"
+  - "preview/motion-report.json"
+  - "../../skills/danganronpa-adv-3d/references/lighting-recipes.md"

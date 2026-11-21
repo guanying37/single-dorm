@@ -1,0 +1,430 @@
+{
+  "checkedAt": "2026-11-21T06:37:24.533Z",
+  "errors": [],
+  "warnings": [],
+  "start": {
+    "x": 0.62,
+    "z": 2.16,
+    "y": 1.8,
+    "yaw": 0.1,
+    "pitch": -0.034999999999999996,
+    "frozen": false
+  },
+  "stats": {
+    "batches": 49,
+    "triangles": 31872,
+    "colliders": 11,
+    "interactives": 3,
+    "area": 23.328000000000003,
+    "contents": {
+      "bins": 2,
+      "bags": 6,
+      "boxes": 5,
+      "paintCans": 4,
+      "jars": 3,
+      "bottles": 2,
+      "tools": 6,
+      "rags": 2,
+      "papers": 11,
+      "webs": 6
+    },
+    "lightOn": true,
+    "flicker": 0.16,
+    "render": {
+      "frame": 111,
+      "calls": 88,
+      "triangles": 37664,
+      "points": 140,
+      "lines": 0
+    },
+    "memory": {
+      "geometries": 90,
+      "textures": 21
+    },
+    "fps": 50.6,
+    "blind": {
+      "camera": {
+        "x": -1.94,
+        "y": 2.62,
+        "z": -2.44
+      },
+      "rack": {
+        "x": -0.78,
+        "y": 1.1,
+        "z": -2.49
+      },
+      "distance": 1.91,
+      "angleDegrees": 52.6,
+      "lensHalfAngleDegrees": 34,
+      "blind": true
+    }
+  },
+  "interactives": [
+    {
+      "id": "door.garbage",
+      "label": "垃圾处理场门",
+      "open": false,
+      "locked": true,
+      "portal": false,
+      "sceneId": "corridor"
+    },
+    {
+      "id": "light.switch",
+      "label": "顶灯",
+      "open": true,
+      "locked": false,
+      "portal": false,
+      "sceneId": null
+    },
+    {
+      "id": "bin.b",
+      "label": "工业垃圾桶 B",
+      "open": false,
+      "locked": false,
+      "portal": false,
+      "sceneId": null
+    }
+  ],
+  "blindSpot": {
+    "camera": {
+      "x": -1.94,
+      "y": 2.62,
+      "z": -2.44
+    },
+    "rack": {
+      "x": -0.78,
+      "y": 1.1,
+      "z": -2.49
+    },
+    "distance": 1.91,
+    "angleDegrees": 52.6,
+    "lensHalfAngleDegrees": 34,
+    "blind": true
+  },
+  "memory": {
+    "geometries": 90,
+    "textures": 21
+  },
+  "route": {
+    "steps": 421,
+    "worstPenetration": 0,
+    "worstBox": null,
+    "samples": [
+      {
+        "x": 0.62,
+        "z": 0.82
+      },
+      {
+        "x": 0.62,
+        "z": -0.78
+      },
+      {
+        "x": 0.02,
+        "z": -1.48
+      },
+      {
+        "x": -0.94,
+        "z": -0.51
+      },
+      {
+        "x": -1.05,
+        "z": 0.96
+      },
+      {
+        "x": -0.8,
+        "z": 1.73
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.8,
+        "z": 1.7
+      },
+      {
+        "x": -0.5,
+        "z": 1.7
+      },
+      {
+        "x": 0.9,
+        "z": 1.44
+      },
+      {
+        "x": 0.92,
+        "z": 0.67
+      },
+      {
+        "x": 0.71,
+        "z": 0.6
+      },
+      {
+        "x": 0.62,
+        "z": 2.18
+      }
+    ]
+  },
+  "impactBins": {
+    "steps": 180,
+    "worstPenetration": 0,
+    "worstBox": null,
+    "samples": [
+      {
+        "x": 0.91,
+        "z": -0.85
+      },
+      {
+        "x": 0.91,
+        "z": -0.85
+      },
+      {
+        "x": 0.91,
+        "z": -0.85
+      },
+      {
+        "x": 0.91,
+        "z": -0.85
+      },
+      {
+        "x": 0.91,
+        "z": -0.85
+      },
+      {
+        "x": 0.91,
+        "z": -0.85
+      },
+      {
+        "x": 0.91,
+        "z": -0.85
+      },
+      {
+        "x": 0.91,
+        "z": -0.85
+      },
+      {
+        "x": 0.91,
+        "z": -0.85
+      }
+    ]
+  },
+  "impactNorthWall": {
+    "steps": 180,
+    "worstPenetration": 0,
+    "worstBox": null,
+    "samples": [
+      {
+        "x": 0,
+        "z": -1.96
+      },
+      {
+        "x": 0,
+        "z": -1.96
+      },
+      {
+        "x": 0,
+        "z": -1.96
+      },
+      {
+        "x": 0,
+        "z": -1.96
+      },
+      {
+        "x": 0,
+        "z": -1.96
+      },
+      {
+        "x": 0,
+        "z": -1.96
+      },
+      {
+        "x": 0,
+        "z": -1.96
+      },
+      {
+        "x": 0,
+        "z": -1.96
+      },
+      {
+        "x": 0,
+        "z": -1.96
+      }
+    ]
+  },
+  "impactBags": {
+    "steps": 180,
+    "worstPenetration": 0,
+    "worstBox": null,
+    "samples": [
+      {
+        "x": -0.8,
+        "z": 1.4
+      },
+      {
+        "x": -0.8,
+        "z": 1.4
+      },
+      {
+        "x": -0.8,
+        "z": 1.4
+      },
+      {
+        "x": -0.8,
+        "z": 1.4
+      },
+      {
+        "x": -0.8,
+        "z": 1.4
+      },
+      {
+        "x": -0.8,
+        "z": 1.4
+      },
+      {
+        "x": -0.8,
+        "z": 1.4
+      },
+      {
+        "x": -0.8,
+        "z": 1.4
+      },
+      {
+        "x": -0.8,
+        "z": 1.4
+      }
+    ]
+  },
+  "impactDoor": {
+    "steps": 180,
+    "worstPenetration": 0,
+    "worstBox": null,
+    "samples": [
+      {
+        "x": 0.6,
+        "z": 1.94
+      },
+      {
+        "x": 0.6,
+        "z": 2.29
+      },
+      {
+        "x": 0.6,
+        "z": 2.29
+      },
+      {
+        "x": 0.6,
+        "z": 2.29
+      },
+      {
+        "x": 0.6,
+        "z": 2.29
+      },
+      {
+        "x": 0.6,
+        "z": 2.29
+      },
+      {
+        "x": 0.6,
+        "z": 2.29
+      },
+      {
+        "x": 0.6,
+        "z": 2.29
+      },
+      {
+        "x": 0.6,
+        "z": 2.29
+      }
+    ]
+  },
+  "afterImpacts": {
+    "x": 0.6,
+    "z": 2.29
+  },
+  "door": {
+    "locked": true,
+    "open": false,
+    "sceneId": "corridor"
+  },
+  "lightOff": {
+    "lightOn": false,
+    "level": 0.01,
+    "key": 0.21,
+    "main": 0.03,
+    "flicker": 0.36
+  },
+  "lightOn": {
+    "lightOn": true,
+    "level": 0.98,
+    "key": 0.91,
+    "main": 2.66
+  },
+  "binOpen": {
+    "open": true,
+    "angle": -1.65
+  },
+  "binClosed": {
+    "open": false,
+    "angle": 0
+  },
+  "fps": 60.1,
+  "heroRender": {
+    "frame": 541,
+    "calls": 73,
+    "triangles": 34516,
+    "points": 140,
+    "lines": 0
+  },
+  "heroStats": {
+    "batches": 49,
+    "triangles": 31872,
+    "colliders": 11,
+    "interactives": 3,
+    "area": 23.328000000000003,
+    "contents": {
+      "bins": 2,
+      "bags": 6,
+      "boxes": 5,
+      "paintCans": 4,
+      "jars": 3,
+      "bottles": 2,
+      "tools": 6,
+      "rags": 2,
+      "papers": 11,
+      "webs": 6
+    },
+    "lightOn": true,
+    "flicker": 0.16
+  }
+}

@@ -1,6 +1,6 @@
 # 单人宿舍 · 3D 场景预览
 
-> 现在与 [学生餐厅](dining/)、[餐厅后厨](kitchen/)、[后厨冷库储藏室](coldstore/) 位于**同一个页面**，顶部「单人宿舍 / 学生餐厅 / 餐厅后厨 / 冷库储藏室」切换；`/dining/`、`/kitchen/`、`/coldstore/` 会跳到对应 hash。宿舍独立页保留在 `dorm.html`。
+> 现在与 [学生餐厅](dining/)、[餐厅后厨](kitchen/)、[后厨冷库储藏室](coldstore/)、[杂物间](storage/)、[垃圾处理场](garbage/)、[阅览室](readingroom/)、[生活区二层休息厅](lounge/)、[住宿区 2F](residence/)、[医务室](infirmary/) 位于**同一个页面**，顶部「单人宿舍 / 学生餐厅 / 餐厅后厨 / 冷库储藏室 / 杂物间 / 垃圾处理场 / 阅览室 / 二层休息厅 / 住宿区 2F / 医务室」切换；`/dining/`、`/kitchen/`、`/coldstore/`、`/storage/`、`/garbage/`、`/readingroom/`、`/lounge/`、`/residence/`、`/infirmary/` 会跳到对应 hash。宿舍独立页保留在 `dorm.html`。
 >
 > **本地打不开？** 不要直接双击 `index.html`（ES Modules 会被 `file://` 拦截）。双击 `start-preview.cmd`，或在当前目录运行 `python -m http.server 8123 --bind 127.0.0.1`，再打开 http://127.0.0.1:8123/。
 
@@ -12,7 +12,7 @@
 
 本机实时预览地址（同一页面，默认宿舍）：
 
-**http://127.0.0.1:8123/** → 顶部切到「学生餐厅」/「餐厅后厨」/「冷库储藏室」，或直接 **http://127.0.0.1:8123/#dining** / **http://127.0.0.1:8123/#kitchen** / **http://127.0.0.1:8123/#coldstore**
+**http://127.0.0.1:8123/** → 顶部切到「学生餐厅」/「餐厅后厨」/「冷库储藏室」/「杂物间」/「垃圾处理场」/「阅览室」/「二层休息厅」/「住宿区 2F」/「医务室」，或直接 **http://127.0.0.1:8123/#dining** / **http://127.0.0.1:8123/#kitchen** / **http://127.0.0.1:8123/#coldstore** / **http://127.0.0.1:8123/#storage** / **http://127.0.0.1:8123/#garbage** / **http://127.0.0.1:8123/#readingroom** / **http://127.0.0.1:8123/#lounge** / **http://127.0.0.1:8123/#residence** / **http://127.0.0.1:8123/#infirmary**
 
 宿舍独立页：**http://127.0.0.1:8123/dorm.html**
 

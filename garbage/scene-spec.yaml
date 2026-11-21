@@ -1,0 +1,273 @@
+sceneId: garbage
+name: 垃圾处理场
+locationType: refuse-yard
+chapter: "生活区 1F · 垃圾场（设计图集 A 区 5.4 × 5.4 m 开间内）"
+function: "生活垃圾、废纸箱与旧工具的暂存与清运；两台带轮工业垃圾桶可藏物/翻找，货架位于监控死角"
+mood: "昏暗、脏、闷；脏白墙 + 水泥地；偏暗白炽灯、接触不良的冷白灯管、门缝冷光、监控绿屏"
+timeOfDay: "人工照明（无窗）"
+weather: "不适用"
+
+dimensions:
+  width: 4.32
+  depth: 5.4
+  height: 2.9
+  wallThickness: 0.24
+  area: 23.328
+  ratio: "4 : 5（宽 : 深）"
+  aisle: "垃圾桶前脸 x≈+1.20 → 垃圾袋堆 x≈-1.10，主通道约 2.3 m；货架前约 1.1 m"
+  planBay: "5.40 × 5.40 m（设计图集 A 区），本房间 4.32 × 5.40 m 落在开间内"
+
+connections:
+  - id: door.garbage
+    wall: south
+    type: black-brown timber door
+    width: 1.02
+    height: 2.12
+    x: 0.58
+    sceneId: corridor
+    status: locked
+    leaf:
+      panels: 6
+      material: "black-brown stained oak"
+      hardware: "brass lever, escutcheon, peephole, 3 hinges, brass kick plate"
+    underlight:
+      height: 0.012
+      color: "#a9c3b8"
+
+cameraModes:
+  fixed:
+    enabled: false
+  moving:
+    enabled: true
+    start:
+      x: 0.62
+      z: 2.16
+      yaw: 0.1
+      pitch: -0.035
+      fov: 68
+    eyeHeight: 1.8
+    playerRadius: 0.3
+    speed:
+      walk: 2.4
+      run: 4.8
+    acceleration: 16.0
+    lookSensitivity: 0.0022
+    pitchLimitDegrees: 83
+    roll: 0
+    bob:
+      walk: 0.012
+      run: 0.022
+      frequency: 5.4
+      lateral: 0.45
+    substep: 0.06
+    collision: true
+    colliderCount: 11
+    testStops:
+      binFront: { x: 0.91, z: -0.85 }
+      northWall: { x: 0.0, z: -1.96 }
+      bagPile: { x: -0.8, z: 1.4 }
+      door: { x: 0.6, z: 2.29 }
+
+interactables:
+  - id: door.garbage
+    label: 垃圾处理场门
+    type: locked-door
+    sceneId: corridor
+    behavior: "toast: 垃圾处理场门 · 暂未开放（预留走廊切换）"
+  - id: light.switch
+    label: 顶灯
+    type: toggle
+    behavior: "two tungsten pendants on/off; off keeps the failing tube, monitor green, door seep and red LED"
+  - id: bin.b
+    label: 工业垃圾桶 B
+    type: open-close
+    behavior: "lid hinged at the wall-side edge, 0 -> -1.65 rad; leans back toward the east wall and does not sweep the aisle; lid does not cast"
+
+cameraAndSecurity:
+  camera:
+    position: { x: -1.94, y: 2.62, z: -2.44 }
+    yaw: -2.44
+    pitch: -0.32
+    sweepDegrees: 0.12
+    led: "red recording sprite, pulsing"
+  monitors:
+    crt: { x: -1.58, y: 2.24, z: -2.47, width: 0.46, height: 0.36, depth: 0.42, feed: "four-quadrant abstract CCTV" }
+    small: { x: -1.12, y: 2.42, z: -2.56, width: 0.28, height: 0.22 }
+    recorder: { x: -1.58, y: 1.99, z: -2.57, width: 0.34, height: 0.1, depth: 0.24 }
+  blindSpot:
+    rackCentre: { x: -0.78, y: 1.1, z: -2.49 }
+    measuredAngleDegrees: 52.6
+    lensHalfAngleDegrees: 34
+    blind: true
+
+bins:
+  count: 2
+  size: { width: 1.14, depth: 0.88, bodyHeight: 1.02, bodyBottom: 0.17, wheelRadius: 0.125 }
+  units:
+    - id: bin.a
+      body: dark green
+      position: { x: 1.64, z: -1.62 }
+      lidAngle: 0.66
+      interactive: false
+      interior: "open chute with bolted steel seal at y=0.56; no liner"
+    - id: bin.b
+      body: near black
+      position: { x: 1.64, z: -0.1 }
+      lidAngle: 0
+      interactive: true
+      openAngle: -1.65
+      interior: "bolted steel seal + lifting ring + heat slits; no inner bin, no liner, no loose trash"
+
+props:
+  rack:
+    size: { width: 1.58, depth: 0.42, height: 1.84 }
+    tiers: 4
+    position: { x: -0.78, z: -2.49 }
+    finish: "rusted angle steel"
+  puddle:
+    size: { width: 1.45, depth: 1.02 }
+    position: { x: -1.48, z: 0.52 }
+    material: "alpha-cut MeshPhysicalMaterial, clearcoat sheen, no collider"
+  bags:
+    count: 6
+    variants: "3 standing tied, 2 slumped, 1 open with trash"
+  cartons:
+    count: 5
+    variants: "open with paper, collapsed/leaning, damp dark"
+  cleaning:
+    broom: "wood handle, 32 bristles, cloth tie, leaning on east wall"
+    dustpan: "dented galvanised tin pan, long handle"
+  sign:
+    size: { width: 0.42, height: 0.5 }
+    position: { x: 1.68, y: 1.62, z: 2.693 }
+    content: "no-smoking pictogram only (ring, slash, cigarette, smoke) — no letters"
+  drain:
+    size: 0.36
+    position: { x: 0.2, z: 1.12 }
+
+lighting:
+  recipe: garbage.dim-tungsten
+  key:
+    type: directional
+    direction: down
+    color: "#ffd4a2"
+    intensity: 0.92
+    castShadow: true
+    shadowMap: 2048
+    shadowBake: once
+  fills:
+    hemisphere: { sky: "#c2c7ba", ground: "#33302a", intensity: 0.5 }
+    ambient: { color: "#9a8d78", intensity: 0.15 }
+    mainBulb: { color: "#ffbb7c", intensity: 2.8, distance: 5.2 }
+    doorBulb: { color: "#ffc78e", intensity: 1.15, distance: 3.4 }
+    flickerTube: { color: "#d8eee6", intensity: 1.1, distance: 3.6 }
+    monitorGlow: { color: "#7fcb92", intensity: 0.3, distance: 2.8 }
+    doorSeep: { color: "#c2d8d0", intensity: 0.78, distance: 2.4 }
+    binBounce: { intensity: 0.52, distance: 3.4 }
+    binFrontFill: { intensity: 0.7, distance: 2.8 }
+    binRim: { intensity: 0.22, distance: 2.2 }
+    bagBounce: { intensity: 0.44, distance: 2.8 }
+    puddleSheen: { intensity: 0.24, distance: 2.4 }
+    rackBounce: { intensity: 0.46, distance: 2.8 }
+    floorBounce: { intensity: 0.24, distance: 2.6 }
+    centerFill: { intensity: 0.2, distance: 4.6 }
+    doorWallFill: { intensity: 0.38, distance: 2.8 }
+    broomFill: { intensity: 0.2, distance: 2.0 }
+  fixtures:
+    - "green enamel tungsten pendant"
+    - "caged bare bulb by the door"
+    - "failing cold batten above the rack (three-frequency flicker)"
+    - "dead batten hanging askew above the bins"
+    - "CRT quad feed and small monitor"
+    - "cold strip under the door"
+  exposure: 0.96
+  postProcessing: none
+  lightOffVariant:
+    key: 0.2
+    mainBulb: 0.02
+    note: "failing tube, monitor green, door seep and red LED remain; room stays navigable"
+
+assets:
+  reuse:
+    - "dining/src/utils.js: StaticBuilder, mergeGeometries, uvScaledPlane, trs, mulberry32"
+    - "dining/src/collision.js: CollisionWorld"
+    - "kitchen/src/geometry.js: roundedBoxGeometry, crtScreenGeometry, frustumGeometry, bucketGeometry"
+    - "storage/src/geometry.js: sackGeometry, slumpedSackGeometry, ropeCoilGeometry"
+    - "single-dorm/src/hub.js + styles.css + local three.module.min.js"
+  new:
+    - kit.room.garbage.4.32x5.40x2.90
+    - kit.wall.plaster.dirty-white
+    - kit.floor.concrete.stained
+    - kit.ceiling.paint.water-stained
+    - kit.door.timber.six-panel.1.02x2.12
+    - kit.sign.no-smoking.torn
+    - kit.camera.corner.box-and-monitors
+    - kit.light.enamel-pendant
+    - kit.light.caged-bulb
+    - kit.light.batten.failing
+    - kit.light.batten.dead-hanging
+    - kit.mesh.rusty-wire.corner
+    - kit.web.cobweb.corner
+    - kit.pipe.rust.valve
+    - prop.bin.industrial.660l
+    - prop.rack.angle-iron.4tier
+    - prop.bag.black.tied
+    - prop.bag.black.open
+    - prop.carton.open
+    - prop.broom
+    - prop.dustpan.tin
+    - prop.puddle.dark-liquid
+    - prop.drain.cast-iron
+  oneoff:
+    - "cold strip under the door + cold floor pool (corridor not modelled)"
+    - "probeBlindSpot() geometric proof of the rack being under the camera"
+    - "three-frequency failing-tube flicker (deterministic, no random numbers)"
+    - "wall-side lid hinge that leans the open lid toward the east wall"
+
+budget:
+  moving:
+    triangles: 450000
+    drawCalls: 90
+  measured:
+    batches: 49
+    staticTriangles: 31872
+    renderTriangles: 34516
+    drawCalls: 73
+    drawCallsMax: 88
+    textureObjects: 21
+    generatedTextures: 20
+    fps: 60
+    fpsDevice: "NVIDIA GeForce GTX 1060 3GB / ANGLE D3D11 / 1600×900"
+    gpuFrameMs: 2.1
+  texturesMB: 5.4
+
+validation:
+  penetration: 0
+  routeSteps: 421
+  impacts: ["bins", "north wall", "bag pile", "door"]
+  blindSpotAngleDegrees: 52.6
+  blindSpotLensHalfAngleDegrees: 34
+  pitchLimitDegrees: 83
+  roll: 0
+  sceneSwitching: true
+  consoleErrors: 0
+  consoleWarnings: 0
+
+constraints:
+  noPeople: true
+  noTextInScene: true
+  noSelfDrawn2DArt: true
+  noAudio: true
+  noExternalRequests: true
+  noCdns: true
+  noRoll: true
+  singleShadowCaster: true
+  corridorNotModelled: true
+
+references:
+  - "BRIEF.md"
+  - "asset-list.md"
+  - "VALIDATION.md"
+  - "preview/check-report.json"
+  - "preview/fps.json"
+  - "../../skills/danganronpa-adv-3d/references/lighting-recipes.md"

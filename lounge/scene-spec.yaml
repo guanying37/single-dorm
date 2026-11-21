@@ -1,0 +1,208 @@
+# 生活区二层休息厅 —— 场景规格
+# 依据：skills/danganronpa-adv-3d（scene-brief / camera-moving / lighting-recipes / performance / validation）
+sceneId: scene.lounge
+name: 生活区二层休息厅
+locationType: lounge
+chapter: "日常 / 自由探索"
+function: "宿舍区公共休息厅：棋牌、交谈、审判前的情报交换；三扇门分别接楼梯厅（大门）、男生宿管处、女生宿管处"
+mood: "体面、明亮、略被管理；紫红地毯与水晶灯下的日常感"
+timeOfDay: "白天（全人工照明，无窗）"
+weather: "无"
+
+dimensions:
+  width: 31.7          # X，长轴
+  depth: 10.0          # Z
+  height: 3.6          # 净高
+  area: 317
+  ratio: "19:6"
+  wallThickness: 0.26
+  grid: 0.25
+
+connections:
+  - id: stair-hall
+    door: west
+    type: double
+    width: 2.8
+    height: 2.6
+    note: "门外 2.6 m 深楼梯厅预留段，不放第二道门"
+  - id: supervisor.male
+    door: north
+    type: single
+    width: 1.0
+    height: 2.2
+    locked: true
+    access: "学生平板（暂未接入，仅保留检测机）"
+  - id: supervisor.female
+    door: south
+    type: single
+    width: 1.0
+    height: 2.2
+    locked: true
+    access: "学生平板（暂未接入，仅保留检测机）"
+
+cameraModes:
+  fixed:
+    enabled: false
+    note: "本场景为可自由探索的休息厅，不做固定机位模式；截图用预设机位。"
+  moving:
+    enabled: true
+    start:
+      x: -10.6
+      z: 0.7
+      yaw: -87.5   # 度
+      pitch: -1.2  # 度
+    eyeHeight: 1.8
+    playerRadius: 0.3
+    fov: 68
+    speed:
+      walk: 5.2
+      run: 11.0
+    acceleration: 18
+    pitchLimit: 83
+    bob:
+      walk: 0.014
+      run: 0.028
+      lateral: true
+      roll: true
+    collision: true
+    substep: 0.075
+    dynamicDoors:
+      - door.main
+
+interactables:
+  - id: door.main
+    label: 大门
+    type: double-door
+    behavior: "开 / 合，双扇联动，动态碰撞"
+    openAngle: 100
+  - id: door.supervisor.male
+    label: 男生宿管处
+    type: locked-door
+    behavior: "锁定提示，不切场"
+    message: "男生宿管处 · 需刷学生平板"
+  - id: door.supervisor.female
+    label: 女生宿管处
+    type: locked-door
+    behavior: "锁定提示，不切场"
+    message: "女生宿管处 · 需刷学生平板"
+  - id: reader.male
+    label: 男生宿管检测器
+    type: card-reader
+    behavior: "红灯闪烁 + 提示，平板暂不接入"
+    message: "检测器 · 请刷学生平板（平板尚未接入）"
+  - id: reader.female
+    label: 女生宿管检测器
+    type: card-reader
+    behavior: "红灯闪烁 + 提示，平板暂不接入"
+    message: "检测器 · 请刷学生平板（平板尚未接入）"
+
+clock:
+  position: [15.85, 2.55, 0]
+  diameter: 1.10
+  divisions: 12
+  hands: [hour, minute, second]
+  adjustable: true
+  api: "scene.setClock(h, m, s) / window.__PREVIEW__.setClock"
+
+assets:
+  reuse:
+    - mat.plaster
+    - mat.oak
+    - mat.walnut
+    - mat.brass
+    - mat.linen
+    - mat.sofa
+    - kit.door.double
+    - kit.trim.baseboard
+    - kit.trim.crown
+  new:
+    - kit.wall.wainscot.1m
+    - kit.ceiling.tray.long
+    - kit.ceiling.beam
+    - prop.table.round.5m
+    - prop.chair.highback.cover
+    - prop.sofa.3seat
+    - prop.console.carved
+    - prop.carving.bust
+    - prop.carving.horse
+    - prop.carving.bird
+    - prop.carving.lion
+    - prop.carving.knot
+    - prop.relief.panel
+    - prop.relief.sunburst
+    - prop.chandelier.crystal
+    - prop.fan.ceiling.warm
+    - prop.camera.dome
+    - prop.airconditioner.cassette
+    - prop.clock.wall.12
+    - prop.reader.card
+    - game.chess
+    - game.checkers
+    - game.go
+    - game.cards
+
+lighting:
+  recipe: lounge.chandelier
+  key:
+    type: directional
+    castShadow: true
+    direction: [0, -1, 0]
+    color: "#fff4e6"
+    intensity: 0.98
+    shadowMap: 2048
+  fixtures:
+    - id: chandelier.1..5
+      type: spot
+      castShadow: false
+      color: "#fff6ea"
+      intensity: 132
+    - id: fan.1..2
+      type: point
+      castShadow: false
+      color: "#ffbf76"
+      intensity: 5.8
+    - id: landing
+      type: point
+      castShadow: false
+      color: "#ffc07c"
+      intensity: 3.3
+  ambient:
+    hemisphere: 0.56
+    ambient: 0.2
+    environmentIntensity: 0.52
+  toneMapping: ACESFilmic
+  exposure: 1.04
+  postprocessing: none
+
+budget:
+  moving:
+    triangles: 235000
+    drawCalls: 84
+    textures: 23
+  staticBatches: 37
+  shadow: "1 × 2048²，只烘焙一次"
+  measured:
+    resolution: 1600x900
+    fps: "58–60（可见 Edge，硬件渲染）"
+    drawCalls: "51–84（随视角）"
+    triangles: "164k–236k"
+
+validation:
+  moving:
+    - "8 方向行走均留在墙内"
+    - "圆桌圆形碰撞，桌前停在 x=-2.8"
+    - "关闭大门 x=-15.65 阻挡；开门后可进入楼梯厅 x=-17.99"
+    - "椅子 / 沙发 / 条案独立碰撞"
+    - "键盘输入链路实测位移 3.91 m"
+  interaction:
+    - "大门开合、动态碰撞同步"
+    - "宿管门与检测机均返回锁定提示"
+    - "挂钟 setClock 后继续走秒"
+  console: "0 error / 0 404"
+  screenshots: "preview/*.jpg（14 张）"
+
+references:
+  - skills/danganronpa-adv-3d/references/art-direction.md
+  - skills/danganronpa-adv-3d/references/lighting-recipes.md
+  - skills/danganronpa-adv-3d/references/camera-moving.md
+  - skills/danganronpa-adv-3d/references/performance.md
