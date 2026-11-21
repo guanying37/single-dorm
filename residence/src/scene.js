@@ -254,6 +254,7 @@ export class ResidenceScene {
     const accents = [
       { x: 10.2, y: 2.25, z: 7.7, color: 0xffb877, intensity: 3.4, distance: 5.0 },
       { x: 50.7, y: 2.4, z: 14.55, color: 0xffc998, intensity: 3.6, distance: 5.5 },
+      { x: 54.0, y: 2.35, z: 25.6, color: 0xffc998, intensity: 3.2, distance: 4.6 },
     ];
     for (const accent of accents) {
       const light = new THREE.PointLight(accent.color, accent.intensity, accent.distance, 2);

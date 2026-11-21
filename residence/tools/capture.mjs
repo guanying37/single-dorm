@@ -96,7 +96,7 @@ const views = [
   { name: 'east-corridor', x: 50.7, z: 9.6, yaw: 180, pitch: -1.5 },
   { name: 'lift', x: 50.7, z: 18.65, yaw: -90, pitch: -2 },
   { name: 'south-corridor', x: 30.0, z: 23.3, yaw: 90, pitch: -1.2 },
-  { name: 'stair', x: 54.0, z: 25.5, yaw: 180, pitch: -52 },
+  { name: 'stair', x: 54.0, z: 25.35, yaw: 180, pitch: -40 },
   { name: 'storage', x: 54.0, z: 7.4, yaw: 0, pitch: -2 },
 ];
 const outDir = new URL(mode === 'final' ? '../preview/final/' : '../preview/inspect/', import.meta.url);

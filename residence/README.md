@@ -84,7 +84,8 @@
 | ![铁栅栏门打开](preview/final/gate-open-detail.png) | ![平板锁定时](preview/final/gate-locked.png) |
 | ![电梯门](preview/final/lift.png) | ![楼梯间梯段](preview/final/stair.png) |
 | ![N 杂物间门](preview/final/storage.png) | ![东走廊](preview/final/east-corridor.png) |
-| ![南走廊](preview/final/south-corridor.png) | ![同页 HUD](preview/final/hub.png) |
+| ![南走廊](preview/final/south-corridor.png) | ![到达休息室大门](preview/final/lounge-arrival.png) |
+| ![同页 HUD](preview/final/hub.png) | |
 
 ## 文件与工具
 

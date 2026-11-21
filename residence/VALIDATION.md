@@ -29,7 +29,7 @@
 | 门后空间 | 未建门后为黑背板；楼梯间是唯一可见内部 |
 | 碰撞 | 楼梯间门洞 / 梯口铁链 / 铁栅栏门动态碰撞正常 |
 | 性能 | 独立页 38 calls / 14,052 tris / 27 batches / 27 interactives / 8 textures / 60 FPS；hub 40 textures，1600×900 预热后约 48–60 FPS |
-| 截图 | `preview/final/` 16 张，包含楼梯间与单樘休息室门 |
+| 截图 | `preview/final/` 17 张，包含楼梯间与休息室到达视图 |
 
 ## 复现
 
